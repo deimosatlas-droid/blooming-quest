@@ -34,6 +34,12 @@ The Pages workflow uploads only dist/. Keep .openai, Git metadata, credentials a
 - Preview every new monster/boss sprite or variant for the user before adding it.
 - Preserve connected impassable fences, purposeful prop placement, readable paths and dense map-edge cover.
 
+## Travelling kit interface
+
+The v0.15 interface uses the approved B-object-icons/A-open-menus direction: physical map, leather bag and rose-bound spellbook icons, with wood/brass/leather/parchment UI. Traveller menus open inside the game/fullscreen wrapper, pause gameplay, clear held input, and keep the existing Map A region/labels and real spell/inventory data. M Map, B Bag, K Spellbook, J Journal, O Options. Maintain modal exclusivity and refresh kit availability when starting or closing menus. Food use is explicit: apples/pears/berries heal one heart, noodles two; full health consumes nothing. Poison mushrooms are crafting only and never edible. Export/import controls must be revealed after exiting expanded play because that layout hides the portable panel.
+
+docs/PLAYABLE-NOW.md is the current player guide; do not describe scenery such as shops or the barn as finished commerce/animal-management systems.
+
 ## Action RPG systems
 
 The v0.14 release implements 20 distinct active spells across Katana/Bloomcraft/Stormy/Frost/Ember, each with three ranks, plus six retained passives. Five equipped slots use 1–5; K opens the searchable, filterable spellbook. Load spell-catalog.js before progression.js. Existing rank-1 choices and three-slot saves migrate additively. Three starting points and two per level at 60XP intervals allow testing mixed builds; respecs remain free.

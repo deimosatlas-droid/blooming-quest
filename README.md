@@ -4,6 +4,12 @@ A laptop-friendly pixel-art adventure with a private tower estate, seven towns, 
 
 The browser game lives in `dist/`. It runs without ChatGPT, an AI API key or a game-server account. Serve that folder over HTTP(S); opening its HTML through `file://` is not supported.
 
+## Amaal’s travelling kit
+
+The medieval object toolbar opens an in-game Map (M), Bag (B), Spellbook (K), Journal (J) and Options (O). Wood, leather, brass and parchment panels match the approved visual concepts. The Map retains Map A with current location, hover highlights and development travel to all seven towns plus home. The Bag reads real saved quantities; explicitly eat apples/pears/berries for one heart or noodles for two. Poison mushrooms remain crafting-only and full health consumes nothing. Menus pause gameplay and save current position.
+
+See [everything playable now](docs/PLAYABLE-NOW.md) for the complete world, combat, spells, gathering, NPC routines, story, save and device guide, including unfinished systems.
+
 ## Combat and skills
 
 Open **Skills (K)** for 20 spells across Katana, Bloomcraft, Stormy, Frost and Ember, each with three ranks. The tree retains six passives, supports school/search filters, and shows current/next-rank effects. Spend three starting points, then earn XP from actual monster kills and camp clears. Equip five spells to 1–5; Q dodges, holding C guards, and the opening guard window can parry frontal attacks. Stamina and enemy warnings make timing matter. Brief input buffering, hold-to-chain attacks, safe recovery cancels, faster combos, smooth camera tracking and dedicated runtime dodge/guard/cast/hurt poses improve responsiveness. The rose/brass HUD shows health, stamina, level, XP, cooldowns and nearby target health. Touch controls expose the same actions. Dungeons, bosses and expanded NPC quest chains remain planned.
