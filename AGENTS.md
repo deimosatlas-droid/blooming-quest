@@ -34,6 +34,8 @@ The Pages workflow uploads only dist/. Keep .openai, Git metadata, credentials a
 - Preview every new monster/boss sprite or variant for the user before adding it.
 - Preserve connected impassable fences, purposeful prop placement, readable paths and dense map-edge cover.
 
-## Planned systems
+## Action RPG systems
 
-docs/ARPG-SYSTEMS.md describes original Dimraeth-inspired combat, skills, dungeons, bosses and NPC quest chains. These are proposed work, not implemented features of the portable v0.11 release.
+The v0.13 release implements original Dimraeth-inspired stamina combat, dodge, directional guard/parry, three warned enemy attack patterns, XP/levels, a nine-node skill tree, three equipped active abilities and an original forest/rose/brass HUD. Controls: Q dodge, hold C guard (opening window parries), K skills, 1–3 equipped abilities. Touch equivalents must remain available. Camp and actual kill rewards use stable one-time IDs; camp cleanup grants no kill XP.
+
+docs/ARPG-SYSTEMS.md retains the expansion design. Dungeons, bosses and multi-stage NPC quests are still future work. Do not present those as implemented.

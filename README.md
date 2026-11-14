@@ -4,6 +4,10 @@ A laptop-friendly pixel-art adventure with a private tower estate, seven towns, 
 
 The browser game lives in `dist/`. It runs without ChatGPT, an AI API key or a game-server account. Serve that folder over HTTP(S); opening its HTML through `file://` is not supported.
 
+## Combat and skills
+
+Open **Skills (K)** for the connected Katana, Bloomcraft and Stormy tree. Spend the starting point to learn an active ability, then earn XP from actual monster kills and camp clears. Equip three abilities to 1–3; Q dodges, holding C guards, and the opening guard window can parry frontal attacks. Stamina and enemy warnings make timing matter. The rose/brass HUD shows health, stamina, level, XP, cooldowns and nearby target health. Touch controls expose the same actions. Dungeons, bosses and expanded NPC quest chains remain planned.
+
 ## Playing and saves
 
 Use WASD/arrows to move, Shift to run, E to interact/harvest, Space for the katana combo, M for the map and J for the journal. Phones and tablets have a D-pad plus Interact, Attack, Run, Heal, Map and Journal buttons. Expanded play keeps those controls visible. Modern iOS, Android and desktop browsers are the target; real-device verification is still needed.
@@ -30,7 +34,7 @@ See [regression checks](tests/README.md). Native render checks additionally use 
 
 ## Planned action RPG expansion
 
-[The expansion design](docs/ARPG-SYSTEMS.md) describes original Dimraeth-inspired combat, skill branches, dungeons, bosses and NPC quest chains. Those progression systems are proposed work, not implemented features of this browser release.
+[The expansion design](docs/ARPG-SYSTEMS.md) describes original Dimraeth-inspired combat, skill branches, dungeons, bosses and NPC quest chains. Combat, progression and the skill-tree interface are implemented in v0.13. Dungeons, bosses and tracked multi-stage NPC quest chains remain proposed work.
 
 ## Artwork
 

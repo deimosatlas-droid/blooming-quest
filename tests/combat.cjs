@@ -105,17 +105,19 @@ function campHp(combat,id='brambles'){return combat.snapshot().camps.find(c=>c.i
   assert.equal(combat.snapshot().monsters.length,0,'a saved defeated monster does not return');
 }
 
-// Contact hurts Amaal, with a shared invulnerability window across attackers.
+// A readable warned attack hurts Amaal, with shared invulnerability across attackers.
 {
   const {combat}=makeRuntime();
   const run=enter(combat,fixtureRoad([fixtureCamp({spawnPoints:[[200,200]],maxAlive:2,totalSpawns:2,spawnEvery:.05})]));
   advance(combat,.85);
-  assert.equal(run.events.damage,1,'monster contact causes actual health damage');
+  assert.equal(run.events.damage,0,'monster contact is harmless during its warning');
+  advance(combat,.85);
+  assert.equal(run.events.damage,1,'the warned attack eventually causes actual health damage');
   const hp=run.state.hp;
   advance(combat,.3);
   assert.equal(run.state.hp,hp,'contact cannot drain health every frame');
-  advance(combat,1.2);
-  assert(run.state.hp<hp,'contact can hurt again after invulnerability ends');
+  advance(combat,2.2);
+  assert(run.state.hp<hp,'another warned attack can hurt after recovery and invulnerability');
 }
 
 // No invisible monster fallback, and no monsters in any safe scene type.
@@ -182,10 +184,10 @@ for(const [id,area]of roads){
     keyAction(' ');if(combat.snapshot().camps[0].hp!==before-1)throw Error('adventure cooldown blocks duplicate Space damage');
     render();
     enter('rosepetal');enter('death-test');state.hp=1;
-    for(let i=0;i<40&&areaId==='death-test';i++)update(.04);
+    for(let i=0;i<90&&areaId==='death-test';i++)update(.04);
     if(!['town','home'].includes(area.kind)||state.hp!==5)throw Error('defeat returns Amaal to a safe checkpoint with restored health');
     if(combat.snapshot().monsters.length)throw Error('defeat clears road combat before returning home');
     save();if(JSON.parse(localStorage.getItem('blooming-world-v05')).hp!==5)throw Error('restored health is saved');
   `,C);
 }
-console.log('PASS: directional Space damage, cooldown, finite camp waves, camp destruction, defeated-monster persistence, damage/invulnerability, approved-art gating, six roads, safe scenes, adventure Space hooks, defeat/respawn/save.');
+console.log('PASS: directional Space damage, cooldown, finite camp waves, camp destruction, defeated-monster persistence, warned damage/invulnerability, approved-art gating, six roads, safe scenes, adventure Space hooks, defeat/respawn/save.');

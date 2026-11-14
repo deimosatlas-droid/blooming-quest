@@ -1,10 +1,14 @@
 # Blooming Quest: action RPG expansion design
 
-Status: proposed design, not implemented. Browser release comes first. Finish the current consistency fixes and portable release before beginning this expansion.
+Status: combat and progression delivered in browser v0.13. The live game now has stamina, collision-safe dodge, directional guard/parry, frozen enemy attack warnings, three equipped abilities, nine learnable nodes, XP/levels, additive old-save credit and an original resource HUD/connected skill-tree UI. Dungeons, bosses and tracked NPC quest chains below remain planned.
+
+Current branches are Katana (Petal Sweep, Finishing Cut, Petal Return), Bloomcraft (Briar Bind, Lingering Roots, Deep Roots) and Stormy (Stormy’s Gust, Tailwind, Wind Ward). Level 1 starts with one skill point; levels 2–10 add a point each. Development respecs are free. Third-combo damage, parry stamina, bind duration, maximum stamina, gust movement and one-hit wards all change actual play. Existing cleared camps grant 35 XP once; actual new monster kills grant 12 XP, and camp cleanup grants none.
+
+Press K or the Skills book to open the tree, Q to dodge, hold C to guard and time the opening 0.2 seconds for a frontal parry, and 1–3 to cast equipped abilities. Skills pause combat, stamina, cooldowns and NPC time while open. The touch HUD provides the same actions. The remaining sections preserve the wider expansion direction and are not a claim that its dungeon/story milestones have shipped.
 
 ## Reference and direction
 
-The confirmed reference is [Dimraeth, by Mudtek](https://store.steampowered.com/app/2402680/Dimraeth/). Its developer description identifies deliberate stamina-based combat, readable enemy warnings, positioning, dodging, blocking and parrying. It also describes race/class skill trees, a five-spell loadout, quests, relationships and bosses. These are reference points for the feel and depth of this proposal. They are not a description of features already in Blooming Quest.
+The confirmed reference is [Dimraeth, by Mudtek](https://store.steampowered.com/app/2402680/Dimraeth/). Its developer description identifies deliberate stamina-based combat, readable enemy warnings, positioning, dodging, blocking and parrying. It also describes race/class skill trees, a five-spell loadout, quests, relationships and bosses. These are reference points for the feel and depth of this proposal. They guide the original implementation; only the features listed as delivered above are in Blooming Quest.
 
 Blooming Quest will implement its own rules, encounters, skills, dialogue and story. We will retain Amaal as the protagonist, the approved Emerald-inspired presentation, Stormy, Rosepetal and the established towns. We will not copy Dimraeth's code, art, dialogue, maps or exact skill trees, and we are not promising its full content scale.
 
@@ -46,13 +50,13 @@ Amaal stays Amaal. Build variety comes from mixing these branches rather than ch
 
 | Branch | First active skill | Two initial upgrade choices |
 | --- | --- | --- |
-| **Katana** | Petal Sweep: a costly crowd-control cut with a clear recovery window | Shorter recovery after a successful hit; stamina returned by a successful parry |
-| **Bloomcraft** | Briar Bind: a small root field that slows enemies | Longer binding against ordinary enemies; a crafted coating that strengthens a limited number of strikes |
+| **Katana** | Petal Sweep: a costly crowd-control cut with a clear recovery window | Extra damage on the third combo strike; stamina returned by a successful parry |
+| **Bloomcraft** | Briar Bind: a small root field that slows enemies | Longer binding; increased maximum stamina |
 | **Stormy** | Stormy's Gust: a directed gust that pushes enemies away | A brief movement boost after the gust; a short protective wind ward |
 
 These nine nodes are the initial tree, not a claim that nine skills are the final game's depth. Each branch has one active and two prerequisite upgrades. Branches may be mixed. Major effects must be understandable before spending a point; avoid filling the first tree with tiny percentage increases that do not change decisions.
 
-A provisional first-slice level range is 1–5, with one skill point per level gained. Balance rewards through playing the full quest/dungeon loop before committing exact XP thresholds or damage numbers. Preserve surplus XP if the prototype has a temporary level cap. Development respecs are free so the user can compare builds without replaying the world.
+The current level range is 1–10, with a starting skill point and one more per level gained. Balance rewards through playing the full quest/dungeon loop before committing exact XP thresholds or damage numbers. Preserve surplus XP if the prototype has a temporary level cap. Development respecs are free so the user can compare builds without replaying the world.
 
 Begin with three usable skill slots. Store a loadout that can grow to five, and add the other slots only when there are enough tested abilities to support meaningful choices. Do not display nonfunctional future buttons.
 

@@ -12,7 +12,7 @@ const root=path.resolve(__dirname,'../dist');
    const sandbox={window:{},Math,JSON};vm.createContext(sandbox);vm.runInContext(source,sandbox);const combat=sandbox.window.BloomCombat;
    const hero={x:200+dx,y:200+dy,face:direction};let damage=0;
    combat.configure({image:picture,layout});combat.enter({id:'test',kind:'road',safe:false,camps:[{id:'art',x:200,y:180,monster:type,spawnPoints:[[200,200]],maxAlive:1,totalSpawns:1}]},{id:'test',hero,state:{},canStand:()=>true,onDamage:n=>damage+=n,atlas:{},drawSprite(){}});
-   combat.update(.4);assert.equal(combat.snapshot().monsters.length,1,type+' spawns');assert(damage>0,type+' reaches melee attack');
+   combat.update(.4);assert.equal(combat.snapshot().monsters.length,1,type+' spawns');assert.equal(damage,0,type+' warns before dealing damage');for(let tick=0;tick<120&&combat.snapshot().monsters[0].attackState!=='active';tick++)combat.update(.02);assert.equal(combat.snapshot().monsters[0].attackState,'active',type+' reaches warned active attack');for(let tick=0;tick<10&&damage===0;tick++)combat.update(.01);assert(damage>0,type+' damage resolves in the active phase');
    const canvas=createCanvas(384,256),ctx=canvas.getContext('2d'),draws=[];
    const traced=new Proxy(ctx,{get(o,key){if(key==='drawImage')return(...args)=>{draws.push(args);return o.drawImage(...args);};const val=o[key];return typeof val==='function'?val.bind(o):val;},set(o,key,value){o[key]=value;return true;}});
    const entry=combat.actors().find(a=>a.kind==='monster');combat.draw(entry,traced,{x:0,y:0});assert(draws.length,type+' draws source art');

@@ -77,9 +77,9 @@ assert.equal(transfer.getState().x,departure.x);assert.equal(transfer.getState()
 assert.equal(storage['blooming-world-v05'],JSON.stringify(departure),'ferry export never invents a destination or transient coordinates');
 const imported=JSON.stringify({area:'sunveil',x:400,y:440,note:true,inventory:{apple:9}});
 storage['blooming-world-v05']=imported;importing=true;
-C.location.search='?area=rosepetal&devtravel=1&v=12&theme=safe';C.location.hash='#journey';
+C.location.search='?area=rosepetal&devtravel=1&v=13&theme=safe';C.location.hash='#journey';
 transfer.onImport();
-assert.equal(replaced,'/index.html?v=12&theme=safe#journey','import removes only development travel selectors before reloading');
+assert.equal(replaced,'/index.html?v=13&theme=safe#journey','import removes only development travel selectors before reloading');
 assert.equal(reloads,1,'an accepted import reloads once');
 assert.equal(storage['blooming-world-v05'],imported,'pagehide cannot overwrite imported progress with the old live scene');
 vm.runInContext('ferryTrip=null;save(true)',C);assert.equal(storage['blooming-world-v05'],imported,'manual/autosaves also respect an import already in progress');

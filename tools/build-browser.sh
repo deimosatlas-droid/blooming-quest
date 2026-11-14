@@ -7,6 +7,12 @@ for source in dist/*.js; do
 done
 node tests/adventure.cjs
 node tests/hero-combat.cjs
+node tests/combat.cjs
+node tests/enemy-telegraphs.cjs
+node tests/progression.cjs
+node tests/abilities.cjs
+node tests/combat-ui.cjs
+node tests/arpg-integration.cjs
 node tests/collision-input.cjs
 node tests/scene-interactions.cjs
 node tests/forage.cjs
