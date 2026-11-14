@@ -1,0 +1,766 @@
+[
+  {
+    "id": "A01",
+    "title": "Skeleton & Witch Doctor",
+    "author": "Admurin",
+    "url": "https://admurin.itch.io/monster-pack-40",
+    "names": [
+      "Skeleton",
+      "Witch doctor"
+    ],
+    "animations": "Both: idle, run. Witch doctor: attack.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "The free skeleton does not list a dedicated attack animation.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMjU0MzY1OC8xNTY3ODg2NS5naWY=/original/IVhkZq.gif",
+      "https://img.itch.zone/aW1hZ2UvMjU0MzY1OC8xNTY3ODg2Ni5naWY=/original/qj7yh8.gif",
+      "https://img.itch.zone/aW1hZ2UvMjU0MzY1OC8xNTY3ODg2Ny5wbmc=/original/sNNt07.png"
+    ],
+    "previewVerified": true,
+    "inUse": true
+  },
+  {
+    "id": "A02",
+    "title": "Zombie Variants",
+    "author": "Admurin",
+    "url": "https://admurin.itch.io/monster-pack-99",
+    "names": [
+      "Zombie 5",
+      "Zombie 6"
+    ],
+    "animations": "Idle, movement; 3 directional sets.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "No attack, hurt or death animation listed.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMzMwNzA0NC8xOTc1MTA2Mi5naWY=/original/AlkE98.gif",
+      "https://img.itch.zone/aW1hZ2UvMzMwNzA0NC8xOTc1MTA2My5naWY=/original/ahJHpf.gif",
+      "https://img.itch.zone/aW1nLzg5MTkyMTYucG5n/original/k6c%2FcS.png"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "A03",
+    "title": "Spectres",
+    "author": "Admurin",
+    "url": "https://admurin.itch.io/monster-pack-95",
+    "names": [
+      "Spectre 13",
+      "Spectre 14"
+    ],
+    "animations": "Idle, movement, attack; 3 directional sets. Spectre 14 includes a projectile.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMzI0MDc1OC8xOTM1Mzg1My5naWY=/original/azX9jL.gif",
+      "https://img.itch.zone/aW1hZ2UvMzI0MDc1OC8xOTM1Mzg1NC5naWY=/original/UIkYzw.gif",
+      "https://img.itch.zone/aW1nLzg5MTkyMTYucG5n/original/k6c%2FcS.png"
+    ],
+    "previewVerified": true,
+    "inUse": true
+  },
+  {
+    "id": "A04",
+    "title": "Crow & Grackle",
+    "author": "Admurin",
+    "url": "https://admurin.itch.io/monster-pack-66",
+    "names": [
+      "Crow",
+      "Grackle"
+    ],
+    "animations": "Idle, standing, takeoff, movement, attack, landing; 3 directional sets.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMjc1MzA4Ni8xNjQyODYyMC5wbmc=/original/eQY%2FTk.png",
+      "https://img.itch.zone/aW1hZ2UvMjc1MzA4Ni8xNjQyOTAzOC5naWY=/original/J6xos2.gif",
+      "https://img.itch.zone/aW1hZ2UvMjc1MzA4Ni8xNjQyOTAzNy5naWY=/original/vaSLqc.gif"
+    ],
+    "previewVerified": true,
+    "inUse": true
+  },
+  {
+    "id": "A05",
+    "title": "Boar & Pigs",
+    "author": "Admurin",
+    "url": "https://admurin.itch.io/monster-pack-21",
+    "names": [
+      "Piggy",
+      "Pig",
+      "Boar"
+    ],
+    "animations": "Idle and movement; boar has two attacks; 3 directional sets.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMjAxNjkyNy8xNTY3ODY4Mi5naWY=/original/%2BAgxu6.gif",
+      "https://img.itch.zone/aW1hZ2UvMjAxNjkyNy8xNTY3ODY4NC5naWY=/original/IDbmm2.gif",
+      "https://img.itch.zone/aW1hZ2UvMjAxNjkyNy8xNTY3ODY4My5naWY=/original/L%2FuBGw.gif",
+      "https://img.itch.zone/aW1hZ2UvMjAxNjkyNy8xNTY3ODY4MS5wbmc=/original/90gxJt.png"
+    ],
+    "previewVerified": true,
+    "inUse": true
+  },
+  {
+    "id": "A06",
+    "title": "Rabbit & Horned Rabbit",
+    "author": "Admurin",
+    "url": "https://admurin.itch.io/monster-pack",
+    "names": [
+      "Rabbit",
+      "Horned rabbit"
+    ],
+    "animations": "Idle and run; horned rabbit also has attack; 3 directional sets.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Rabbit could be wildlife or a rescue animal rather than an enemy.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMTgwNTYxMy8xNDQwOTAyMy5naWY=/original/06oopT.gif",
+      "https://img.itch.zone/aW1hZ2UvMTgwNTYxMy8xNDQwOTAyNC5naWY=/original/31LU5x.gif",
+      "https://img.itch.zone/aW1nLzg5MTkyMTYucG5n/original/k6c%2FcS.png"
+    ],
+    "previewVerified": true,
+    "inUse": true
+  },
+  {
+    "id": "A07",
+    "title": "Devil & Slime",
+    "author": "Admurin",
+    "url": "https://admurin.itch.io/monster-pack-85",
+    "names": [
+      "Devil",
+      "Gingerbread",
+      "Slime"
+    ],
+    "animations": "Idle, movement, attack; devil has 3 attacks; 3 directional sets.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Seasonal pack: gingerbread is outside the current medieval forest direction.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMzIxNDY5OC8xOTE5OTg2NC5naWY=/original/ZvcC3h.gif",
+      "https://img.itch.zone/aW1hZ2UvMzIxNDY5OC8xOTE5OTg2NS5naWY=/original/0UfgMq.gif",
+      "https://img.itch.zone/aW1hZ2UvMzIxNDY5OC8xOTE5OTg2Ni5naWY=/original/CYu9yZ.gif"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "A08",
+    "title": "Snowmen",
+    "author": "Admurin",
+    "url": "https://admurin.itch.io/monster-pack-82",
+    "names": [
+      "Snowman 1",
+      "Snowman 2",
+      "Snowman 3",
+      "Snowman 4",
+      "Snowman 5",
+      "Snowman 6",
+      "Snowman 7"
+    ],
+    "animations": "Idle and movement; 3 directional sets.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Seven listed snowmen; no dedicated combat animation listed.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMzE2NDYwOS8xODg5ODgxMC5naWY=/original/xxSgrL.gif",
+      "https://img.itch.zone/aW1hZ2UvMzE2NDYwOS8xODg5ODgwOS5naWY=/original/SRVqyJ.gif",
+      "https://img.itch.zone/aW1hZ2UvMzE2NDYwOS8xODg5ODgxMi5naWY=/original/DR31CP.gif",
+      "https://img.itch.zone/aW1hZ2UvMzE2NDYwOS8xODg5ODgxMS5naWY=/original/3ruSNZ.gif",
+      "https://img.itch.zone/aW1hZ2UvMzE2NDYwOS8xODg5ODgxMy5naWY=/original/TsZ7dR.gif",
+      "https://img.itch.zone/aW1hZ2UvMzE2NDYwOS8xODg5ODgxNC5naWY=/original/Vs0rhh.gif"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "A09",
+    "title": "Reindeer & Seasonal Creatures",
+    "author": "Admurin",
+    "url": "https://admurin.itch.io/monster-pack-83",
+    "names": [
+      "Reindeer 1",
+      "Reindeer 2",
+      "Reindeer 3",
+      "Nasta",
+      "Kid"
+    ],
+    "animations": "Idle and movement; 3 directional sets.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Seasonal/wildlife alternatives. Not a core combat recommendation.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMzE2NDYxMC8xODg5ODgwNC5naWY=/original/NC93nD.gif",
+      "https://img.itch.zone/aW1hZ2UvMzE2NDYxMC8xODg5ODgwNS5naWY=/original/Dxgq1L.gif",
+      "https://img.itch.zone/aW1hZ2UvMzE2NDYxMC8xODg5ODgwNi5naWY=/original/T7sdvz.gif",
+      "https://img.itch.zone/aW1hZ2UvMzE2NDYxMC8xODg5ODgwOC5naWY=/original/dP92ou.gif",
+      "https://img.itch.zone/aW1hZ2UvMzE2NDYxMC8xODg5ODgwNy5naWY=/original/TZHKyp.gif"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "B01",
+    "title": "Five Orcs",
+    "author": "Zenedark",
+    "url": "https://zenedark.itch.io/animated-orc-sprites",
+    "names": [
+      "Orc 1",
+      "Orc 2",
+      "Orc 3",
+      "Orc 4",
+      "Orc 5"
+    ],
+    "animations": "Idle, walk, attack in 4 directions. 16px figures on 32px animation canvases.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Creator permits game use and editing. We will preserve the included licence when integrating.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMTg1MjI5NS8xMjQwMzg1OS5wbmc=/original/tRuzd4.png",
+      "https://img.itch.zone/aW1hZ2UvMTg1MjI5NS8xMDg4ODkzMi5wbmc=/original/5jNs1j.png",
+      "https://img.itch.zone/aW1hZ2UvMTg1MjI5NS8xMDg5NDg2OC5wbmc=/original/k6t1ki.png",
+      "https://img.itch.zone/aW1nLzEwODgwNDAxLmdpZg==/original/fWMVQ1.gif",
+      "https://img.itch.zone/aW1nLzEwODgwNDA0LmdpZg==/original/2zy62u.gif",
+      "https://img.itch.zone/aW1nLzEwODgwNDA2LmdpZg==/original/UqSsU3.gif",
+      "https://img.itch.zone/aW1nLzEwODg3NTUyLmdpZg==/original/x%2B2eSi.gif",
+      "https://img.itch.zone/aW1nLzEwODgwODQyLmdpZg==/original/yumlXD.gif"
+    ],
+    "previewVerified": true,
+    "inUse": true
+  },
+  {
+    "id": "B02",
+    "title": "Insect Enemies",
+    "author": "Ponk",
+    "url": "https://ponkpixels.itch.io/insect-enemies",
+    "names": [
+      "Flying beetle",
+      "Spitting maggot",
+      "Praying mantis"
+    ],
+    "animations": "Movement and attacks; egg hatch, acid projectile and splatter also included.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Page metadata: CC BY 4.0. Credit Ponk and record modifications.",
+    "note": "32×32 top-down 3/4 view. No death animation listed; apply the stricter attribution terms.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTYzNjY3LzI5NjA5NDcuZ2lm/original/sLhjUE.gif",
+      "https://img.itch.zone/aW1hZ2UvNTYzNjY3LzI5NjIyMDAuZ2lm/original/wUWQgH.gif",
+      "https://img.itch.zone/aW1hZ2UvNTYzNjY3LzI5NjIzNTYuZ2lm/original/DWcX9B.gif",
+      "https://img.itch.zone/aW1hZ2UvNTYzNjY3LzI5NjI0NTMuZ2lm/original/gyZVxl.gif"
+    ],
+    "previewVerified": true,
+    "inUse": true
+  },
+  {
+    "id": "B03",
+    "title": "Retro Skeleton",
+    "author": "Snoblin",
+    "url": "https://snoblin.itch.io/pixel-rpg-skeleton-free",
+    "names": [
+      "Skeleton"
+    ],
+    "animations": "Idle, walk, hurt and death in 4 directions.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Free basic skeleton only. The armed warrior/archer/barbarian pack is paid and excluded.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMTg1NDg1My8xMjM1MDgyNC5naWY=/original/sT%2FpjT.gif",
+      "https://img.itch.zone/aW1hZ2UvMTg1NDg1My8xMjM1MDkwMy5naWY=/original/yOPG1x.gif",
+      "https://img.itch.zone/aW1nLzE1NTE3Njc3LnBuZw==/original/dGF27s.png",
+      "https://img.itch.zone/aW1nLzEyMzUwOTQxLnBuZw==/original/QEbvW%2F.png",
+      "https://img.itch.zone/aW1nLzE1NDY2NDUxLmdpZg==/original/1%2BWeBW.gif",
+      "https://img.itch.zone/aW1nLzIwNzU3MjAzLmdpZg==/original/aWU3TU.gif",
+      "https://img.itch.zone/aW1nLzI5MzQ4ODg0LnBuZw==/original/3K7QCE.png",
+      "https://img.itch.zone/aW1nLzI5MzQ4ODY0LnBuZw==/original/xKp7BV.png"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "B04",
+    "title": "Skeleton — Free Edition",
+    "author": "Mica",
+    "url": "https://micaellebritto.itch.io/skeleton-sprite",
+    "names": [
+      "Skeleton"
+    ],
+    "animations": "Free: idle, run, attack in 4 directions.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Walk, jump, hurt and death belong to the paid edition and are excluded. 64×64 canvas.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNDAxNDU4OS8yMzk1MDc3NS5wbmc=/original/FxaUbl.png",
+      "https://img.itch.zone/aW1hZ2UvNDAxNDU4OS8yMzk1MDc3My5wbmc=/original/E%2F%2BA0x.png",
+      "https://img.itch.zone/aW1hZ2UvNDAxNDU4OS8yMzk1MDc3Ni5wbmc=/original/gl54NT.png",
+      "https://img.itch.zone/aW1hZ2UvNDAxNDU4OS8yMzk1MDc4NC5wbmc=/original/6H%2FpiG.png",
+      "https://img.itch.zone/aW1hZ2UvNDAxNDU4OS8yMzk1MDc3OC5wbmc=/original/Ah7vWG.png",
+      "https://img.itch.zone/aW1hZ2UvNDAxNDU4OS8yMzk1MDc3Ny5wbmc=/original/d6i7di.png",
+      "https://img.itch.zone/aW1hZ2UvNDAxNDU4OS8yMzk1MDc3NC5wbmc=/original/zBn8ba.png",
+      "https://i.imgur.com/7lvDSId.gif"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "B05",
+    "title": "Small Slimes",
+    "author": "Ulerinn",
+    "url": "https://ulerinn.itch.io/free-slimes",
+    "names": [
+      "Slime"
+    ],
+    "animations": "Idle, walk and attack.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Page states CC0 and permits commercial game use; also asks not to redistribute the pack. Retain its supplied terms.",
+    "note": "One slime design in four colors; three recolors counted separately.",
+    "colors": 3,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMTYzMjYxOS85NTk3OTA2LnBuZw==/original/OFf0oC.png",
+      "https://img.itch.zone/aW1hZ2UvMTYzMjYxOS85NTk3OTA1LnBuZw==/original/okDvMT.png",
+      "https://img.itch.zone/aW1hZ2UvMTYzMjYxOS85NTk3OTA3LnBuZw==/original/Ztd3Un.png"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "B06",
+    "title": "Slime & King Slime",
+    "author": "heimlich3",
+    "url": "https://heimlich3.itch.io/slime",
+    "names": [
+      "Slime",
+      "King slime"
+    ],
+    "animations": "Idle, move, attack, hurt, death; 4 directions; 32×32.",
+    "view": "Isometric",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Each design has four colors. Isometric angle needs review against our overhead camera.",
+    "colors": 6,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTEwODg4NS8zMDU4NTI1OC5naWY=/original/9gijme.gif",
+      "https://img.itch.zone/aW1hZ2UvNTEwODg4NS8zMDU4NTI1NS5naWY=/original/TVf3wS.gif",
+      "https://img.itch.zone/aW1hZ2UvNTEwODg4NS8zMDU4NTI1OS5naWY=/original/D9hJ4T.gif",
+      "https://img.itch.zone/aW1hZ2UvNTEwODg4NS8zMDU4ODcyMC5naWY=/original/62La7c.gif",
+      "https://img.itch.zone/aW1nLzMwNTc3NTM2LnBuZw==/original/akSYl2.png",
+      "https://img.itch.zone/aW1nLzMwNTc4NDY2LnBuZw==/original/9rKZ1%2F.png",
+      "https://img.itch.zone/aW1nLzMwNTgxNzEzLmdpZg==/original/b8h9MM.gif"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "B07",
+    "title": "RPG Free Sampler",
+    "author": "furkan90x",
+    "url": "https://furkan90x.itch.io/rpg-pixel-art-sampler-free",
+    "names": [
+      "Green slime",
+      "Goblin",
+      "Jack-o’-lantern (attack only)",
+      "Minotaur (idle only)"
+    ],
+    "animations": "Slime/goblin: idle, walk, attack, hurt, death in 4 directions.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Only slime and goblin have the listed full sets. Pumpkin and minotaur are limited animation samples, not complete enemies.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTA0MDk5OS8zMTE3MTM0Ny5wbmc=/original/7p0cTQ.png",
+      "https://img.itch.zone/aW1hZ2UvNTA0MDk5OS8zMDMyNzM2OS5naWY=/original/GbFtLJ.gif",
+      "https://img.itch.zone/aW1hZ2UvNTA0MDk5OS8zMDM0ODAwMi5wbmc=/original/wQ1MVA.png",
+      "https://img.itch.zone/aW1hZ2UvNTA0MDk5OS8zMTE2NjY3NS5wbmc=/original/yvrYth.png"
+    ],
+    "previewVerified": true,
+    "inUse": true
+  },
+  {
+    "id": "C01",
+    "title": "N3XUS Starter Monsters",
+    "author": "N3XUS",
+    "url": "https://samura133.itch.io/n3xus-starter-free",
+    "names": [
+      "Acid slime",
+      "Bat",
+      "Ghost",
+      "Skeleton",
+      "Zombie",
+      "Goblin"
+    ],
+    "animations": "Idle, walk, attack, hurt, death; 4 directions.",
+    "view": "Top-down",
+    "art": "Procedural / AI-assisted code",
+    "license": "Free personal/commercial game use. Required credit: Art by N3XUS - n3xus.dev. No asset redistribution.",
+    "note": "Procedurally drawn, not hand-pixelled. 32×32 and 32×64 canvases.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTI0MTY3OS8zMTYxMjAyNi5naWY=/original/FOYeYa.gif",
+      "https://img.itch.zone/aW1hZ2UvNTI0MTY3OS8zMTYxMjAyNy5naWY=/original/WU7YZm.gif",
+      "https://img.itch.zone/aW1hZ2UvNTI0MTY3OS8zMTYxMjAyOC5naWY=/original/vIyUyE.gif",
+      "https://img.itch.zone/aW1hZ2UvNTI0MTY3OS8zMTYxMjAyOS5naWY=/original/Pu%2FpM%2B.gif",
+      "https://img.itch.zone/aW1hZ2UvNTI0MTY3OS8zMTYxMjAzMC5naWY=/original/FqwQq3.gif"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "C02",
+    "title": "Monsters & Creatures",
+    "author": "michelclauwaert",
+    "url": "https://michelclauwaertgmailcom.itch.io/monsters-creatures-free-16x16-top-down-rpg-enemy-boss-pack",
+    "names": [
+      "Mushroom folk",
+      "Thorn sprite",
+      "Jackalope",
+      "Moss golem",
+      "Owlbear cub",
+      "Flytrap walker",
+      "Crystal cube",
+      "Rock crab",
+      "Bat swarm",
+      "Mimic jar",
+      "Bone hound",
+      "Roller bug",
+      "Kobold miner",
+      "Living armor",
+      "Gargoyle",
+      "Bog lurker",
+      "Giant mosquito",
+      "Swamp hag",
+      "Lily snapper",
+      "Lizardfolk",
+      "Antlion",
+      "Mummy cat",
+      "Dust devil",
+      "Frill lizard",
+      "Frost fox",
+      "Yeti cub",
+      "Frost moth",
+      "Magma slug",
+      "Flame skull",
+      "Ash hound",
+      "Crab knight",
+      "Jelly",
+      "Pufferfish",
+      "Pumpkin head",
+      "Shadow cat",
+      "Wraith",
+      "Goblin bomber",
+      "Bumble guard",
+      "Ratfolk thief",
+      "Cyclops",
+      "Elder treant",
+      "Gel monarch",
+      "Dragon whelp",
+      "Bone archmage",
+      "Tide kraken",
+      "Golem king"
+    ],
+    "animations": "Creator lists directional idle, walk, attack, hurt, death and specials; bosses have phase changes.",
+    "view": "Top-down",
+    "art": "AI-assisted (creator disclosed)",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Creator page discloses AI-assisted production. Not used in the active road-camp roster.",
+    "colors": 27,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTI1OTYyMC8zMTU0NTEwNS5naWY=/original/7eozLI.gif",
+      "https://img.itch.zone/aW1hZ2UvNTI1OTYyMC8zMTU0NTEwOC5naWY=/original/9Zunfo.gif",
+      "https://img.itch.zone/aW1hZ2UvNTI1OTYyMC8zMTU0NTEwNC5naWY=/original/osA2DO.gif",
+      "https://img.itch.zone/aW1hZ2UvNTI1OTYyMC8zMTU0NTEwNy5naWY=/original/VTrtoa.gif",
+      "https://img.itch.zone/aW1hZ2UvNTI1OTYyMC8zMTU0NTEwNi5naWY=/original/kESF%2FY.gif",
+      "https://img.itch.zone/aW1hZ2UvNTI1OTYyMC8zMTU0NTEyMC5wbmc=/original/dB%2Fccg.png",
+      "https://img.itch.zone/aW1hZ2UvNTI1OTYyMC8zMTU0NTEyMS5wbmc=/original/UqvzQP.png",
+      "https://img.itch.zone/aW1hZ2UvNTI1OTYyMC8zMTU0NTEyMy5wbmc=/original/NpdYZ7.png"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "C03",
+    "title": "Twenty Tiny Monsters",
+    "author": "TopDigitalForge",
+    "url": "https://topdigitalforge.itch.io/free-pixel-monsters",
+    "names": [
+      "Slime",
+      "Bat",
+      "Beetle",
+      "Ghost",
+      "Golem",
+      "Eye",
+      "Imp",
+      "Plant",
+      "Spider",
+      "Knight"
+    ],
+    "animations": "2-frame idle only.",
+    "view": "Top-down",
+    "art": "Procedural / AI-assisted code",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Two variants per archetype: 20 sprites total. No movement or attack sheets in the free pack.",
+    "colors": 10,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTA3ODM3MS8zMDM5ODUyMy5naWY=/original/9aBSwt.gif",
+      "https://img.itch.zone/aW1hZ2UvNTA3ODM3MS8zMDM5ODUyNC5wbmc=/original/Iq5%2Fbf.png"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "D01",
+    "title": "Mimic, Slime & Goblin",
+    "author": "miks",
+    "url": "https://mikspixel.itch.io/monster-pack-animated-pixel-art-64x64",
+    "names": [
+      "Mimic",
+      "Slime",
+      "Goblin"
+    ],
+    "animations": "Idle, side-view walk, attack, death; 64×64.",
+    "view": "Side-view",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Reference/alternative only: no complete top-down directional set.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNDcxMTcwMC8yODA3Nzc3NS5naWY=/original/4swqkY.gif",
+      "https://img.itch.zone/aW1hZ2UvNDcxMTcwMC8yODA3NzY2Ny5naWY=/original/lnq3nR.gif",
+      "https://img.itch.zone/aW1hZ2UvNDcxMTcwMC8yODA3NzY2OC5naWY=/original/cxsuhS.gif",
+      "https://img.itch.zone/aW1hZ2UvNDcxMTcwMC8yODA3NzY4Ni5naWY=/original/W7HkSu.gif",
+      "https://img.itch.zone/aW1hZ2UvNDcxMTcwMC8yODA3NzcwNy5naWY=/original/fdgnpc.gif"
+    ],
+    "previewVerified": true,
+    "inUse": true
+  },
+  {
+    "id": "D02",
+    "title": "Zombie, Skeleton & Witch",
+    "author": "Stealthix",
+    "url": "https://stealthix.itch.io/animated-monsters",
+    "names": [
+      "Zombie",
+      "Skeleton",
+      "Witch"
+    ],
+    "animations": "Idle, walk, punch, hurt, fall.",
+    "view": "Direction set unconfirmed",
+    "art": "Artist-made",
+    "license": "CC0. Attribution appreciated, not required.",
+    "note": "View direction is not specified on the source page; inspect sheets before considering integration.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMzcwNjYxLzE4NTc1NjQuZ2lm/original/COhGiI.gif",
+      "https://img.itch.zone/aW1hZ2UvMzcwNjYxLzE4NTc1NjMuZ2lm/original/kqqBiZ.gif"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "D03",
+    "title": "Pixel Monsters Free Pack",
+    "author": "Matseb2611",
+    "url": "https://matseb2611.itch.io/pixel-monsters-free-pack",
+    "names": [
+      "Evil head",
+      "Evil skull 1",
+      "Evil skull 2",
+      "Goblin",
+      "Armed ghost 1",
+      "Armed ghost 2",
+      "Mosquito"
+    ],
+    "animations": "4-direction movement sheets; additional poses include side-view attacks and deaths.",
+    "view": "Top-down",
+    "art": "Artist-made",
+    "license": "Free download verified. Usage licence is not explicit on the page; inspect the archive before any game use.",
+    "note": "Five monster families, seven listed forms. Do not assume side-view battle poses are available in every direction.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMzQ0NzU4LzE3MTA3NzMucG5n/original/8O08HX.png",
+      "https://img.itch.zone/aW1hZ2UvMzQ0NzU4LzE3MTA3NTYucG5n/original/WABvys.png",
+      "https://img.itch.zone/aW1hZ2UvMzQ0NzU4LzE3MTA3NTcucG5n/original/ZCkBlI.png"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "D04",
+    "title": "Fantasy Monsters Vol. 1",
+    "author": "reodesuxz",
+    "url": "https://reodesuxz.itch.io/free-pixel-fantasy-monsters-32x32-animated",
+    "names": [
+      "Slime",
+      "Bat",
+      "Skeleton",
+      "Ghost",
+      "Goblin",
+      "Mushroom",
+      "Spider",
+      "Eyeball",
+      "Pumpkin",
+      "Snake",
+      "Golem",
+      "Wyrm",
+      "Imp"
+    ],
+    "animations": "4-frame idle only; 32×32.",
+    "view": "Side-view / reference",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "15 listed sprites: 13 types including three slime colors. No attack or walking set.",
+    "colors": 2,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTEzNzA3OS8zMDc1MTI2OS5wbmc=/original/fEOvqG.png",
+      "https://img.itch.zone/aW1hZ2UvNTEzNzA3OS8zMDc1MTI3MS5wbmc=/original/fycJmV.png"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "D05",
+    "title": "Fantasy Monsters Vol. 2",
+    "author": "reodesuxz",
+    "url": "https://reodesuxz.itch.io/free-pixel-fantasy-monsters-vol-2-32x32-animated",
+    "names": [
+      "Zombie",
+      "Mummy",
+      "Lich",
+      "Vampire",
+      "Fire elemental",
+      "Water elemental",
+      "Ice elemental",
+      "Storm elemental",
+      "Wolf",
+      "Boar",
+      "Scorpion",
+      "Orc",
+      "Demon",
+      "Mimic chest",
+      "Dark knight"
+    ],
+    "animations": "4-frame idle and attack; right-facing, flip for left.",
+    "view": "Side-view",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Good reference breadth, but not directional overworld enemies.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTE0MTYwNy8zMDc3ODE0MC5wbmc=/original/6Ygr2%2F.png",
+      "https://img.itch.zone/aW1hZ2UvNTE0MTYwNy8zMDc3ODE0Mi5wbmc=/original/U8mJXn.png"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "D06",
+    "title": "Fantasy Monsters Vol. 3",
+    "author": "reodesuxz",
+    "url": "https://reodesuxz.itch.io/free-pixel-fantasy-monsters-vol-3-32x32-animated",
+    "names": [
+      "Treant",
+      "Giant crab",
+      "Giant wasp",
+      "Cyclops",
+      "Lizardman",
+      "Frog",
+      "Giant rat",
+      "Jellyfish",
+      "Gargoyle",
+      "Yeti"
+    ],
+    "animations": "4-frame idle and attack; right-facing, flip for left.",
+    "view": "Side-view",
+    "art": "Artist-made",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "No top/back animation sets.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTE3MjM4MC8zMDk3MzcyMi5wbmc=/original/N59S4y.png",
+      "https://img.itch.zone/aW1hZ2UvNTE3MjM4MC8zMDk3MzcyMy5wbmc=/original/bd6KoW.png"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "D07",
+    "title": "Ghost Mushroom",
+    "author": "Elie Studio",
+    "url": "https://elie-automata.itch.io/ghost-mushroom-free-2d-pixel-art-monster",
+    "names": [
+      "Ghost mushroom"
+    ],
+    "animations": "Stand, idle and death; 8 directions.",
+    "view": "Top-down",
+    "art": "AI-generated / assisted graphics",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "The original page now redirects to an unrelated product; not used in the active road roster.",
+    "colors": 4,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTE4MDk3Mi8zMTc1NDI4My5wbmc=/original/rzPtyf.png",
+      "https://img.itch.zone/aW1hZ2UvNTE4MDk3Mi8zMTc1NDI4Ni5wbmc=/original/dverWc.png",
+      "https://img.itch.zone/aW1hZ2UvNTE4MDk3Mi8zMTc1NDI4OC5naWY=/original/toQG0c.gif",
+      "https://img.itch.zone/aW1hZ2UvNTE4MDk3Mi8zMTc1NDI4NC5wbmc=/original/95bTtQ.png",
+      "https://img.itch.zone/aW1hZ2UvNTE4MDk3Mi8zMTc1NDI4NS5wbmc=/original/XWFEGF.png",
+      "https://img.itch.zone/aW1hZ2UvNTE4MDk3Mi8zMTc1NDI4Ny5wbmc=/original/x%2BdsVq.png",
+      "https://img.itch.zone/aW1nLzMxNzU0MTI2LmdpZg==/original/waxSnH.gif",
+      "https://img.itch.zone/aW1nLzMxNzU0MTMwLmdpZg==/original/rWFanO.gif"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  },
+  {
+    "id": "D08",
+    "title": "Storm Harpy & Static Weaver",
+    "author": "GegX",
+    "url": "https://gegx.itch.io/free-animated-monsters",
+    "names": [
+      "Storm harpy",
+      "Static weaver"
+    ],
+    "animations": "Idle, walk, attack; 4 directions.",
+    "view": "Top-down",
+    "art": "AI-generated (creator disclosed)",
+    "license": "Personal/commercial game use; modification allowed; no standalone redistribution. Credit appreciated.",
+    "note": "Creator page discloses AI-generated art. Not used in the active road roster.",
+    "colors": 0,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTA2Mzk5MC8zMDM4NDI0OC5wbmc=/original/rQCs2Q.png",
+      "https://img.itch.zone/aW1hZ2UvNTA2Mzk5MC8zMDM4NDI0OS5wbmc=/original/1FiTi3.png",
+      "https://img.itch.zone/aW1hZ2UvNTA2Mzk5MC8zMDM4NDI0Ny5wbmc=/original/CJk7r0.png"
+    ],
+    "previewVerified": true,
+    "inUse": false
+  }
+]

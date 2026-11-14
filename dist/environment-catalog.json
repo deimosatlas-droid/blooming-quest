@@ -1,0 +1,1438 @@
+[
+  {
+    "id": "E01",
+    "title": "Serene Village — Revamped",
+    "author": "LimeZu",
+    "url": "https://limezu.itch.io/serenevillagerevamped",
+    "contents": [
+      "24 houses",
+      "Terrain",
+      "Trees",
+      "Rocks",
+      "Mushrooms",
+      "Animated objects"
+    ],
+    "categories": [
+      "Buildings",
+      "Trees",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "thornrose",
+      "moonblossom",
+      "tidepetal",
+      "seabloom"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "CC BY 4.0. Credit LimeZu, link the licence and record modifications.",
+    "licenseStatus": "Game use permitted",
+    "note": "Strong candidate for a coherent village base. Preview characters come from a different pack.",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvODAzMTc5LzQ1NDY2OTgucG5n/original/PnJ0xo.png",
+      "https://img.itch.zone/aW1hZ2UvODAzMTc5LzQ0OTg3NTUucG5n/original/nDrHon.png",
+      "https://img.itch.zone/aW1hZ2UvODAzMTc5LzQ1NDE4MDIuZ2lm/original/SJj%2BxE.gif",
+      "https://img.itch.zone/aW1hZ2UvODAzMTc5LzQ5ODA4NDMuZ2lm/original/cmDb2k.gif",
+      "https://img.itch.zone/aW1hZ2UvODAzMTc5LzQ1MTIzNDAucG5n/original/TTHYMA.png"
+    ],
+    "sourceFetched": true,
+    "inUse": true
+  },
+  {
+    "id": "E02",
+    "title": "RPG Tileset — 16px",
+    "author": "Pipoya",
+    "url": "https://pipoya.itch.io/free-rpg-tileset-16x16",
+    "contents": [
+      "Outdoor tiles",
+      "Indoor tiles",
+      "Dungeon tiles"
+    ],
+    "categories": [
+      "Buildings",
+      "Interiors",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "thornrose",
+      "moonblossom",
+      "tidepetal",
+      "seabloom"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "Some sample scenes include older or modified pieces; only the downloaded tiles are in scope.",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNDY1MDY1LzIzNjk3MDcucG5n/original/fHgbQx.png",
+      "https://img.itch.zone/aW1hZ2UvNDY1MDY1LzIzNjk3MDgucG5n/original/ajueDb.png",
+      "https://img.itch.zone/aW1hZ2UvNDY1MDY1LzIzNjk3MTEucG5n/original/nDSF2U.png",
+      "https://img.itch.zone/aW1hZ2UvNDY1MDY1LzIzNjk3MDkucG5n/original/xNd%2BJS.png",
+      "https://img.itch.zone/aW1hZ2UvNDY1MDY1LzIzNjk3MTAucG5n/original/V0vs7p.png",
+      "https://img.itch.zone/aW1hZ2UvNDY1MDY1LzIzNjk3MTQucG5n/original/bmuf0E.png"
+    ],
+    "sourceFetched": true,
+    "inUse": true
+  },
+  {
+    "id": "E03",
+    "title": "RPG Tileset — 32px",
+    "author": "Pipoya",
+    "url": "https://pipoya.itch.io/pipoya-rpg-tileset-32x32",
+    "contents": [
+      "Outdoor tiles",
+      "Indoor tiles",
+      "Door animations",
+      "Tiled sample maps"
+    ],
+    "categories": [
+      "Buildings",
+      "Interiors",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "thornrose",
+      "moonblossom",
+      "tidepetal",
+      "seabloom"
+    ],
+    "grid": "32×32",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "Different pixel scale from the 16px base; compare before mixing.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNDU5MjQ3LzIzMzU5OTcuZ2lm/original/hOwGgR.gif",
+      "https://img.itch.zone/aW1hZ2UvNDU5MjQ3LzIzMzU5OTguZ2lm/original/c4QiAg.gif",
+      "https://img.itch.zone/aW1hZ2UvNDU5MjQ3LzIzMzYwMDEuZ2lm/original/6rhd1p.gif",
+      "https://img.itch.zone/aW1hZ2UvNDU5MjQ3LzIzMzYwMDMuZ2lm/original/AVymFB.gif",
+      "https://img.itch.zone/aW1hZ2UvNDU5MjQ3LzIzMzU5OTkuZ2lm/original/F4I1H7.gif",
+      "https://img.itch.zone/aW1hZ2UvNDU5MjQ3LzIzMzYwMDAuZ2lm/original/%2FL8hRo.gif"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "E04",
+    "title": "Top Down — Basic",
+    "author": "Cainos",
+    "url": "https://cainos.itch.io/pixel-art-top-down-basic",
+    "contents": [
+      "48 props",
+      "15 grasses",
+      "3 trees",
+      "Grass ground",
+      "Stone ground",
+      "Walls",
+      "Separate shadows"
+    ],
+    "categories": [
+      "Ruins",
+      "Trees",
+      "Plants",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "thornrose",
+      "hydrangea",
+      "roads"
+    ],
+    "grid": "32×32",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "Detailed stone-and-nature option. Unity-specific shaders are not portable; PNGs are usable in other engines.",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMTAzMDc1Mi81ODg2OTkwLnBuZw==/original/Up89zK.png",
+      "https://img.itch.zone/aW1hZ2UvMTAzMDc1Mi81ODg2OTkzLnBuZw==/original/IV9P%2B5.png",
+      "https://img.itch.zone/aW1hZ2UvMTAzMDc1Mi81ODg2OTk2LnBuZw==/original/zxaF2R.png",
+      "https://img.itch.zone/aW1hZ2UvMTAzMDc1Mi81ODg2OTk5LnBuZw==/original/PBe89V.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "E05",
+    "title": "Ninja Adventure — Environment Library",
+    "author": "Pixel-Boy & AAA",
+    "url": "https://pixel-boy.itch.io/ninja-adventure-asset-pack",
+    "contents": [
+      "Exterior tiles",
+      "Interior tiles",
+      "Floor autotiles",
+      "Environment effects"
+    ],
+    "categories": [
+      "Buildings",
+      "Interiors",
+      "Trees",
+      "Terrain",
+      "Water",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "thornrose",
+      "moonblossom",
+      "tidepetal",
+      "seabloom"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "CC0. Commercial use allowed; credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "Large consistent 16px library. Review Japanese architecture motifs before selecting pieces for this medieval world.",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvOTMyNjc3LzU0NzM5MjMuZ2lm/original/YzEJnE.gif",
+      "https://img.itch.zone/aW1hZ2UvOTMyNjc3LzU0NzM5MzAuZ2lm/original/yTdpyv.gif",
+      "https://img.itch.zone/aW1hZ2UvOTMyNjc3LzI2Mzk5NDQ1LmdpZg==/original/QcG%2Fvy.gif",
+      "https://img.itch.zone/aW1hZ2UvOTMyNjc3LzIwNDM4MDA4LnBuZw==/original/VLynPf.png",
+      "https://img.itch.zone/aW1hZ2UvOTMyNjc3LzIwNDM4MTE3LnBuZw==/original/pIId3S.png",
+      "https://img.itch.zone/aW1hZ2UvOTMyNjc3LzIwNDM3NzkyLnBuZw==/original/ifdSaD.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "E06",
+    "title": "Fields of Adventure",
+    "author": "Tofu",
+    "url": "https://tofupixel.itch.io/fields-of-adventure",
+    "contents": [
+      "Trees and stumps",
+      "Plants and flowers",
+      "Cliffs and cave entrance",
+      "Water",
+      "Two houses",
+      "Well",
+      "Fences",
+      "Bridges",
+      "Paths",
+      "Pots and crates"
+    ],
+    "categories": [
+      "Buildings",
+      "Trees",
+      "Plants",
+      "Flowers",
+      "Water",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "roads"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Free download and editing permission verified; read the separate license.txt before integration.",
+    "licenseStatus": "Licence file review needed",
+    "note": "Strong visual candidate; licence is supplied as a separate file.",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMjcyOTI1OS8xNjI3OTE5NC5wbmc=/original/UJR6q5.png",
+      "https://img.itch.zone/aW1hZ2UvMjcyOTI1OS8xNjI3OTE5My5wbmc=/original/A%2FwejL.png",
+      "https://img.itch.zone/aW1hZ2UvMjcyOTI1OS8xNjI3OTE5NS5wbmc=/original/C5aMM9.png",
+      "https://img.itch.zone/aW1hZ2UvMjcyOTI1OS8xNjI3OTE5Ni5wbmc=/original/sBoUAk.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "E07",
+    "title": "Forest Houses",
+    "author": "Soppycraft",
+    "url": "https://soppycraft.itch.io/forest-houses-top-down-pixel-pack",
+    "contents": [
+      "Houses",
+      "Trees",
+      "Flowering bushes",
+      "Grass",
+      "Flowers",
+      "Clay pots",
+      "Mud and stone paths",
+      "Water troughs"
+    ],
+    "categories": [
+      "Buildings",
+      "Trees",
+      "Plants",
+      "Flowers",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "53 sprites. Some preview plants belong to a separately sold Indoor Plants pack and are excluded.",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNDQ2MDkyNC8yNjU5MjU3MC5wbmc=/original/3y3duL.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "E08",
+    "title": "The Quiet Village",
+    "author": "Life in pixels",
+    "url": "https://life-in-pixels.itch.io/the-quiet-village-pack",
+    "contents": [
+      "Modular houses",
+      "Interiors",
+      "Roofs and doors",
+      "Trees",
+      "Flowers",
+      "Bushes",
+      "Grass and cliffs",
+      "Water",
+      "Crates and wells"
+    ],
+    "categories": [
+      "Buildings",
+      "Interiors",
+      "Trees",
+      "Flowers",
+      "Terrain",
+      "Water",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "moonblossom"
+    ],
+    "grid": "Check source sheets",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "Preview citizens and mushrooms are not included.",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMzYzNTQ2Ny8yMTYzMzM1MC5wbmc=/original/cs1x6l.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "E09",
+    "title": "Tiny Town",
+    "author": "Kenney",
+    "url": "https://kenney.nl/assets/tiny-town",
+    "contents": [
+      "130 town and overworld tiles"
+    ],
+    "categories": [
+      "Buildings",
+      "Trees",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "thornrose",
+      "moonblossom",
+      "tidepetal",
+      "seabloom"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "CC0. Free commercial use; attribution not required.",
+    "licenseStatus": "Game use permitted",
+    "note": "A simple, consistent style alternative; review against the richer Emerald direction.",
+    "preferred": false,
+    "images": [
+      "https://kenney.nl/media/pages/assets/tiny-town/fc6adf02eb-1674742335/preview.png",
+      "https://kenney.nl/media/pages/assets/tiny-town/e241a9f6c0-1674742338/sample.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "E10",
+    "title": "Roguelike / RPG Pack",
+    "author": "Kenney",
+    "url": "https://kenney.nl/assets/roguelike-rpg-pack",
+    "contents": [
+      "Town tiles",
+      "Furniture",
+      "RPG terrain",
+      "1700 files across the full pack"
+    ],
+    "categories": [
+      "Buildings",
+      "Interiors",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "thornrose",
+      "moonblossom",
+      "tidepetal",
+      "seabloom"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "CC0. Free commercial use; attribution not required.",
+    "licenseStatus": "Game use permitted",
+    "note": "Broad source library. File count is not a count of unique building designs.",
+    "preferred": false,
+    "images": [
+      "https://kenney.nl/media/pages/assets/roguelike-rpg-pack/0bbebdc877-1677697409/preview.png",
+      "https://kenney.nl/media/pages/assets/roguelike-rpg-pack/6b88b8d663-1677697411/sample1.png",
+      "https://kenney.nl/media/pages/assets/roguelike-rpg-pack/5f73473862-1677697413/sample2.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "E11",
+    "title": "Tiny Pixel Fantasy — Base",
+    "author": "Caz",
+    "url": "https://cazwolf.itch.io/tiny-pixel-fantasy1",
+    "contents": [
+      "Town exterior",
+      "Town interior",
+      "Woodland",
+      "Caves",
+      "Castle exterior",
+      "Castle interior",
+      "Ship exterior",
+      "Ship interior"
+    ],
+    "categories": [
+      "Buildings",
+      "Interiors",
+      "Trees",
+      "Terrain",
+      "Ruins",
+      "Docks & boats"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "thornrose",
+      "moonblossom",
+      "tidepetal",
+      "seabloom"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Royalty-free download. Full EULA is linked on the creator page; verify it before integration.",
+    "licenseStatus": "Licence file review needed",
+    "note": "Strong classic RPG coverage, including ship interiors.",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMjczMTcxMC8xNjI5MzgyNC5wbmc=/original/wScdWc.png",
+      "https://img.itch.zone/aW1hZ2UvMjczMTcxMC8xNjI5MzgyNS5wbmc=/original/ixgtBj.png",
+      "https://img.itch.zone/aW1hZ2UvMjczMTcxMC8xNjI5MzgyOC5wbmc=/original/RE22R9.png",
+      "https://img.itch.zone/aW1hZ2UvMjczMTcxMC8xNjI5MzgyOS5wbmc=/original/ojPob8.png",
+      "https://img.itch.zone/aW1hZ2UvMjczMTcxMC8xNjI5MzgyMi5naWY=/original/9ivIyI.gif",
+      "https://img.itch.zone/aW1hZ2UvMjczMTcxMC8xNjI5MzgyNy5naWY=/original/ktv%2BKn.gif"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N01",
+    "title": "Nature Mini Pack",
+    "author": "Mroker",
+    "url": "https://mroker.itch.io/free-top-down-nature-mini-pack",
+    "contents": [
+      "Three tree families",
+      "Small trees",
+      "Stumps and trunks",
+      "Four bushes",
+      "Mushrooms",
+      "Five flowers",
+      "Short and tall grass",
+      "Seven stones"
+    ],
+    "categories": [
+      "Trees",
+      "Plants",
+      "Flowers",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "thornrose",
+      "roads"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNDY2NzQ4Mi8yNzgxOTUzMC5wbmc=/original/wAOkCZ.png",
+      "https://img.itch.zone/aW1hZ2UvNDY2NzQ4Mi8yNzgxNjQ3MS5wbmc=/original/wrxfwd.png",
+      "https://img.itch.zone/aW1hZ2UvNDY2NzQ4Mi8yNzgxNjQ3NC5wbmc=/original/CqgoGk.png",
+      "https://img.itch.zone/aW1hZ2UvNDY2NzQ4Mi8yNzgxNjQ3NS5wbmc=/original/Kkjkvd.png",
+      "https://img.itch.zone/aW1hZ2UvNDY2NzQ4Mi8yNzgxNjQ3Ny5wbmc=/original/peBAT6.png",
+      "https://img.itch.zone/aW1hZ2UvNDY2NzQ4Mi8yNzgxNjQ3OC5wbmc=/original/BeJis3.png"
+    ],
+    "sourceFetched": true,
+    "inUse": true
+  },
+  {
+    "id": "N02",
+    "title": "Pixel Art Flower Pack",
+    "author": "karsiori",
+    "url": "https://karsiori.itch.io/free-pixel-art-flower-pack",
+    "contents": [
+      "13 flower designs",
+      "Seven potted flowers",
+      "Flowerbed grid",
+      "Two bushes",
+      "Four empty pots",
+      "Color variants"
+    ],
+    "categories": [
+      "Flowers",
+      "Plants",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "moonblossom",
+      "tidepetal"
+    ],
+    "grid": "Check source sheets",
+    "scope": "Free pack",
+    "license": "CC0. Personal and commercial use; credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "Exact lavender, hydrangea and moonblossom species are not confirmed by the source; custom variants may still be needed.",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMjQ2MjQ5OC8xNDYwNjYzOS5wbmc=/original/gWbuB0.png",
+      "https://img.itch.zone/aW1hZ2UvMjQ2MjQ5OC8xNDYwNjY0MC5wbmc=/original/CPaAHY.png"
+    ],
+    "sourceFetched": true,
+    "inUse": true
+  },
+  {
+    "id": "N03",
+    "title": "Pixel Plants — Free Edition",
+    "author": "Shaade",
+    "url": "https://shaade.itch.io/pixelplants",
+    "contents": [
+      "Tree in two variations",
+      "Small bush",
+      "One flower",
+      "Grass"
+    ],
+    "categories": [
+      "Trees",
+      "Plants",
+      "Flowers"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "roads"
+    ],
+    "grid": "16×16",
+    "scope": "Free subset",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "Only these pieces are free. Other premium plants shown on the page are excluded.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1nLzI0OTIzMTA2LnBuZw==/original/R6z6vm.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N04",
+    "title": "Plants & Flowers — Free Edition",
+    "author": "Vairus Studio",
+    "url": "https://vairus-studio.itch.io/plants-flowers-pixel-pack",
+    "contents": [
+      "Free plants and flowers sheet",
+      "Decorative nature variations"
+    ],
+    "categories": [
+      "Flowers",
+      "Plants"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "moonblossom"
+    ],
+    "grid": "16×16",
+    "scope": "Free subset",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "Use the (Free).zip, not the paid Complete edition. Exact free contents need sheet inspection.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNDIwNjU2MS8yNTA4NjUwOC5wbmc=/original/DJS9aK.png",
+      "https://img.itch.zone/aW1hZ2UvNDIwNjU2MS8yNTA4Njc1NS5wbmc=/original/ZrMFCi.png",
+      "https://img.itch.zone/aW1hZ2UvNDIwNjU2MS8yNTA4Njc1Ni5wbmc=/original/K%2BM8nA.png",
+      "https://img.itch.zone/aW1hZ2UvNDIwNjU2MS8yNTA4Njc1Ny5wbmc=/original/PILofJ.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N05",
+    "title": "Tiny Garden",
+    "author": "kathychow",
+    "url": "https://kathychow.itch.io/16x16-tiny-garden-free-pack",
+    "contents": [
+      "Eight plus one flower sets",
+      "Seed-to-blossom phases",
+      "Grass",
+      "Water",
+      "Bridge",
+      "Stone road",
+      "Tree",
+      "Hut"
+    ],
+    "categories": [
+      "Flowers",
+      "Plants",
+      "Trees",
+      "Water",
+      "Buildings",
+      "Terrain"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "hydrangea"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "Strong option for a growing home garden.",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMjQ0Njc2OC8xNDQ5OTM3Ni5wbmc=/original/1eHSLX.png",
+      "https://img.itch.zone/aW1hZ2UvMjQ0Njc2OC8xNDQ5NzE0Mi5wbmc=/original/SRLPgr.png",
+      "https://img.itch.zone/aW1hZ2UvMjQ0Njc2OC8xNDQ5NzE0NS5wbmc=/original/08nPKW.png",
+      "https://img.itch.zone/aW1hZ2UvMjQ0Njc2OC8xNDQ5NzE0NC5naWY=/original/0e8paO.gif"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N06",
+    "title": "Forest Tileset",
+    "author": "Kettoman",
+    "url": "https://kettoman.itch.io/free-pixel-forest-tileset-16x16",
+    "contents": [
+      "Tree variations",
+      "Grass-to-dirt edges",
+      "Rocky terrain",
+      "Bushes",
+      "Flowers",
+      "Small plants"
+    ],
+    "categories": [
+      "Trees",
+      "Plants",
+      "Flowers",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "thornrose",
+      "roads"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNDA0NjI3NC8yNDEyMDk1OC5wbmc=/original/Zl4WTZ.png",
+      "https://img.itch.zone/aW1hZ2UvNDA0NjI3NC8yNDEyMTEyOC5wbmc=/original/WD1P%2FF.png",
+      "https://img.itch.zone/aW1hZ2UvNDA0NjI3NC8yNDEyMTEyNy5wbmc=/original/ljGaft.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N07",
+    "title": "Ten Pixel Trees",
+    "author": "Riclmbr",
+    "url": "https://riclmbr.itch.io/pixel-trees-10-free-pixel-art-trees",
+    "contents": [
+      "Oak",
+      "Apple",
+      "Birch",
+      "Willow",
+      "Pine",
+      "Snowy pine",
+      "Cherry blossom",
+      "Autumn maple",
+      "Palm",
+      "Dead tree"
+    ],
+    "categories": [
+      "Trees"
+    ],
+    "regions": [
+      "rosepetal",
+      "sunveil",
+      "hydrangea",
+      "thornrose",
+      "moonblossom",
+      "tidepetal",
+      "seabloom",
+      "roads"
+    ],
+    "grid": "64×80 objects",
+    "scope": "Free pack",
+    "license": "CC0. Commercial use; no credit required.",
+    "licenseStatus": "Game use permitted",
+    "note": "Static trees. Large object size needs scale comparison with tiny player sprites.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTIxMTY0Mi8zMTIyODg5Ni5wbmc=/original/4y6Zg7.png",
+      "https://img.itch.zone/aW1hZ2UvNTIxMTY0Mi8zMTIyODg3Ni5wbmc=/original/zM97Pg.png",
+      "https://img.itch.zone/aW1hZ2UvNTIxMTY0Mi8zMTIyODg3Ny5wbmc=/original/iswQeD.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N08",
+    "title": "Seasonal Tree Shapes",
+    "author": "Danyl4o",
+    "url": "https://danyl4o.itch.io/trees",
+    "contents": [
+      "Twenty tree shapes",
+      "Six color sets",
+      "120 total tree sprites"
+    ],
+    "categories": [
+      "Trees"
+    ],
+    "regions": [
+      "sunveil",
+      "hydrangea",
+      "thornrose",
+      "moonblossom",
+      "roads"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "Each entire tree fits one 16px tile, so these suit small-scale maps better than full-size Emerald overworld trees.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTA2NjA1MC8zMDMyOTQ0OS5wbmc=/original/qn34hP.png",
+      "https://img.itch.zone/aW1hZ2UvNTA2NjA1MC8zMDMyOTQ1MS5wbmc=/original/vhL4Ij.png",
+      "https://img.itch.zone/aW1hZ2UvNTA2NjA1MC8zMDMyOTQ1NS5wbmc=/original/UkEK1v.png",
+      "https://img.itch.zone/aW1hZ2UvNTA2NjA1MC8zMDMyOTQ1Ni5wbmc=/original/eW4DlO.png",
+      "https://img.itch.zone/aW1hZ2UvNTA2NjA1MC8zMDMyOTQ1OC5wbmc=/original/sHKhRc.png",
+      "https://img.itch.zone/aW1hZ2UvNTA2NjA1MC8zMDMyOTQ1OS5wbmc=/original/otXcHa.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N09",
+    "title": "Flora Details",
+    "author": "VISCERAL MELON",
+    "url": "https://visceral-melon.itch.io/flora-flowers-mushrooms-grass-asset-pack-free",
+    "contents": [
+      "Flowers",
+      "Mushrooms",
+      "Grass details",
+      "Color variations"
+    ],
+    "categories": [
+      "Flowers",
+      "Plants"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "moonblossom",
+      "roads"
+    ],
+    "grid": "8×8",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "Small ground accents only. Keep them at native scale or clean integer scaling.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTA2MDM4MS8zMDI5NjQ5MS5wbmc=/original/p0bYK7.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N10",
+    "title": "Four-Season Trees",
+    "author": "Ragnir123",
+    "url": "https://ragnir123.itch.io/4-season-trees-pack-v1",
+    "contents": [
+      "Four-season tree sheet",
+      "Editable Aseprite source"
+    ],
+    "categories": [
+      "Trees"
+    ],
+    "regions": [
+      "sunveil",
+      "hydrangea",
+      "moonblossom",
+      "roads"
+    ],
+    "grid": "Check source sheet",
+    "scope": "Free pack",
+    "license": "Free download verified. Usage terms are not explicit on the source page; inspect archive before use.",
+    "licenseStatus": "Licence file review needed",
+    "note": "",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1nLzI5MDM3MDc0LnBuZw==/original/NYIjci.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N11",
+    "title": "Forest Night",
+    "author": "MajorHN",
+    "url": "https://majorhn.itch.io/16x16-topdown-forest-night-sprite",
+    "contents": [
+      "Night-themed forest tilesheet"
+    ],
+    "categories": [
+      "Trees",
+      "Terrain",
+      "Plants"
+    ],
+    "regions": [
+      "moonblossom",
+      "thornrose",
+      "roads"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Free download verified; usage licence not explicit on the page. Inspect before use.",
+    "licenseStatus": "Licence file review needed",
+    "note": "Candidate for night palettes, not approved game artwork.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1nLzEwOTk3NDM4LnBuZw==/original/iWVtZA.png",
+      "https://img.itch.zone/aW1nLzEwOTk3NDM4LnBuZw==/347x500/vmKzv9.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N12",
+    "title": "Sprout Lands — Basic",
+    "author": "Cup Nooble",
+    "url": "https://cupnooble.itch.io/sprout-lands-asset-pack",
+    "contents": [
+      "Basic grass and water tiles",
+      "Free pastel farming assets"
+    ],
+    "categories": [
+      "Terrain",
+      "Plants",
+      "Water",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr"
+    ],
+    "grid": "16×16",
+    "scope": "Free subset",
+    "license": "Free edition: NON-COMMERCIAL projects only. Credit Cup Nooble. Commercial use requires a paid licence and is outside this free collection.",
+    "licenseStatus": "Non-commercial only",
+    "note": "Personal-gift option only. Pastel art is softer than Emerald; premium features in previews are excluded.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMTI1NjEzOC84MTgyODcyLmdpZg==/original/h3xB8S.gif",
+      "https://img.itch.zone/aW1hZ2UvMTI1NjEzOC84MTgyODc0LnBuZw==/original/OniLGN.png",
+      "https://img.itch.zone/aW1hZ2UvMTI1NjEzOC83NzM0OTcwLmdpZg==/original/E5DzWK.gif",
+      "https://img.itch.zone/aW1hZ2UvMTI1NjEzOC83NzM0ODIxLnBuZw==/original/zDnZ6%2B.png",
+      "https://img.itch.zone/aW1hZ2UvMTI1NjEzOC83OTU5NTc4LmdpZg==/original/fg2a3F.gif",
+      "https://img.itch.zone/aW1hZ2UvMTI1NjEzOC83ODUxNDkyLnBuZw==/original/4lM7Qy.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N13",
+    "title": "Infinity Forest — Free",
+    "author": "PixelMo",
+    "url": "https://pixelmo.itch.io/infinity-forest",
+    "contents": [
+      "Free forest terrain and props sample"
+    ],
+    "categories": [
+      "Trees",
+      "Plants",
+      "Flowers",
+      "Terrain"
+    ],
+    "regions": [
+      "hydrangea",
+      "moonblossom",
+      "roads"
+    ],
+    "grid": "16×16",
+    "scope": "Free subset",
+    "license": "Free edition permits NON-COMMERCIAL projects only. No standalone redistribution.",
+    "licenseStatus": "Non-commercial only",
+    "note": "Do not infer the whole page’s pictured content is included; inspect the Free archive.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMTg5OTk5My8xMTI0NTg5OC5naWY=/original/iYlFy5.gif",
+      "https://img.itch.zone/aW1hZ2UvMTg5OTk5My8xMTI0NTkwMi5naWY=/original/GL%2Fdtb.gif",
+      "https://img.itch.zone/aW1hZ2UvMTg5OTk5My8xMTI1OTM2Ny5wbmc=/original/6mizGd.png",
+      "https://img.itch.zone/aW1hZ2UvMTg5OTk5My8xMTI3NTYxMS5wbmc=/original/fq5IOI.png",
+      "https://img.itch.zone/aW1hZ2UvMTg5OTk5My8xMTM5ODY1Ny5wbmc=/original/xm5Plm.png",
+      "https://img.itch.zone/aW1hZ2UvMTg5OTk5My8xMTM5ODY2Mi5wbmc=/original/a4WC%2BK.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N14",
+    "title": "Mana Seed Spring — Sample",
+    "author": "Seliel the Shaper",
+    "url": "https://seliel-the-shaper.itch.io/spring-forest",
+    "contents": [
+      "Free seasonal forest sample only"
+    ],
+    "categories": [
+      "Trees",
+      "Plants",
+      "Terrain"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "hydrangea"
+    ],
+    "grid": "16×16",
+    "scope": "Free sample only",
+    "license": "A free sample is offered; read the sample licence before game use. The full tileset is paid and excluded.",
+    "licenseStatus": "Sample licence review needed",
+    "note": "Preview images advertise the full paid pack. Individual free trees, water and plant contents are not yet verified.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNjQzODk5LzExMzY3NDM4LnBuZw==/original/gqoIN0.png",
+      "https://img.itch.zone/aW1hZ2UvNjQzODk5LzM3NTA3OTEucG5n/original/XxjO%2Bh.png",
+      "https://img.itch.zone/aW1hZ2UvNjQzODk5LzM3NTA3ODkucG5n/original/9MPL2k.png",
+      "https://img.itch.zone/aW1hZ2UvNjQzODk5LzM3NTA3OTAucG5n/original/UWplp%2B.png",
+      "https://img.itch.zone/aW1hZ2UvNjQzODk5LzM3NTA3ODgucG5n/original/XAAe0w.png",
+      "https://img.itch.zone/aW1hZ2UvNjQzODk5Lzc0MjkwMTAucG5n/original/cetB%2Bq.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N15",
+    "title": "Mana Seed Summer — Sample",
+    "author": "Seliel the Shaper",
+    "url": "https://seliel-the-shaper.itch.io/summer-forest",
+    "contents": [
+      "Free seasonal forest sample only"
+    ],
+    "categories": [
+      "Trees",
+      "Plants",
+      "Terrain"
+    ],
+    "regions": [
+      "sunveil",
+      "hydrangea",
+      "roads"
+    ],
+    "grid": "16×16",
+    "scope": "Free sample only",
+    "license": "A free sample is offered; read the sample licence before game use. The full tileset is paid and excluded.",
+    "licenseStatus": "Sample licence review needed",
+    "note": "Preview images advertise the full paid pack. Individual free trees, water and plant contents are not yet verified.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNjMwNjMxLzExMzY3NDUzLmdpZg==/original/cnPTrD.gif",
+      "https://img.itch.zone/aW1hZ2UvNjMwNjMxLzM3NDQxNTEucG5n/original/VfMOgg.png",
+      "https://img.itch.zone/aW1hZ2UvNjMwNjMxLzM3NDQxNDkucG5n/original/cb7%2FAt.png",
+      "https://img.itch.zone/aW1hZ2UvNjMwNjMxLzM3NDQxNTAucG5n/original/62oM71.png",
+      "https://img.itch.zone/aW1hZ2UvNjMwNjMxLzM3NDQxNDgucG5n/original/2BWZE9.png",
+      "https://img.itch.zone/aW1hZ2UvNjMwNjMxLzc0MjM3NDMucG5n/original/yoqNec.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N16",
+    "title": "Mana Seed Autumn — Sample",
+    "author": "Seliel the Shaper",
+    "url": "https://seliel-the-shaper.itch.io/autumn-forest",
+    "contents": [
+      "Free seasonal forest sample only"
+    ],
+    "categories": [
+      "Trees",
+      "Plants",
+      "Terrain"
+    ],
+    "regions": [
+      "sunveil",
+      "thornrose",
+      "roads"
+    ],
+    "grid": "16×16",
+    "scope": "Free sample only",
+    "license": "A free sample is offered; read the sample licence before game use. The full tileset is paid and excluded.",
+    "licenseStatus": "Sample licence review needed",
+    "note": "Preview images advertise the full paid pack. Individual free trees, water and plant contents are not yet verified.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNjgwODYxLzExMzY3NDIzLnBuZw==/original/ky3DbX.png",
+      "https://img.itch.zone/aW1hZ2UvNjgwODYxLzM3NDQyNTgucG5n/original/6zITqE.png",
+      "https://img.itch.zone/aW1hZ2UvNjgwODYxLzM3NDQyNTYucG5n/original/pcXKZU.png",
+      "https://img.itch.zone/aW1hZ2UvNjgwODYxLzM3NDQyNTcucG5n/original/z%2B%2BdEn.png",
+      "https://img.itch.zone/aW1hZ2UvNjgwODYxLzM3NDQyNTUucG5n/original/8RmGzT.png",
+      "https://img.itch.zone/aW1hZ2UvNjgwODYxLzU1Njc0MDEucG5n/original/qKYG7j.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "N17",
+    "title": "Mana Seed Winter — Sample",
+    "author": "Seliel the Shaper",
+    "url": "https://seliel-the-shaper.itch.io/winter-forest",
+    "contents": [
+      "Free seasonal forest sample only"
+    ],
+    "categories": [
+      "Trees",
+      "Plants",
+      "Terrain"
+    ],
+    "regions": [
+      "moonblossom",
+      "thornrose"
+    ],
+    "grid": "16×16",
+    "scope": "Free sample only",
+    "license": "A free sample is offered; read the sample licence before game use. The full tileset is paid and excluded.",
+    "licenseStatus": "Sample licence review needed",
+    "note": "Preview images advertise the full paid pack. Individual free trees, water and plant contents are not yet verified.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNzA2MzQ0LzExMzY3NDc5LnBuZw==/original/0i1jri.png",
+      "https://img.itch.zone/aW1hZ2UvNzA2MzQ0LzM5MDY2MjQucG5n/original/Ftxbtu.png",
+      "https://img.itch.zone/aW1hZ2UvNzA2MzQ0LzM5MDY2MjIucG5n/original/WDMNN7.png",
+      "https://img.itch.zone/aW1hZ2UvNzA2MzQ0LzM5MDY2MjMucG5n/original/MVSezi.png",
+      "https://img.itch.zone/aW1hZ2UvNzA2MzQ0LzM5MDY2MjEucG5n/original/HRevdf.png",
+      "https://img.itch.zone/aW1hZ2UvNzA2MzQ0Lzc0MzEyOTYucG5n/original/wzV7y4.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "H01",
+    "title": "Pirate Port Town",
+    "author": "reodesuxz",
+    "url": "https://reodesuxz.itch.io/free-pixel-top-down-pirate-port-town-tileset-vol-2-16x16",
+    "contents": [
+      "Cobblestone and dock floors",
+      "Timber and plaster walls",
+      "Roof pieces",
+      "Ships and rowboat",
+      "Lighthouse",
+      "Crane",
+      "Nets",
+      "Market stalls",
+      "Tavern furniture"
+    ],
+    "categories": [
+      "Buildings",
+      "Docks & boats",
+      "Water",
+      "Terrain",
+      "Props",
+      "Interiors"
+    ],
+    "regions": [
+      "tidepetal",
+      "seabloom"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "123 listed assets across the whole pack. Select medieval merchant pieces; pirate flags and cannons are optional, not part of our confirmed setting.",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTIzMDA0NC8zMTM0OTEwMi5wbmc=/original/IIMYA3.png",
+      "https://img.itch.zone/aW1hZ2UvNTIzMDA0NC8zMTM0OTEwMy5wbmc=/original/bF%2Bd5n.png"
+    ],
+    "sourceFetched": true,
+    "inUse": true
+  },
+  {
+    "id": "H02",
+    "title": "Ocean & Island Tiles",
+    "author": "reodesuxz",
+    "url": "https://reodesuxz.itch.io/free-pixel-ocean-pirate-tileset-16x16",
+    "contents": [
+      "Shallow and deep water",
+      "Shore edges",
+      "Sand",
+      "Pier pieces",
+      "Palms",
+      "Seaweed and coral",
+      "Ship components",
+      "Dock props",
+      "Lighthouse"
+    ],
+    "categories": [
+      "Docks & boats",
+      "Water",
+      "Trees",
+      "Plants",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "tidepetal",
+      "seabloom"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "90 listed assets across the full pack. Tropical palms are optional for Seabloom, not automatically added.",
+    "preferred": true,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTEzODQwMC8zMDc1OTA2OC5wbmc=/original/AfvBp9.png",
+      "https://img.itch.zone/aW1hZ2UvNTEzODQwMC8zMDc1OTA3MS5wbmc=/original/57sfNy.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "H03",
+    "title": "Top-Down Boats",
+    "author": "MinZinn",
+    "url": "https://minzinn.itch.io/pixel-boats-top-down-game-assets-32x32-64x64-pixel-art-free",
+    "contents": [
+      "Top-down boat sprites"
+    ],
+    "categories": [
+      "Docks & boats"
+    ],
+    "regions": [
+      "tidepetal",
+      "seabloom"
+    ],
+    "grid": "32px / 64px",
+    "scope": "Free pack",
+    "license": "CC BY 4.0. Credit MinZinn, link the licence and record modifications.",
+    "licenseStatus": "Game use permitted",
+    "note": "Choose sail/rowing vessels for the medieval theme; modern boats are not recommended.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvMjk0NzcyNy8xNzY0NDc4OS5naWY=/original/BT5xj7.gif",
+      "https://img.itch.zone/aW1hZ2UvMjk0NzcyNy8xNzY0NDk1MC5naWY=/original/5gIKr2.gif",
+      "https://img.itch.zone/aW1hZ2UvMjk0NzcyNy8xNzY2NTI5OC5naWY=/original/6Lth2x.gif",
+      "https://img.itch.zone/aW1hZ2UvMjk0NzcyNy8xNzcxNTg1NS5naWY=/original/MIyb8C.gif"
+    ],
+    "sourceFetched": true,
+    "inUse": true
+  },
+  {
+    "id": "R01",
+    "title": "Farm Tiles",
+    "author": "reodesuxz",
+    "url": "https://reodesuxz.itch.io/free-pixel-top-down-farm-tileset-16x16",
+    "contents": [
+      "Ground and water edges",
+      "Crop growth stages",
+      "Fences and gates",
+      "Hay",
+      "Barrels",
+      "Crates",
+      "Well",
+      "Tools",
+      "Nature objects"
+    ],
+    "categories": [
+      "Terrain",
+      "Water",
+      "Plants",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "108 assets across the full pack. Useful farm dressing rather than a full farming system.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTEzNjQwMi8zMDc0NzQwOC5wbmc=/original/gju95j.png",
+      "https://img.itch.zone/aW1hZ2UvNTEzNjQwMi8zMDc0NzQxNi5wbmc=/original/aWQpZL.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "R02",
+    "title": "Castle & Medieval",
+    "author": "reodesuxz",
+    "url": "https://reodesuxz.itch.io/free-pixel-castle-medieval-tileset-16x16",
+    "contents": [
+      "Castle walls and tower",
+      "Gates",
+      "Cottage",
+      "Market stall",
+      "Cobblestone",
+      "Moat",
+      "Wooden bridge",
+      "Ivy",
+      "Anvil",
+      "Well",
+      "Windmill"
+    ],
+    "categories": [
+      "Buildings",
+      "Terrain",
+      "Water",
+      "Props",
+      "Ruins"
+    ],
+    "regions": [
+      "rosepetal",
+      "sunveil",
+      "thornrose",
+      "moonblossom"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "87 total assets. Building modularity and exact scale need review.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTE0MDI0MC8zMDc2OTczNy5wbmc=/original/V1WyrW.png",
+      "https://img.itch.zone/aW1hZ2UvNTE0MDI0MC8zMDc2OTc0MS5wbmc=/original/XvzNEP.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "R03",
+    "title": "Castle Interiors",
+    "author": "reodesuxz",
+    "url": "https://reodesuxz.itch.io/free-pixel-castle-interior-tileset-16x16",
+    "contents": [
+      "Stone and wood floors",
+      "Walls and windows",
+      "Pillars",
+      "Torches",
+      "Doors",
+      "Bed",
+      "Bookshelf",
+      "Fireplace",
+      "Tables",
+      "Chandelier"
+    ],
+    "categories": [
+      "Interiors",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "thornrose",
+      "moonblossom"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "83 total assets, including characters. Select cosy furnishings rather than making every house a throne room.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTE0MzIyNC8zMDc4NzM2My5wbmc=/original/beely3.png",
+      "https://img.itch.zone/aW1hZ2UvNTE0MzIyNC8zMDc4NzM2NC5wbmc=/original/gX%2FESq.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "R04",
+    "title": "Castle & Dungeon Vol. 3",
+    "author": "reodesuxz",
+    "url": "https://reodesuxz.itch.io/free-pixel-top-down-castle-and-dungeon-tileset-vol-3-16x16",
+    "contents": [
+      "Mossy flagstones",
+      "Courtyard grass",
+      "Round towers",
+      "Stairs",
+      "Gate pieces",
+      "Torch",
+      "Forge",
+      "Weapon racks",
+      "Fountain",
+      "Statues"
+    ],
+    "categories": [
+      "Buildings",
+      "Interiors",
+      "Ruins",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "thornrose",
+      "moonblossom",
+      "roads"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "152 total assets. Good source of ruins and blacksmith workshop details.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTIwMzU5My8zMTE3MjQzOS5wbmc=/original/4X%2Bksj.png",
+      "https://img.itch.zone/aW1hZ2UvNTIwMzU5My8zMTE3MjQ0MC5wbmc=/original/WiJ60D.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  },
+  {
+    "id": "R05",
+    "title": "Forest & Village",
+    "author": "reodesuxz",
+    "url": "https://reodesuxz.itch.io/free-pixel-top-down-forest-and-village-tileset-16x16",
+    "contents": [
+      "Village roofs and walls",
+      "Animated water",
+      "Bridges",
+      "Tree varieties",
+      "Bushes",
+      "Sunflower",
+      "Ferns",
+      "Mushrooms",
+      "Reeds",
+      "Lily pad",
+      "Fences",
+      "Market stalls"
+    ],
+    "categories": [
+      "Buildings",
+      "Trees",
+      "Plants",
+      "Flowers",
+      "Water",
+      "Terrain",
+      "Props"
+    ],
+    "regions": [
+      "rosepetal",
+      "lavendyr",
+      "sunveil",
+      "hydrangea",
+      "thornrose",
+      "moonblossom",
+      "tidepetal",
+      "seabloom"
+    ],
+    "grid": "16×16",
+    "scope": "Free pack",
+    "license": "Personal and commercial game use allowed. Retain creator terms; no standalone redistribution. Credit appreciated.",
+    "licenseStatus": "Game use permitted",
+    "note": "129 total assets. Source name suggests broad coverage; visual quality still needs your review.",
+    "preferred": false,
+    "images": [
+      "https://img.itch.zone/aW1hZ2UvNTE5Njc5NC8zMTEzMDI5MS5wbmc=/original/skXLYs.png",
+      "https://img.itch.zone/aW1hZ2UvNTE5Njc5NC8zMTEzMDI5Mi5wbmc=/original/JrAK7p.png"
+    ],
+    "sourceFetched": true,
+    "inUse": false
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "cell": [
+    32,
+    32
+  ],
+  "anchor": [
+    16,
+    28
+  ],
+  "directions": 4,
+  "types": {
+    "chicken": 0,
+    "cow": 1,
+    "goat": 2,
+    "bird": 3,
+    "cat": 4,
+    "rabbit": 5,
+    "fox": 6,
+    "owl": 7
+  }
+}

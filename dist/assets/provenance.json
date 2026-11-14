@@ -1,0 +1,142 @@
+{
+  "sources": [
+    {
+      "id": "E01",
+      "name": "Serene Village Revamped",
+      "author": "LimeZu",
+      "url": "https://limezu.itch.io/serenevillagerevamped",
+      "licence": "CC BY 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "changes": "Tiles and houses extracted into a game atlas. Roof components also used in the lighthouse."
+    },
+    {
+      "id": "E02",
+      "name": "PIPOYA FREE RPG Tileset 16×16",
+      "author": "Pipoya",
+      "url": "https://pipoya.itch.io/free-rpg-tileset-16x16",
+      "licence": "Creator terms: personal/commercial use and editing; no asset redistribution.",
+      "changes": "Stone, walls and furniture extracted for the game; stone used in the boundary walls and lighthouse."
+    },
+    {
+      "id": "N01",
+      "name": "Free Top-down Nature Mini Pack",
+      "author": "Mroker",
+      "url": "https://mroker.itch.io/free-top-down-nature-mini-pack",
+      "licence": "Creator terms: personal/commercial use and modification.",
+      "changes": "Selected pine and small plant sprites extracted; pine scaled with nearest-neighbour sampling."
+    },
+    {
+      "id": "N02",
+      "name": "Pixel Art Flower Pack",
+      "author": "karsiori",
+      "url": "https://karsiori.itch.io/free-pixel-art-flower-pack",
+      "licence": "CC0 1.0",
+      "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "changes": "Selected flower and bush sprites scaled for the overworld."
+    },
+    {
+      "id": "H01",
+      "name": "Pixel Top-down Pirate Port Town Tileset Vol. 2",
+      "author": "reodesuxz",
+      "url": "https://reodesuxz.itch.io/free-pixel-top-down-pirate-port-town-tileset-vol-2-16x16",
+      "licence": "Creator terms: personal/commercial projects and modification; no standalone asset redistribution.",
+      "changes": "Selected floors, windows, market stalls and dock props packed into the runtime atlas."
+    },
+    {
+      "id": "H03",
+      "name": "Top-down Pixel Boats",
+      "author": "MinZinn",
+      "url": "https://minzinn.itch.io/pixel-boats-top-down-game-assets-32x32-64x64-pixel-art-free",
+      "licence": "CC BY 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "changes": "Two sailboat orientations extracted and scaled for dock and ferry scenes."
+    }
+  ],
+  "character": {
+    "name": "Amaal",
+    "design": "Based on user-provided reference, woman on the left.",
+    "production": "Generated directional sprite sheet, sliced into 16 ground-aligned frames and resized for game use.",
+    "sprite": "amaal-walk.png"
+  },
+  "mapLayouts": "Purposeful connected property fences and named gates, clear pedestrian lanes with seating and supplies in recesses, eight distinct towns, dense roadside woodland groves and rounded ground boundaries.",
+  "note": "Source sprites are part of this game, not supplied as a separate asset library.",
+  "generatedArtwork": {
+    "artDirection": "Amaal reference-based warm fantasy pixel art, consistent proportions, shading and outlines for all NPCs.",
+    "residents": {
+      "sprite": "residents.png",
+      "grid": [
+        4,
+        104
+      ],
+      "cell": [
+        40,
+        48
+      ],
+      "anchor": [
+        20,
+        40
+      ],
+      "roles": [
+        "104 globally unique residents with town-specific clothes and professions"
+      ],
+      "poses": "416 directional views aligned to Amaal’s game scale; subtle steps and job effects animate at runtime.",
+      "designCount": 104
+    },
+    "animals": {
+      "sprite": "animals.png",
+      "layout": "animals.json"
+    },
+    "estate": [
+      "rose_tower",
+      "estate_barn",
+      "estate_greenhouse",
+      "estate_gate",
+      "estate_bed",
+      "estate_workbench",
+      "estate_hay"
+    ],
+    "previewed": "Generated sheets shown in the conversation before integration.",
+    "townProps": [
+      "town_market_stall_red",
+      "town_market_stall_blue",
+      "town_fountain",
+      "town_well",
+      "town_flower_cart",
+      "town_bench"
+    ],
+    "themedHouses": {
+      "towns": 7,
+      "designs": 24,
+      "production": "Generated whole isolated buildings from eight historical theme sheets, resized with pixel sampling and individually measured doorway offsets. Seven towns use twenty designs; the full twenty-four-design atlas retains the archived Rosepetal house theme.",
+      "sourceThemeSheets": 8,
+      "activeExteriorDesigns": 20
+    },
+    "campStructures": [
+      "camp_wood",
+      "camp_rock",
+      "camp_haunt",
+      "camp_ruins"
+    ],
+    "architecture": [
+      "lighthouse",
+      "estate_wall_h",
+      "estate_wall_v",
+      "estate_gatepost"
+    ],
+    "regionalMap": {
+      "sprite": "map-a-world.png",
+      "design": "User-selected MapA, adapted to unlabelled production artwork; town labels, hover effects and fast travel are interactive code."
+    },
+    "forage": [
+      "fruit_apple_tree",
+      "fruit_apple_tree_picked",
+      "fruit_pear_tree",
+      "fruit_pear_tree_picked",
+      "fruit_berry_bush",
+      "fruit_berry_bush_picked"
+    ]
+  },
+  "atlasRepairs": "Corrected incomplete source crops for houses, rocks, pine, forest trees, fern, bed, fireplace, table, crates, barrels, planters and signs.",
+  "monsterCredits": "monster-provenance.json (16 active designs)",
+  "npcAI": "Original in-browser finite-state schedule planner and weighted pathfinding. No paid service, account, installation, language model or external runtime dependency."
+}

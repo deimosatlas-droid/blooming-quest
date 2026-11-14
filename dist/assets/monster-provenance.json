@@ -1,0 +1,121 @@
+{
+  "sources": [
+    {
+      "id": "A01",
+      "name": "Monster Pack 40",
+      "author": "Admurin",
+      "url": "https://admurin.itch.io/monster-pack-40",
+      "terms": "Personal and commercial game use; modification allowed; no standalone asset redistribution; credit appreciated. No NFTs or training AI.",
+      "used": [
+        "Skeleton_Move.png",
+        "Witch_Doctor_Move.png"
+      ],
+      "changes": "Frames cropped, nearest-neighbour scaled and aligned to one ground anchor."
+    },
+    {
+      "id": "A03",
+      "name": "Monster Pack 95",
+      "author": "Admurin",
+      "url": "https://admurin.itch.io/monster-pack-95",
+      "terms": "Personal and commercial game use; modification allowed; no standalone asset redistribution; credit appreciated. No NFTs or training AI.",
+      "used": [
+        "Spectre_14_Move.png",
+        "Spectre_14_Attack.png"
+      ],
+      "changes": "Frames cropped, nearest-neighbour scaled and aligned to one ground anchor."
+    },
+    {
+      "id": "B01",
+      "name": "Original Orcs",
+      "author": "Zenedark",
+      "url": "https://zenedark.itch.io/animated-orc-sprites",
+      "terms": "Commercial and non-commercial games allowed. Editing for game projects allowed. No standalone redistribution, templates or NFTs. Credit appreciated.",
+      "used": [
+        "Warrior walk and attack directions",
+        "Shaman walk and attack directions"
+      ],
+      "changes": "Directional walk frames extracted, resized and aligned to one ground anchor."
+    },
+    {
+      "id": "B02",
+      "name": "Insect Enemies",
+      "author": "Ponk",
+      "url": "https://ponkpixels.itch.io/insect-enemies",
+      "terms": "Creator page specifies CC BY4.0; creator comment also says free use.",
+      "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "used": [
+        "BeetleMove.png",
+        "BeetleAttack.png",
+        "MantisMove.png",
+        "MantisAttack.png",
+        "MaggotWalk.png",
+        "MaggotSpit.png"
+      ],
+      "changes": "Directional movement frames extracted, resized and aligned to one ground anchor."
+    },
+    {
+      "id": "A04",
+      "name": "Monster Pack 66",
+      "author": "Admurin",
+      "url": "https://admurin.itch.io/monster-pack-66",
+      "terms": "Personal and commercial game use; modification allowed; no standalone asset redistribution; credit appreciated. No NFTs or training AI.",
+      "used": [
+        "Birds_Crow_Move.png",
+        "Birds_Crow_Attack.png"
+      ],
+      "changes": "Original animation frames cropped, nearest-neighbour scaled and aligned to a consistent ground point."
+    },
+    {
+      "id": "A05",
+      "name": "Monster Pack 21",
+      "author": "Admurin",
+      "url": "https://admurin.itch.io/monster-pack-21",
+      "terms": "Personal and commercial game use; modification allowed; no standalone asset redistribution; credit appreciated. No NFTs or training AI.",
+      "used": [
+        "Boar_Move.png",
+        "Boar_Attack.png"
+      ],
+      "changes": "Original animation frames cropped, nearest-neighbour scaled and aligned to a consistent ground point."
+    },
+    {
+      "id": "A06",
+      "name": "Monster Pack Free",
+      "author": "Admurin",
+      "url": "https://admurin.itch.io/monster-pack",
+      "terms": "Personal and commercial game use; modification allowed; no standalone asset redistribution; credit appreciated. No NFTs or training AI.",
+      "used": [
+        "Rabbit_Horned_Move.png",
+        "Rabbit_Horned_Attack.png"
+      ],
+      "changes": "Original animation frames cropped, nearest-neighbour scaled and aligned to a consistent ground point."
+    },
+    {
+      "id": "D01",
+      "name": "FREE Monster Pack - Animated Pixel Art (64x64)",
+      "author": "miks",
+      "url": "https://mikspixel.itch.io/monster-pack-animated-pixel-art-64x64",
+      "terms": "Commercial and personal game use and project modification allowed. Do not redistribute raw assets, claim ownership, or use for AI training. Credit appreciated.",
+      "used": [
+        "slime walk/attack",
+        "goblin walk/attack",
+        "mimic walk/attack"
+      ],
+      "changes": "Original single-view animations extracted and scaled; horizontal mirroring supplied by runtime."
+    },
+    {
+      "id": "B07",
+      "name": "RPG Pixel Art Sampler Free v4.1",
+      "author": "RetroLabStudioCo",
+      "url": "https://furkan90x.itch.io/rpg-pixel-art-sampler-free",
+      "terms": "Free personal and commercial game/project use. Modification allowed; no standalone redistribution; credit appreciated. Creator states original hand-authored procedural pixel art without AI image generation.",
+      "used": [
+        "minotaur_idle_right.png",
+        "jack_o_lantern_attack_down.png"
+      ],
+      "changes": "Original free sample animation strips extracted and scaled; no new views or poses drawn."
+    }
+  ],
+  "art": "Existing artist-made free sprite packs. No generated monsters or placeholder substitutes.",
+  "review": "New creature preview sheets shown before integration.",
+  "scope": "16 distinct monster designs, with existing progress/type IDs preserved."
+}

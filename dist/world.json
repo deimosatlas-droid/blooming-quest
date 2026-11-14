@@ -1,0 +1,845 @@
+{
+  "title": "Forrest Hydrangea Meadows",
+  "version": "0.11 · Portable browser release and world consistency",
+  "rules": {
+    "townsAreSafe": true,
+    "homeIsSafe": true,
+    "monsterSpawns": "roads-only",
+    "encountersEnabled": true,
+    "roster": "16 free monster species active across24 roadside camps.",
+    "artStatus": "104 globally distinct Amaal-style NPC models, 416 directional resident views, 64 new Amaal idle and sword-action poses, and Map A regional artwork.",
+    "ferriesAreSafe": true,
+    "lifeStatus": "104 globally distinct residents perform free built-in daily tasks across seven towns, with animated work actions and reserved workstations. Rosepetal has no village NPCs.",
+    "campRules": "Camps appear only beside long roads. Breaking a camp permanently stops its spawns. Towns, home and boat crossings remain safe.",
+    "uniqueNpcAppearanceWithinTown": true,
+    "placement": "Loose wild plants moved off paving; sensible property fences and harbours; dense land-edge canopy and named exit openings.",
+    "ground": "Rounded road ends/junctions, grass and leaf detail, shoreline reeds, woodland canopy belts and groves.",
+    "uniqueNpcAppearanceWorldwide": true,
+    "npcModelReuse": 0,
+    "ferryTravel": "Walk onto the visible ship for automatic quick travel; arrive safely off the boarding trigger.",
+    "developmentTravel": "All seven towns and the Rosepetal home estate are unlocked on Map A; instant travel preserves the saved journey.",
+    "homeEstate": "Rosepetal is Amaal and Raeez’s private home estate: one grand tower, an animal barn, farmyard and growing garden. It has no village NPCs.",
+    "foraging": "Wild fruit trees and berry bushes grow beside the long roads. Poison mushrooms grow in marked woodland patches at Rosepetal.",
+    "practice": "Practice dummies at Rosepetal provide a place to train at home.",
+    "storyStatus": "The opening story draft includes Raeez’s note at home. The full trail through the seven towns is still being written."
+  },
+  "towns": [
+    {
+      "id": "rosepetal",
+      "name": "Rosepetal Tower",
+      "subtitle": "Amaal and Raeez’s home estate",
+      "x": 135,
+      "y": 605,
+      "color": "#c7808b",
+      "size": [
+        64,
+        48
+      ],
+      "description": "Amaal and Raeez’s private home estate: one grand rose-covered tower, an animal barn, and a large farm and garden within a cobblestone boundary.",
+      "places": [
+        "Grand rose-covered tower and bedroom",
+        "Animal barn and farmyard",
+        "Growing garden and orchard",
+        "Practice dummies and a place to rest"
+      ],
+      "npc": "Stormy and the rescued animals",
+      "next": "lavenderway",
+      "artGuide": {
+        "palette": [
+          "#a97582",
+          "#b6bd97",
+          "#d7c99c"
+        ],
+        "architecture": "One grand rose-covered fantasy tower, a working animal barn, and a farm and garden within a cobblestone boundary.",
+        "nature": "Rose beds, cottage flowers, soft grass, fruit trees and a small kitchen garden.",
+        "packs": [
+          "E01",
+          "E02",
+          "E07",
+          "N02",
+          "N05",
+          "R01",
+          "R02",
+          "R03"
+        ],
+        "gaps": "Rosepetal is a home estate, not a village or town."
+      },
+      "status": "canonical",
+      "buildings": 2,
+      "residents": 0,
+      "animals": 8,
+      "layout": "A private tower estate with connected farm and garden paths, an animal barn, a cobblestone boundary and practice space.",
+      "npcModels": 0,
+      "globalModelReuse": false,
+      "locationType": "home-estate"
+    },
+    {
+      "id": "lavendyr",
+      "name": "Lavendyr Glade",
+      "subtitle": "The herbalist’s settlement",
+      "x": 350,
+      "y": 450,
+      "color": "#a895c5",
+      "size": [
+        64,
+        48
+      ],
+      "description": "A small settlement among lavender fields, with herbal gardens, an apothecary and homes gathered around the village well.",
+      "places": [
+        "Maera’s herbalist cottage",
+        "Apothecary and seed house",
+        "Village well",
+        "Lavender farmhouse and gardens"
+      ],
+      "npc": "The herbalist",
+      "prev": "lavenderway",
+      "next": "foxglove",
+      "artGuide": {
+        "palette": [
+          "#a696c4",
+          "#819d76",
+          "#d6ccb2"
+        ],
+        "architecture": "Low plaster-and-timber cottages, thatch details and the herbalist’s greenhouse-like garden.",
+        "nature": "Lavender bands, bluebells, herbs, birches, reeds and pale-green grass.",
+        "packs": [
+          "E01",
+          "E06",
+          "E07",
+          "N01",
+          "N02",
+          "N04",
+          "N05"
+        ],
+        "gaps": "Themed complete building sprites, local resident designs and dedicated street materials are integrated."
+      },
+      "status": "canonical",
+      "buildings": 8,
+      "residents": 13,
+      "animals": 3,
+      "layout": "Connected streets lead to actual doors, work yards, public places, bridges and road exits.",
+      "npcModels": 13,
+      "globalModelReuse": false,
+      "locationType": "town"
+    },
+    {
+      "id": "sunveil",
+      "name": "Sunveil Grove",
+      "subtitle": "Foxglove Hollow village",
+      "x": 490,
+      "y": 580,
+      "color": "#d4b35e",
+      "size": [
+        72,
+        48
+      ],
+      "description": "A warm, busy village beneath golden trees. Market stalls, a bakery and craft workshops gather around the fountain.",
+      "places": [
+        "Merchant’s square",
+        "Carpenter’s workshop",
+        "Cottages and gardens",
+        "Fountain"
+      ],
+      "npc": "Travelling merchant",
+      "prev": "foxglove",
+      "next": "marigold",
+      "artGuide": {
+        "palette": [
+          "#d0b271",
+          "#8caa64",
+          "#ae765d"
+        ],
+        "architecture": "Warm timber cottages, terracotta roofs, a carpenter’s workshop and market stalls.",
+        "nature": "Golden foliage, sunflowers, ivy and wild roses.",
+        "packs": [
+          "E01",
+          "E08",
+          "N01",
+          "N07",
+          "N08",
+          "R05"
+        ],
+        "gaps": "Themed complete building sprites, local resident designs and dedicated street materials are integrated."
+      },
+      "status": "canonical",
+      "buildings": 11,
+      "residents": 16,
+      "animals": 2,
+      "layout": "Connected streets lead to actual doors, work yards, public places, bridges and road exits.",
+      "npcModels": 16,
+      "globalModelReuse": false,
+      "locationType": "town"
+    },
+    {
+      "id": "tidepetal",
+      "name": "Tidepetal Quay",
+      "subtitle": "The mid-journey river port",
+      "x": 600,
+      "y": 370,
+      "color": "#81b5ad",
+      "size": [
+        80,
+        56
+      ],
+      "port": true,
+      "description": "A safe river port near the middle of the journey. Flower baskets, timber warehouses and a ferry quay connect the forest roads to a distant coast.",
+      "places": [
+        "Harbour office",
+        "Riverside warehouse",
+        "Fish-and-flower market",
+        "Passenger pier"
+      ],
+      "npc": "The ferrymaster",
+      "prev": "marigold",
+      "next": "petalferry",
+      "artGuide": {
+        "palette": [
+          "#78a99e",
+          "#b9a57d",
+          "#b59aaf"
+        ],
+        "architecture": "Central river-port: weathered timber, green roofs, warehouse doors, flower baskets and a passenger pier.",
+        "nature": "Reeds, willows, riverside flowerpots and soft grassy banks.",
+        "packs": [
+          "E01",
+          "E11",
+          "H01",
+          "H02",
+          "H03",
+          "N02",
+          "N07"
+        ],
+        "gaps": "Themed complete building sprites, local resident designs and dedicated street materials are integrated."
+      },
+      "status": "canonical",
+      "buildings": 11,
+      "residents": 17,
+      "animals": 3,
+      "layout": "Connected streets lead to actual doors, work yards, public places, bridges and road exits.",
+      "npcModels": 17,
+      "globalModelReuse": false,
+      "locationType": "town"
+    },
+    {
+      "id": "seabloom",
+      "name": "Seabloom Port",
+      "subtitle": "The distant coastal harbour",
+      "x": 1130,
+      "y": 650,
+      "color": "#8aabd0",
+      "size": [
+        80,
+        56
+      ],
+      "port": true,
+      "description": "A distant safe port linked to Tidepetal by boat. Salt-washed stone, blue roofs, sea grasses and a lighthouse lead into another long road.",
+      "places": [
+        "Customs house",
+        "Cargo warehouse",
+        "Fishing market",
+        "Lighthouse and passenger pier"
+      ],
+      "npc": "Dock workers and a lighthouse keeper",
+      "prev": "petalferry",
+      "next": "coastroad",
+      "artGuide": {
+        "palette": [
+          "#8baec6",
+          "#c8c1a0",
+          "#759d91"
+        ],
+        "architecture": "Distant coastal port: salt-washed stone, blue roofs, cargo yards, fish stalls and a lighthouse.",
+        "nature": "Sea grasses, coastal shrubs, wildflowers and rocky shoreline.",
+        "packs": [
+          "E02",
+          "E11",
+          "H01",
+          "H02",
+          "H03",
+          "N01",
+          "N07"
+        ],
+        "gaps": "Themed complete building sprites, local resident designs and dedicated street materials are integrated."
+      },
+      "status": "canonical",
+      "buildings": 12,
+      "residents": 17,
+      "animals": 4,
+      "layout": "Connected streets lead to actual doors, work yards, public places, bridges and road exits.",
+      "npcModels": 17,
+      "globalModelReuse": false,
+      "locationType": "town"
+    },
+    {
+      "id": "hydrangea",
+      "name": "Hydrangea Meadows",
+      "subtitle": "Marigold Crossroads settlement",
+      "x": 970,
+      "y": 450,
+      "color": "#7faabc",
+      "size": [
+        72,
+        52
+      ],
+      "description": "The trading heart of the forest, surrounded by blue and pink hydrangeas. Stream bridges connect the square, cottages and work yards.",
+      "places": [
+        "Trading square",
+        "Supply shop",
+        "Stream bridges",
+        "Cottages"
+      ],
+      "npc": "Traders and villagers",
+      "prev": "coastroad",
+      "next": "nightshade",
+      "artGuide": {
+        "palette": [
+          "#83adc0",
+          "#a293bc",
+          "#779d74"
+        ],
+        "architecture": "Mossy stone bases, timber shopfronts, small wooden bridges and a trading square.",
+        "nature": "Dense pink, purple and blue flower clusters, ferns, broadleaf trees and streams.",
+        "packs": [
+          "E01",
+          "E06",
+          "E07",
+          "N01",
+          "N02",
+          "N06",
+          "R05"
+        ],
+        "gaps": "Themed complete building sprites, local resident designs and dedicated street materials are integrated."
+      },
+      "status": "canonical",
+      "buildings": 10,
+      "residents": 15,
+      "animals": 3,
+      "layout": "Connected streets lead to actual doors, work yards, public places, bridges and road exits.",
+      "npcModels": 15,
+      "globalModelReuse": false,
+      "locationType": "town"
+    },
+    {
+      "id": "thornrose",
+      "name": "Thornrose Hills",
+      "subtitle": "A sheltered hill outpost",
+      "x": 1080,
+      "y": 285,
+      "color": "#bd8c78",
+      "size": [
+        64,
+        48
+      ],
+      "description": "A small safe outpost tucked into the hills, with a forge, working yards and a mountain-goat paddock. The woodland roads lie beyond its gates.",
+      "places": [
+        "Blacksmith’s workshop",
+        "Rest cottage",
+        "Lookout square",
+        "Mountain goat shelter"
+      ],
+      "npc": "The blacksmith",
+      "prev": "nightshade",
+      "next": "moonpath",
+      "artGuide": {
+        "palette": [
+          "#a68c78",
+          "#8b9679",
+          "#676e75"
+        ],
+        "architecture": "A sheltered stone-and-timber outpost, blacksmith’s forge and ruined watchtower on the road.",
+        "nature": "Rocky slopes, thorny hedges, pine accents and dark woodland plants.",
+        "packs": [
+          "E02",
+          "E04",
+          "N06",
+          "N07",
+          "R02",
+          "R04"
+        ],
+        "gaps": "Themed complete building sprites, local resident designs and dedicated street materials are integrated."
+      },
+      "status": "canonical",
+      "buildings": 8,
+      "residents": 13,
+      "animals": 3,
+      "layout": "Connected streets lead to actual doors, work yards, public places, bridges and road exits.",
+      "npcModels": 13,
+      "globalModelReuse": false,
+      "locationType": "town"
+    },
+    {
+      "id": "moonblossom",
+      "name": "Moonblossom Hamlet",
+      "subtitle": "Lanterns at the end of the trail",
+      "x": 900,
+      "y": 130,
+      "color": "#aaa6cb",
+      "size": [
+        72,
+        52
+      ],
+      "description": "A quiet lantern-lit village at the edge of the old forest. Neighbours gather for evening tea, shared stories and walks beside the stream.",
+      "places": [
+        "Lantern square",
+        "Streamside cottages and gardens",
+        "Evening tea house",
+        "Storyteller’s reading house"
+      ],
+      "npc": "Hamlet villagers",
+      "prev": "moonpath",
+      "artGuide": {
+        "palette": [
+          "#8c8fb4",
+          "#b8aac5",
+          "#e3c08c"
+        ],
+        "architecture": "Muted cottage roofs, cobblestone, warm lanterns and quiet streamside gardens.",
+        "nature": "Pale moonflowers, silver-green foliage, willows and gentle water reflections.",
+        "packs": [
+          "E01",
+          "E08",
+          "N02",
+          "N07",
+          "N11",
+          "R03",
+          "R05"
+        ],
+        "gaps": "Themed complete building sprites, local resident designs and dedicated street materials are integrated."
+      },
+      "status": "canonical",
+      "buildings": 8,
+      "residents": 13,
+      "animals": 2,
+      "layout": "Connected streets lead to actual doors, work yards, public places, bridges and road exits.",
+      "npcModels": 13,
+      "globalModelReuse": false,
+      "locationType": "town"
+    }
+  ],
+  "roads": [
+    {
+      "id": "lavenderway",
+      "name": "Lavenderway Fields",
+      "from": "rosepetal",
+      "to": "lavendyr",
+      "points": [
+        [
+          135,
+          605
+        ],
+        [
+          210,
+          605
+        ],
+        [
+          225,
+          520
+        ],
+        [
+          300,
+          510
+        ],
+        [
+          350,
+          450
+        ]
+      ],
+      "size": [
+        144,
+        44
+      ],
+      "color": "#ac9cc2",
+      "theme": "Lavender, a narrow stream, and open meadow",
+      "features": [
+        "First combat clearing",
+        "Stream crossing",
+        "Optional flower pocket",
+        "Wild fruit and berry bushes"
+      ],
+      "walkSeconds": 84,
+      "foraging": "Wild fruit and berries grow beside the path, outside the walking lane."
+    },
+    {
+      "id": "foxglove",
+      "name": "Foxglove Road",
+      "from": "lavendyr",
+      "to": "sunveil",
+      "points": [
+        [
+          350,
+          450
+        ],
+        [
+          405,
+          445
+        ],
+        [
+          430,
+          510
+        ],
+        [
+          460,
+          520
+        ],
+        [
+          490,
+          580
+        ]
+      ],
+      "size": [
+        160,
+        48
+      ],
+      "color": "#c3b079",
+      "theme": "Golden trees, wild roses, and foxgloves",
+      "features": [
+        "Long woodland bends",
+        "Roadside camp clearings",
+        "Wild-boar den",
+        "Wild fruit and berry bushes"
+      ],
+      "walkSeconds": 94,
+      "foraging": "Wild fruit and berries grow beside the path, outside the walking lane."
+    },
+    {
+      "id": "marigold",
+      "name": "Marigold River Road",
+      "from": "sunveil",
+      "to": "tidepetal",
+      "points": [
+        [
+          490,
+          580
+        ],
+        [
+          565,
+          565
+        ],
+        [
+          575,
+          490
+        ],
+        [
+          540,
+          450
+        ],
+        [
+          555,
+          405
+        ],
+        [
+          600,
+          370
+        ]
+      ],
+      "size": [
+        192,
+        52
+      ],
+      "color": "#83b2ae",
+      "theme": "Hydrangea woodland, riverside paths and the approach to Tidepetal",
+      "features": [
+        "Long forest bend",
+        "Reed-lined stream banks",
+        "Woodland approach to Tidepetal",
+        "Wild fruit and berry bushes"
+      ],
+      "walkSeconds": 113,
+      "foraging": "Wild fruit and berries grow beside the path, outside the walking lane."
+    },
+    {
+      "id": "coastroad",
+      "name": "Seabloom Coast Road",
+      "from": "seabloom",
+      "to": "hydrangea",
+      "points": [
+        [
+          1130,
+          650
+        ],
+        [
+          1190,
+          610
+        ],
+        [
+          1190,
+          535
+        ],
+        [
+          1115,
+          505
+        ],
+        [
+          1090,
+          450
+        ],
+        [
+          970,
+          450
+        ]
+      ],
+      "size": [
+        224,
+        56
+      ],
+      "color": "#99b8af",
+      "theme": "Coastal grass, wind-bent trees and inland hydrangeas",
+      "features": [
+        "Coastal woodland approach",
+        "Reed-lined stream bridge",
+        "Long approach to Hydrangea",
+        "Wild fruit and berry bushes"
+      ],
+      "walkSeconds": 133,
+      "foraging": "Wild fruit and berries grow beside the path, outside the walking lane."
+    },
+    {
+      "id": "nightshade",
+      "name": "Nightshade Woods",
+      "from": "hydrangea",
+      "to": "thornrose",
+      "points": [
+        [
+          970,
+          450
+        ],
+        [
+          935,
+          400
+        ],
+        [
+          970,
+          365
+        ],
+        [
+          1040,
+          370
+        ],
+        [
+          1080,
+          285
+        ]
+      ],
+      "size": [
+        208,
+        56
+      ],
+      "color": "#8b91ad",
+      "theme": "Deep forest, glowing mushrooms, and old stone ruins",
+      "features": [
+        "Haunted roadside hollows",
+        "Long narrow forest corridor",
+        "Shaded woodland clearing",
+        "Wild fruit and berry bushes"
+      ],
+      "walkSeconds": 123,
+      "foraging": "Wild fruit and berries grow beside the path, outside the walking lane."
+    },
+    {
+      "id": "moonpath",
+      "name": "Thornrose Pass",
+      "from": "thornrose",
+      "to": "moonblossom",
+      "points": [
+        [
+          1080,
+          285
+        ],
+        [
+          1100,
+          215
+        ],
+        [
+          1020,
+          200
+        ],
+        [
+          1000,
+          145
+        ],
+        [
+          900,
+          130
+        ]
+      ],
+      "size": [
+        224,
+        56
+      ],
+      "color": "#aca1b8",
+      "theme": "Rocky hill paths, thorn roses, and pale moonflowers",
+      "features": [
+        "Winding woodland path",
+        "Stream bridge",
+        "Shaded approach to Moonblossom",
+        "Wild fruit and berry bushes"
+      ],
+      "walkSeconds": 133,
+      "foraging": "Wild fruit and berries grow beside the path, outside the walking lane."
+    }
+  ],
+  "ferries": [
+    {
+      "id": "petalferry",
+      "name": "The Petal Passage",
+      "from": "tidepetal",
+      "to": "seabloom",
+      "points": [
+        [
+          600,
+          370
+        ],
+        [
+          635,
+          465
+        ],
+        [
+          680,
+          590
+        ],
+        [
+          850,
+          710
+        ],
+        [
+          1050,
+          710
+        ],
+        [
+          1130,
+          650
+        ]
+      ],
+      "size": [
+        64,
+        36
+      ],
+      "color": "#82b8c1",
+      "theme": "A safe boat crossing between two distant ports",
+      "features": [
+        "Walk onto either visible ship to cross",
+        "Safe arrival on the destination quay",
+        "No monster encounters; no immediate return loop"
+      ],
+      "travelSeconds": 0.32,
+      "safe": true
+    }
+  ],
+  "itinerary": [
+    "rosepetal",
+    "lavenderway",
+    "lavendyr",
+    "foxglove",
+    "sunveil",
+    "marigold",
+    "tidepetal",
+    "petalferry",
+    "seabloom",
+    "coastroad",
+    "hydrangea",
+    "nightshade",
+    "thornrose",
+    "moonpath",
+    "moonblossom"
+  ],
+  "roadArtGuide": {
+    "palette": [
+      "#7c9965",
+      "#c4af82",
+      "#839f96"
+    ],
+    "architecture": "Long connecting routes with stream bridges, signposts, monster camps and clear encounter pockets.",
+    "nature": "Regional trees, wild fruit and berry bushes, leaf litter and woodland plants frame the long roads. Plants and supplies stay outside the walking lane.",
+    "packs": [
+      "E04",
+      "E06",
+      "N01",
+      "N06",
+      "R04",
+      "R05"
+    ],
+    "gaps": "Only the long roads host monsters. The seven towns, the home estate and boat crossings stay safe."
+  },
+  "canonStatus": "locked by user",
+  "characters": {
+    "amaal": {
+      "appearance": "Chestnut-brown bob, round black glasses, green cloak, cream sleeves, brown leather armour, silver shoulder and knee plates, brown boots.",
+      "sprite": "assets/amaal-walk.png",
+      "reference": "User-supplied couple illustration; woman on left.",
+      "actions": {
+        "sprite": "assets/amaal-actions.png",
+        "layout": "assets/amaal-actions.json",
+        "clips": [
+          "idle",
+          "sweep",
+          "return",
+          "thrust"
+        ],
+        "frames": 64,
+        "bodyHeight": 32,
+        "anchor": [
+          32,
+          52
+        ]
+      }
+    },
+    "raeez": {
+      "appearance": "Short dark hair, beard, green cloak with gold clasp, cream sleeves, brown armour and boots.",
+      "reference": "User-supplied couple illustration; man on right.",
+      "storyRole": "The person Amaal is searching for."
+    },
+    "residents": {
+      "sprite": "assets/residents.png",
+      "artRule": "All NPCs match Amaal’s art style, scale, proportions, outlines and shading. Distinct faces, clothes and professions.",
+      "roles": [
+        "herbalist",
+        "worker",
+        "merchant",
+        "blacksmith",
+        "elder",
+        "dockworker",
+        "child",
+        "villager"
+      ],
+      "designCount": 104,
+      "layout": "assets/residents.json",
+      "townCostumes": "Lavender herbalists, golden-market traders, hydrangea river workers, stone-forge craftspeople, moon-lantern keepers, river-port traders and coastal fishers.",
+      "appearanceRule": "Each model appears exactly once in the entire world; all match Amaal’s pixel art style.",
+      "workAnimation": "Procedural tool and task motions use the existing directional resident sprites; jobs reserve a workstation before approaching and working."
+    }
+  },
+  "appliedEnvironmentSources": [
+    "E01",
+    "E02",
+    "N01",
+    "N02",
+    "H01",
+    "H03"
+  ],
+  "appliedArtManifest": "assets/provenance.json",
+  "livingWorld": {
+    "towns": 7,
+    "roads": 6,
+    "rooms": 70,
+    "residents": 104,
+    "animals": 28,
+    "npcDesigns": 104,
+    "themedHouseDesigns": 20,
+    "camps": 24,
+    "activeMonsterDesigns": 16,
+    "fenceGroups": 17,
+    "forageSources": 109,
+    "homes": 1,
+    "destinations": 8,
+    "retainedSaveRooms": 5,
+    "areas": 89,
+    "heroActionFrames": 64,
+    "atlasHouseDesigns": 24
+  },
+  "dayCycle": {
+    "startMinutes": 480,
+    "realSecondsPerGameHour": 75,
+    "persistent": true,
+    "npcAI": "Free built-in daily routines with animated tasks, workstation reservations and waiting positions; no external API or runtime service."
+  }
+}

@@ -1,0 +1,1185 @@
+{
+  "cell": [
+    40,
+    48
+  ],
+  "anchor": [
+    20,
+    40
+  ],
+  "directions": [
+    "down",
+    "right",
+    "up",
+    "left"
+  ],
+  "identities": [
+    {
+      "row": 0,
+      "id": "resident-0",
+      "town": "rosepetal",
+      "role": "herbalist",
+      "roles": [
+        "herbalist"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 1,
+      "id": "resident-1",
+      "town": "rosepetal",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 2,
+      "id": "resident-2",
+      "town": "lavendyr",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 3,
+      "id": "resident-3",
+      "town": "lavendyr",
+      "role": "blacksmith",
+      "roles": [
+        "blacksmith",
+        "worker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 4,
+      "id": "resident-4",
+      "town": "rosepetal",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 5,
+      "id": "resident-5",
+      "town": "lavendyr",
+      "role": "dockworker",
+      "roles": [
+        "dockworker",
+        "worker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 6,
+      "id": "resident-6",
+      "town": "lavendyr",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 7,
+      "id": "resident-7",
+      "town": "rosepetal",
+      "role": "villager",
+      "roles": [
+        "villager",
+        "merchant"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 8,
+      "town": "rosepetal",
+      "themeIndex": 0,
+      "id": "resident-8",
+      "role": "villager",
+      "roles": [
+        "villager",
+        "worker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 9,
+      "town": "rosepetal",
+      "themeIndex": 1,
+      "id": "resident-9",
+      "role": "worker",
+      "roles": [
+        "worker",
+        "herbalist"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 10,
+      "town": "rosepetal",
+      "themeIndex": 2,
+      "id": "resident-10",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 11,
+      "town": "lavendyr",
+      "themeIndex": 0,
+      "id": "resident-11",
+      "role": "herbalist",
+      "roles": [
+        "herbalist",
+        "merchant"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 12,
+      "town": "lavendyr",
+      "themeIndex": 1,
+      "id": "resident-12",
+      "role": "elder",
+      "roles": [
+        "elder",
+        "herbalist"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 13,
+      "town": "lavendyr",
+      "themeIndex": 2,
+      "id": "resident-13",
+      "role": "worker",
+      "roles": [
+        "worker",
+        "villager"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 14,
+      "town": "sunveil",
+      "themeIndex": 0,
+      "id": "resident-14",
+      "role": "merchant",
+      "roles": [
+        "merchant",
+        "villager"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 15,
+      "town": "sunveil",
+      "themeIndex": 1,
+      "id": "resident-15",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 16,
+      "town": "sunveil",
+      "themeIndex": 2,
+      "id": "resident-16",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 17,
+      "town": "hydrangea",
+      "themeIndex": 0,
+      "id": "resident-17",
+      "role": "herbalist",
+      "roles": [
+        "herbalist",
+        "villager"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 18,
+      "town": "hydrangea",
+      "themeIndex": 1,
+      "id": "resident-18",
+      "role": "elder",
+      "roles": [
+        "elder",
+        "dockworker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 19,
+      "town": "hydrangea",
+      "themeIndex": 2,
+      "id": "resident-19",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 20,
+      "town": "thornrose",
+      "themeIndex": 0,
+      "id": "resident-20",
+      "role": "blacksmith",
+      "roles": [
+        "blacksmith",
+        "worker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 21,
+      "town": "thornrose",
+      "themeIndex": 1,
+      "id": "resident-21",
+      "role": "worker",
+      "roles": [
+        "worker",
+        "elder"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 22,
+      "town": "thornrose",
+      "themeIndex": 2,
+      "id": "resident-22",
+      "role": "guard",
+      "roles": [
+        "guard",
+        "worker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 23,
+      "town": "moonblossom",
+      "themeIndex": 0,
+      "id": "resident-23",
+      "role": "worker",
+      "roles": [
+        "worker",
+        "herbalist"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 24,
+      "town": "moonblossom",
+      "themeIndex": 1,
+      "id": "resident-24",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 25,
+      "town": "moonblossom",
+      "themeIndex": 2,
+      "id": "resident-25",
+      "role": "merchant",
+      "roles": [
+        "merchant",
+        "villager"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 26,
+      "town": "tidepetal",
+      "themeIndex": 0,
+      "id": "resident-26",
+      "role": "dockworker",
+      "roles": [
+        "dockworker",
+        "guard"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 27,
+      "town": "tidepetal",
+      "themeIndex": 1,
+      "id": "resident-27",
+      "role": "herbalist",
+      "roles": [
+        "herbalist",
+        "merchant"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 28,
+      "town": "tidepetal",
+      "themeIndex": 2,
+      "id": "resident-28",
+      "role": "dockworker",
+      "roles": [
+        "dockworker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 29,
+      "town": "seabloom",
+      "themeIndex": 0,
+      "id": "resident-29",
+      "role": "dockworker",
+      "roles": [
+        "dockworker",
+        "worker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 30,
+      "town": "seabloom",
+      "themeIndex": 1,
+      "id": "resident-30",
+      "role": "dockworker",
+      "roles": [
+        "dockworker",
+        "elder"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 31,
+      "town": "seabloom",
+      "themeIndex": 2,
+      "id": "resident-31",
+      "role": "worker",
+      "roles": [
+        "worker",
+        "elder"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 32,
+      "town": "rosepetal",
+      "themeIndex": 3,
+      "id": "resident-32",
+      "role": "herbalist",
+      "roles": [
+        "herbalist",
+        "worker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 33,
+      "town": "lavendyr",
+      "themeIndex": 3,
+      "id": "resident-33",
+      "role": "worker",
+      "roles": [
+        "worker",
+        "villager"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 34,
+      "town": "sunveil",
+      "themeIndex": 3,
+      "id": "resident-34",
+      "role": "merchant",
+      "roles": [
+        "merchant",
+        "elder"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 35,
+      "town": "hydrangea",
+      "themeIndex": 3,
+      "id": "resident-35",
+      "role": "worker",
+      "roles": [
+        "worker",
+        "dockworker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 36,
+      "town": "thornrose",
+      "themeIndex": 3,
+      "id": "resident-36",
+      "role": "worker",
+      "roles": [
+        "worker",
+        "blacksmith"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 37,
+      "town": "moonblossom",
+      "themeIndex": 3,
+      "id": "resident-37",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 38,
+      "town": "tidepetal",
+      "themeIndex": 3,
+      "id": "resident-38",
+      "role": "merchant",
+      "roles": [
+        "merchant",
+        "elder"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 39,
+      "town": "seabloom",
+      "themeIndex": 3,
+      "id": "resident-39",
+      "role": "dockworker",
+      "roles": [
+        "dockworker",
+        "worker"
+      ],
+      "preservedOriginal": true
+    },
+    {
+      "row": 40,
+      "id": "resident-40",
+      "town": "lavendyr",
+      "role": "herbalist",
+      "roles": [
+        "herbalist"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 41,
+      "id": "resident-41",
+      "town": "lavendyr",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 42,
+      "id": "resident-42",
+      "town": "lavendyr",
+      "role": "villager",
+      "roles": [
+        "villager"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 43,
+      "id": "resident-43",
+      "town": "lavendyr",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 44,
+      "id": "resident-44",
+      "town": "sunveil",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 45,
+      "id": "resident-45",
+      "town": "sunveil",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 46,
+      "id": "resident-46",
+      "town": "sunveil",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 47,
+      "id": "resident-47",
+      "town": "sunveil",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 48,
+      "id": "resident-48",
+      "town": "sunveil",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 49,
+      "id": "resident-49",
+      "town": "sunveil",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 50,
+      "id": "resident-50",
+      "town": "sunveil",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 51,
+      "id": "resident-51",
+      "town": "sunveil",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 52,
+      "id": "resident-52",
+      "town": "sunveil",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 53,
+      "id": "resident-53",
+      "town": "sunveil",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 54,
+      "id": "resident-54",
+      "town": "hydrangea",
+      "role": "herbalist",
+      "roles": [
+        "herbalist"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 55,
+      "id": "resident-55",
+      "town": "hydrangea",
+      "role": "villager",
+      "roles": [
+        "villager"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 56,
+      "id": "resident-56",
+      "town": "hydrangea",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 57,
+      "id": "resident-57",
+      "town": "hydrangea",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 58,
+      "id": "resident-58",
+      "town": "hydrangea",
+      "role": "blacksmith",
+      "roles": [
+        "blacksmith"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 59,
+      "id": "resident-59",
+      "town": "hydrangea",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 60,
+      "id": "resident-60",
+      "town": "hydrangea",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 61,
+      "id": "resident-61",
+      "town": "hydrangea",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 62,
+      "id": "resident-62",
+      "town": "hydrangea",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 63,
+      "id": "resident-63",
+      "town": "hydrangea",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 64,
+      "id": "resident-64",
+      "town": "thornrose",
+      "role": "guard",
+      "roles": [
+        "guard"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 65,
+      "id": "resident-65",
+      "town": "thornrose",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 66,
+      "id": "resident-66",
+      "town": "thornrose",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 67,
+      "id": "resident-67",
+      "town": "thornrose",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 68,
+      "id": "resident-68",
+      "town": "thornrose",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 69,
+      "id": "resident-69",
+      "town": "thornrose",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 70,
+      "id": "resident-70",
+      "town": "thornrose",
+      "role": "blacksmith",
+      "roles": [
+        "blacksmith"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 71,
+      "id": "resident-71",
+      "town": "thornrose",
+      "role": "guard",
+      "roles": [
+        "guard"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 72,
+      "id": "resident-72",
+      "town": "moonblossom",
+      "role": "herbalist",
+      "roles": [
+        "herbalist"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 73,
+      "id": "resident-73",
+      "town": "moonblossom",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 74,
+      "id": "resident-74",
+      "town": "moonblossom",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 75,
+      "id": "resident-75",
+      "town": "moonblossom",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 76,
+      "id": "resident-76",
+      "town": "moonblossom",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 77,
+      "id": "resident-77",
+      "town": "moonblossom",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 78,
+      "id": "resident-78",
+      "town": "moonblossom",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 79,
+      "id": "resident-79",
+      "town": "moonblossom",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 80,
+      "id": "resident-80",
+      "town": "tidepetal",
+      "role": "dockworker",
+      "roles": [
+        "dockworker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 81,
+      "id": "resident-81",
+      "town": "tidepetal",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 82,
+      "id": "resident-82",
+      "town": "tidepetal",
+      "role": "herbalist",
+      "roles": [
+        "herbalist"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 83,
+      "id": "resident-83",
+      "town": "tidepetal",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 84,
+      "id": "resident-84",
+      "town": "tidepetal",
+      "role": "dockworker",
+      "roles": [
+        "dockworker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 85,
+      "id": "resident-85",
+      "town": "tidepetal",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 86,
+      "id": "resident-86",
+      "town": "tidepetal",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 87,
+      "id": "resident-87",
+      "town": "tidepetal",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 88,
+      "id": "resident-88",
+      "town": "tidepetal",
+      "role": "dockworker",
+      "roles": [
+        "dockworker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 89,
+      "id": "resident-89",
+      "town": "tidepetal",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 90,
+      "id": "resident-90",
+      "town": "tidepetal",
+      "role": "worker",
+      "roles": [
+        "worker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 91,
+      "id": "resident-91",
+      "town": "tidepetal",
+      "role": "dockworker",
+      "roles": [
+        "dockworker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 92,
+      "id": "resident-92",
+      "town": "seabloom",
+      "role": "villager",
+      "roles": [
+        "villager"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 93,
+      "id": "resident-93",
+      "town": "seabloom",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 94,
+      "id": "resident-94",
+      "town": "seabloom",
+      "role": "dockworker",
+      "roles": [
+        "dockworker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 95,
+      "id": "resident-95",
+      "town": "seabloom",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 96,
+      "id": "resident-96",
+      "town": "seabloom",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 97,
+      "id": "resident-97",
+      "town": "seabloom",
+      "role": "dockworker",
+      "roles": [
+        "dockworker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 98,
+      "id": "resident-98",
+      "town": "seabloom",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 99,
+      "id": "resident-99",
+      "town": "seabloom",
+      "role": "child",
+      "roles": [
+        "child"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 100,
+      "id": "resident-100",
+      "town": "seabloom",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 101,
+      "id": "resident-101",
+      "town": "seabloom",
+      "role": "elder",
+      "roles": [
+        "elder"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 102,
+      "id": "resident-102",
+      "town": "seabloom",
+      "role": "merchant",
+      "roles": [
+        "merchant"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    },
+    {
+      "row": 103,
+      "id": "resident-103",
+      "town": "seabloom",
+      "role": "dockworker",
+      "roles": [
+        "dockworker"
+      ],
+      "source": "approved-generated-npc-v09",
+      "preservedOriginal": false
+    }
+  ],
+  "designCount": 104,
+  "style": "Every identity follows Amaal\u2019s chibi scale, dark outlines, warm shading and medieval fantasy style.",
+  "rosterRule": "All104 NPCs across the whole world have different designs; each model belongs to exactly one named NPC."
+}

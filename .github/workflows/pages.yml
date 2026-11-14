@@ -1,0 +1,61 @@
+name: Publish browser game
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dist/**'
+      - 'tests/**'
+      - 'tools/export-standalone.py'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Check the browser game
+        run: |
+          for file in dist/*.js; do node --check "$file"; done
+          node tests/adventure.cjs
+          node tests/hero-combat.cjs
+          node tests/collision-input.cjs
+          node tests/scene-interactions.cjs
+          node tests/forage.cjs
+          node tests/world-map.cjs
+          node tests/save-transfer.cjs
+          node tests/offline.cjs
+      - name: Prepare a coherent offline release
+        run: |
+          python3 tools/export-standalone.py --prepare-only
+          python3 tools/export-standalone.py --check
+      - name: Upload the standalone website
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
