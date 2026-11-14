@@ -2,7 +2,7 @@
 (function(global){
   'use strict';
   let image=null,layout={},area=null,options={},hero=null,progress=null;
-  let camps=[],monsters=[],effects=[],time=0,invulnerable=0,attackLock=0,session=0,attackSequence=0,activations=new Set();
+  let camps=[],monsters=[],effects=[],missiles=[],zones=[],time=0,invulnerable=0,attackLock=0,session=0,attackSequence=0,activations=new Set();
   const DIRECTIONS={right:[1,0],down:[0,1],left:[-1,0],up:[0,-1]};
   const clamp=(value,low,high)=>Math.max(low,Math.min(high,value));
   const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
@@ -70,7 +70,7 @@
   }
   function enter(nextArea,config={}){
     session++;area=nextArea;options=config;hero=config.hero;
-    camps=[];monsters=[];effects=[];time=0;invulnerable=0;attackLock=0;attackSequence=0;activations.clear();
+    camps=[];monsters=[];effects=[];missiles=[];zones=[];time=0;invulnerable=0;attackLock=0;attackSequence=0;activations.clear();
     if(!hero||area.kind!=='road'||area.safe===true||config.id==='petalferry')return;
     const state=config.state||{};
     state.clearedCamps=dictionary(state.clearedCamps);
@@ -99,7 +99,7 @@
     const dx=tx-monster.x,dy=ty-monster.y,length=Math.hypot(dx,dy);
     monster.walking=false;
     if(length<3)return;
-    const step=Math.min(length,monster.speed*dt),nx=monster.x+dx/length*step,ny=monster.y+dy/length*step;
+    const step=Math.min(length,monster.speed*(1-(monster.slow||0))*dt),nx=monster.x+dx/length*step,ny=monster.y+dy/length*step;
     const oldX=monster.x,oldY=monster.y;
     if(canStand(nx,monster.y))monster.x=nx;
     if(canStand(monster.x,ny))monster.y=ny;
@@ -200,7 +200,9 @@
         camp.timer=camp.spawnEvery;
       }
     }
+    updateMagic(dt);
     for(const monster of monsters){
+      if(monster.frozen>0){monster.walking=false;continue;}
       monster.attack=Math.max(0,monster.attack-dt);monster.stun=Math.max(0,monster.stun-dt);monster.striking=Math.max(0,monster.striking-dt);monster.bound=Math.max(0,monster.bound-dt);
       if(monster.stun>0){monster.walking=false;continue;}
       const camp=camps.find(c=>c.key===monster.campKey);
@@ -251,36 +253,314 @@
       effects.push({x:monster.x,y:monster.y-24,text:'−'+damage,life:.6,color:'#fff0be'});
       const fallback=DIRECTIONS[attacker.face]||DIRECTIONS.down;
       push(monster,monster.x===attacker.x&&monster.y===attacker.y?fallback[0]:monster.x-attacker.x,monster.x===attacker.x&&monster.y===attacker.y?fallback[1]:monster.y-attacker.y,knockback);
-      if(monster.hp<=0){defeat(monster);result.kills++;}
+      const killed=monster.hp<=0;options.onImpact?.({kind:'melee',spellId:spec.spellId||spec.id||'katana',damage,killed,target:{x:monster.x,y:monster.y}});if(killed){defeat(monster);result.kills++;}
     }
     for(const camp of camps)if(spec.camps!==false&&!camp.cleared&&inArc(camp,attacker,13,spec)&&(!options.canStrike||options.canStrike(attacker,camp))){
       const campDamage=Math.max(1,Number(spec.campDamage)||damage);
       camp.hp=Math.max(0,camp.hp-campDamage);camp.hit=.22;result.hits++;
       progress.campProgress[camp.key].hp=camp.hp;
       effects.push({x:camp.x,y:camp.y-29,text:'−'+campDamage,life:.6,color:'#fff0be'});
+      options.onImpact?.({kind:'melee',damage:campDamage,killed:camp.hp<=0,target:{x:camp.x,y:camp.y}});
       if(camp.hp<=0){clear(camp);result.camps++;}
     }
     if(result.hits)changed();
     return result;
   }
+  const SPELL_DEFAULTS={
+    petal_sweep:{damage:2,range:52,force:8,arc:1.65,color:'#f2b1c0'},
+    rose_lance:{damage:3,range:130,speed:220,pierce:2,radius:4,color:'#f2b1c0'},
+    crescent_return:{damage:2,range:104,speed:180,pierce:6,radius:6,color:'#e9c09d'},
+    thorn_dance:{damage:1,radius:34,duration:3,tick:.65,color:'#f2b1c0'},
+    briar_bind:{damage:0,radius:56,duration:2.5,color:'#b4d68c'},
+    seed_bolt:{damage:1,range:150,speed:175,rootDuration:1.2,radius:4,color:'#b4d68c'},
+    healing_bloom:{damage:0,radius:30,duration:.8,color:'#c6e0a4'},
+    thorn_wall:{damage:1,range:38,radius:30,duration:4,tick:.6,slow:.5,slowDuration:1,color:'#b4d68c'},
+    stormy_gust:{damage:1,range:70,force:22,arc:1.12,color:'#bde6e2'},
+    gale_step:{damage:2,range:72,duration:.22,force:10,color:'#bde6e2'},
+    cyclone:{damage:1,radius:64,duration:1.4,tick:.45,force:22,color:'#bde6e2'},
+    thunder_call:{damage:3,range:96,radius:36,delay:.55,color:'#ece3a0'},
+    frost_shard:{damage:2,range:160,speed:210,slow:.5,slowDuration:2,radius:5,color:'#aad9f1'},
+    ice_ring:{damage:1,radius:48,duration:1.8,color:'#aad9f1'},
+    winter_ward:{damage:0,radius:18,duration:5,color:'#ccebf4'},
+    glacial_path:{damage:1,range:90,radius:12,duration:4,tick:.6,slow:.55,slowDuration:2,color:'#aad9f1'},
+    ember_bolt:{damage:3,range:145,speed:200,burnDamage:1,burnDuration:3,burnTick:1,radius:5,color:'#eeac73'},
+    flame_fan:{damage:2,range:58,arc:1.1,burnDamage:1,burnDuration:2,color:'#eeac73'},
+    cinder_trap:{damage:3,range:60,radius:28,duration:8,armTime:.45,triggerRadius:23,color:'#eeac73'},
+    phoenix_pulse:{damage:2,radius:58,force:6,color:'#f0bd83'}
+  };
+  function remember(id){activations.add(id);if(activations.size>512)activations.delete(activations.values().next().value);}
+  function interrupt(monster,seconds=.2){monster.stun=Math.max(monster.stun,seconds);monster.attackState='idle';monster.attackData=null;monster.striking=0;}
+  function status(monster,spec={}){
+    if(Number(spec.rootDuration)>0)monster.bound=Math.max(monster.bound,clamp(Number(spec.rootDuration),.1,12));
+    if(Number(spec.freezeDuration)>0){monster.frozen=Math.max(monster.frozen||0,clamp(Number(spec.freezeDuration),.1,8));interrupt(monster,.1);}
+    if(Number(spec.slow)>0){monster.slow=Math.max(monster.slow||0,clamp(Number(spec.slow),0,.85));monster.slowTime=Math.max(monster.slowTime||0,clamp(Number(spec.slowDuration)||1,.1,10));}
+    if(Number(spec.burnDamage)>0&&Number(spec.burnDuration)>0){
+      const previous=monster.burning,damage=clamp(Math.floor(Number(spec.burnDamage)),1,8),duration=clamp(Number(spec.burnDuration),.1,10);
+      // Reapplication refreshes duration but never creates parallel DoT stacks.
+      monster.burning={remaining:Math.max(previous?.remaining||0,duration),damage:Math.max(previous?.damage||0,damage),tick:clamp(Number(spec.burnTick)||1,.3,3),timer:previous?.timer??clamp(Number(spec.burnTick)||1,.3,3)};
+    }
+  }
+  function damageMonster(monster,amount,source,spec={},result={hits:0,kills:0,camps:0}){
+    if(!monsters.includes(monster)||monster.hp<=0||!spec.ignoreOcclusion&&!clearLine(source,monster))return false;
+    const damage=clamp(Math.floor(Number(amount)||0),0,20);
+    if(damage){
+      monster.hp=Math.max(0,monster.hp-damage);result.hits++;
+      effects.push({x:monster.x,y:monster.y-24,text:'−'+damage,life:.6,color:spec.color||'#fff0be'});
+      if(spec.interrupt!==false)interrupt(monster,damage>1?.3:.2);
+      const force=clamp(Number(spec.force)||0,0,48);
+      if(force)push(monster,monster.x-source.x,monster.y-source.y,force);
+    }
+    status(monster,spec);
+    const killed=monster.hp<=0;
+    if(damage)options.onImpact?.({kind:spec.impactKind||(spec.spellId==='burn'?'burn':'burst'),spellId:spec.spellId,damage,killed,target:{x:monster.x,y:monster.y}});
+    if(killed){defeat(monster);result.kills++;}
+    return true;
+  }
+  function spellVector(config={}){
+    const source=Array.isArray(config.direction)?config.direction:DIRECTIONS[config.face||hero.face]||DIRECTIONS.down;
+    const length=Math.hypot(Number(source[0])||0,Number(source[1])||0)||1;
+    return[(Number(source[0])||0)/length,(Number(source[1])||0)/length];
+  }
+  function endpoint(origin,vector,range){
+    let point={x:origin.x,y:origin.y};
+    for(let remaining=range;remaining>1e-6;){
+      const step=Math.min(3,remaining),next={x:point.x+vector[0]*step,y:point.y+vector[1]*step};
+      if(!canStand(next.x,next.y)||!clearLine(point,next))break;
+      point=next;remaining-=step;
+    }
+    return point;
+  }
+  function newZone(spellId,spec,origin,extra={}){
+    const zone={id:spec.activationId,spellId,x:origin.x,y:origin.y,origin:{...origin},vector:spellVector(spec),
+      age:0,duration:clamp(Number(spec.duration)||.65,.1,12),radius:clamp(Number(spec.radius)||24,4,100),
+      tick:clamp(Number(spec.tick)||.6,.15,3),timer:0,triggered:false,hits:new Set(),spec:{...spec},...extra};
+    zones.push(zone);if(zones.length>24)zones.shift();return zone;
+  }
+  function missile(spellId,spec,origin){
+    const vector=spellVector(spec),range=clamp(Number(spec.range)||130,16,320),speed=clamp(Number(spec.speed)||190,60,360);
+    missiles.push({id:spec.activationId,spellId,x:origin.x,y:origin.y,origin:{...origin},vector,range,speed,
+      radius:clamp(Number(spec.radius)||4,2,12),leg:0,travelled:0,age:0,life:range/speed*(spellId==='crescent_return'?2:1)+.7,
+      pierce:clamp(Math.floor(Number(spec.pierce)||1),1,12),hits:new Set(),spec:{...spec},done:false});
+    if(missiles.length>32)missiles.shift();
+  }
   function cast(kind,config={}){
-    const result={hits:0,kills:0,camps:0};
-    if(!hero||area?.kind!=='road'||area.safe===true||!['petal_sweep','briar_bind','stormy_gust'].includes(kind))return result;
+    const result={hits:0,kills:0,camps:0,scheduled:false};
+    if(!hero||area?.kind!=='road'||area.safe===true||!Object.prototype.hasOwnProperty.call(SPELL_DEFAULTS,kind))return result;
     const activationId='ability:'+kind+':'+String(config.id??(++attackSequence));
     if(activations.has(activationId))return result;
-    if(kind==='petal_sweep')return swing(hero,{activationId,damage:config.damage||2,campDamage:1,range:config.range||52,arc:1.65,knockback:8});
-    if(kind==='stormy_gust')return swing(hero,{activationId,damage:config.damage||1,range:config.range||70,arc:1.12,knockback:config.force||22,camps:false});
-    activations.add(activationId);
-    const range=Number(config.range)||56,duration=clamp(Number(config.duration)||2.5,.25,10);
-    for(const monster of monsters)if(distance(monster,hero)<=range&&clearLine(hero,monster)){
-      monster.bound=Math.max(monster.bound,duration);monster.stun=.2;monster.attackState='idle';monster.attackData=null;monster.striking=0;result.hits++;
-      effects.push({x:monster.x,y:monster.y-25,text:'ROOTED',life:.65,color:'#c5df99'});
+    const supplied=global.BloomSpells?.resolve?.(kind,Number(config.rank)||1)||{};
+    const spec={...SPELL_DEFAULTS[kind],...supplied,...config,activationId,spellId:kind};
+    const source=config.origin&&Number.isFinite(config.origin.x)&&Number.isFinite(config.origin.y)&&distance(config.origin,hero)<=180?config.origin:hero;
+    const origin={x:source.x,y:source.y},vector=spellVector(spec),face=spec.face||hero.face;
+    if(kind==='petal_sweep'||kind==='stormy_gust'){
+      const hit=swing({...origin,face},{activationId,damage:spec.damage,campDamage:1,range:spec.range,arc:spec.arc,knockback:spec.force,camps:kind==='petal_sweep'});
+      newZone(kind,spec,origin,{duration:.4,shape:'cone',radius:spec.range});return{...hit,scheduled:false};
     }
-    return result;
+    remember(activationId);
+    if(['rose_lance','crescent_return','seed_bolt','frost_shard','ember_bolt'].includes(kind)){
+      missile(kind,spec,origin);result.scheduled=true;return result;
+    }
+    if(kind==='briar_bind'||kind==='ice_ring'||kind==='phoenix_pulse'){
+      const radius=clamp(Number(spec.radius)||Number(spec.range)||48,4,100);
+      for(const monster of [...monsters])if(distance(monster,origin)<=radius&&clearLine(origin,monster)){
+        const adjusted={...spec,rootDuration:kind==='briar_bind'?spec.duration:spec.rootDuration,freezeDuration:kind==='ice_ring'?spec.duration:0};
+        if(damageMonster(monster,spec.damage,origin,adjusted,result)&&!spec.damage){interrupt(monster,.2);result.hits++;}
+      }
+      newZone(kind,spec,origin,{duration:.7,shape:'ring',radius});return result;
+    }
+    if(kind==='flame_fan'){
+      for(const monster of [...monsters])if(inArc(monster,{...origin,face},6,spec))damageMonster(monster,spec.damage,origin,spec,result);
+      newZone(kind,spec,origin,{duration:.5,shape:'cone',radius:spec.range});return result;
+    }
+    if(kind==='gale_step'){
+      const suppliedEnd=config.end&&Number.isFinite(config.end.x)&&Number.isFinite(config.end.y)&&distance(origin,config.end)<=150?config.end:null;
+      const travel=suppliedEnd?distance(origin,suppliedEnd):clamp(Number(spec.range)||72,0,140),dashVector=suppliedEnd&&travel?[(suppliedEnd.x-origin.x)/travel,(suppliedEnd.y-origin.y)/travel]:vector;
+      const end=endpoint(origin,dashVector,travel);
+      for(const monster of [...monsters])if(segmentDistance(monster,origin,end)<=11&&clearLine(origin,monster))damageMonster(monster,spec.damage,origin,spec,result);
+      newZone(kind,spec,origin,{end,shape:'line',duration:.35,radius:10});return result;
+    }
+    if(kind==='healing_bloom'||kind==='winter_ward'){
+      newZone(kind,spec,origin,{shape:'ring',follow:kind==='winter_ward',duration:kind==='healing_bloom'?.8:spec.duration});return result;
+    }
+    if(kind==='thorn_dance'){
+      newZone(kind,spec,origin,{shape:'orbit',follow:true});result.scheduled=true;return result;
+    }
+    if(kind==='cyclone'){
+      newZone(kind,spec,origin,{shape:'vortex'});result.scheduled=true;return result;
+    }
+    if(kind==='thunder_call'){
+      const candidates=monsters.filter(monster=>inArc(monster,{...origin,face},0,{range:spec.range,arc:1.25})&&clearLine(origin,monster)).sort((a,b)=>distance(a,origin)-distance(b,origin));
+      const aim=candidates[0]?{x:candidates[0].x,y:candidates[0].y}:endpoint(origin,vector,clamp(Number(spec.range)||96,16,240));
+      newZone(kind,spec,origin,{...aim,shape:'lightning',delay:clamp(Number(spec.delay)||.55,.15,2),duration:clamp(Number(spec.delay)||.55,.15,2)+.42});result.scheduled=true;return result;
+    }
+    if(kind==='cinder_trap'){
+      const aim=endpoint(origin,vector,clamp(Number(spec.range)||60,16,140));
+      newZone(kind,spec,origin,{...aim,shape:'trap',armTime:clamp(Number(spec.armTime)||.45,.1,2)});result.scheduled=true;return result;
+    }
+    const end=endpoint(origin,vector,clamp(Number(spec.range)||60,12,180));
+    if(kind==='thorn_wall'){
+      const width=clamp(Number(spec.radius)||30,10,60),a=endpoint(end,[-vector[1],vector[0]],width),b=endpoint(end,[vector[1],-vector[0]],width);
+      newZone(kind,spec,origin,{x:end.x,y:end.y,a,b,shape:'wall',radius:8});
+    }else newZone(kind,spec,origin,{end,shape:'trail'});
+    result.scheduled=true;return result;
+  }
+  function tickStatuses(dt){
+    for(const monster of [...monsters]){
+      monster.frozen=Math.max(0,(monster.frozen||0)-dt);monster.slowTime=Math.max(0,(monster.slowTime||0)-dt);if(!monster.slowTime)monster.slow=0;
+      const burn=monster.burning;if(!burn)continue;
+      burn.remaining=Math.max(0,burn.remaining-dt);burn.timer-=dt;
+      if(burn.timer<=0){burn.timer+=burn.tick;damageMonster(monster,burn.damage,monster,{ignoreOcclusion:true,interrupt:false,force:0,spellId:'burn',color:'#efb079'});changed();}
+      if(!burn.remaining)monster.burning=null;
+    }
+  }
+  function updateMissiles(dt){
+    for(const bolt of missiles){
+      bolt.age+=dt;if(bolt.age>bolt.life){bolt.done=true;continue;}
+      let travel=Math.min(bolt.speed*dt,bolt.range-bolt.travelled);
+      while(travel>1e-6&&!bolt.done){
+        const step=Math.min(3,travel),previous={x:bolt.x,y:bolt.y},next={x:bolt.x+bolt.vector[0]*step,y:bolt.y+bolt.vector[1]*step};
+        if(!canStand(next.x,next.y)||!clearLine(previous,next)){
+          if(bolt.spellId==='crescent_return'&&bolt.leg===0){bolt.leg=1;bolt.vector=[-bolt.vector[0],-bolt.vector[1]];bolt.range=bolt.travelled;bolt.travelled=0;break;}
+          bolt.done=true;break;
+        }
+        bolt.x=next.x;bolt.y=next.y;bolt.travelled+=step;travel-=step;
+        for(const monster of [...monsters]){
+          const key=monster.id+':'+bolt.leg;if(bolt.hits.has(key)||segmentDistance(monster,previous,next)>bolt.radius+6||!clearLine(bolt.origin,monster))continue;
+          if(damageMonster(monster,bolt.spec.damage,bolt.origin,{...bolt.spec,force:bolt.spec.force||0,impactKind:'projectile'},undefined)){
+            bolt.hits.add(key);changed();
+            const hitsInLeg=[...bolt.hits].filter(key=>key.endsWith(':'+bolt.leg)).length;
+            if(hitsInLeg>=bolt.pierce){if(bolt.spellId==='crescent_return'&&bolt.leg===0){bolt.leg=1;bolt.vector=[-bolt.vector[0],-bolt.vector[1]];bolt.range=bolt.travelled;bolt.travelled=0;}else bolt.done=true;break;}
+          }
+        }
+      }
+      if(!bolt.done&&bolt.travelled>=bolt.range-1e-6){
+        if(bolt.spellId==='crescent_return'&&bolt.leg===0){bolt.leg=1;bolt.vector=[-bolt.vector[0],-bolt.vector[1]];bolt.travelled=0;}else bolt.done=true;
+      }
+    }
+    missiles=missiles.filter(bolt=>!bolt.done);
+  }
+  function zoneContains(zone,monster){
+    if(zone.shape==='wall')return segmentDistance(monster,zone.a,zone.b)<=zone.radius+5;
+    if(zone.shape==='trail')return segmentDistance(monster,zone.origin,zone.end)<=zone.radius+5;
+    return distance(zone,monster)<=zone.radius+5;
+  }
+  function zoneBurst(zone,freeze=false){
+    for(const monster of [...monsters])if(zoneContains(zone,monster)&&clearLine(zone.origin,monster))damageMonster(monster,zone.spec.damage,zone.origin,{...zone.spec,freezeDuration:freeze?zone.spec.duration:0});
+    changed();
+  }
+  function updateZones(dt){
+    for(const zone of zones){
+      zone.age+=dt;if(zone.follow){zone.x=hero.x;zone.y=hero.y;zone.origin={x:hero.x,y:hero.y};}
+      if(zone.shape==='lightning'){
+        if(!zone.triggered&&zone.age>=zone.delay){zone.triggered=true;zoneBurst(zone);}
+        continue;
+      }
+      if(zone.shape==='trap'){
+        if(zone.triggered){zone.duration=Math.min(zone.duration,zone.age+.42-dt);continue;}
+        if(zone.age>=zone.armTime&&monsters.some(monster=>distance(zone,monster)<=clamp(Number(zone.spec.triggerRadius)||23,8,60)&&clearLine(zone.origin,monster))){zone.triggered=true;zone.duration=zone.age+.42;zoneBurst(zone);}
+        continue;
+      }
+      if(!['orbit','vortex','wall','trail'].includes(zone.shape))continue;
+      if(zone.shape==='vortex')for(const monster of monsters)if(zoneContains(zone,monster)&&clearLine(zone.origin,monster))push(monster,zone.x-monster.x,zone.y-monster.y,clamp(Number(zone.spec.force)||22,0,60)*dt*1.5);
+      zone.timer-=dt;if(zone.timer>0)continue;zone.timer+=zone.tick;
+      for(const monster of [...monsters])if(zoneContains(zone,monster)&&clearLine(zone.origin,monster))damageMonster(monster,zone.spec.damage,zone.origin,{...zone.spec,force:0,interrupt:zone.shape==='orbit',impactKind:'field'});
+      changed();
+    }
+    zones=zones.filter(zone=>zone.age<zone.duration);
+  }
+  function updateMagic(dt){
+    // Fixed small work bounds keep lag spikes from tunnelling missiles or
+    // replaying an unbounded number of delayed pulses in a single frame.
+    for(let remaining=Math.min(.4,Math.max(0,dt));remaining>1e-7;){const step=Math.min(.025,remaining);tickStatuses(step);updateMissiles(step);updateZones(step);remaining-=step;}
+    if(effects.length>160)effects=effects.slice(-160);
   }
   function actors(camera={x:0,y:0}){
     return [...camps.map(camp=>({combat:true,kind:'camp',camp,sort:camp.y-6})),...monsters.map(monster=>({combat:true,kind:'monster',monster,sort:monster.y}))]
       .filter(entry=>{const actor=entry.camp||entry.monster;return actor.x>camera.x-90&&actor.x<camera.x+474&&actor.y>camera.y-20&&actor.y<camera.y+336;});
+  }
+  function magicFlare(ctx,x,y,color,size=1){ctx.fillStyle=color;ctx.fillRect(Math.round(x)-size,Math.round(y),size*2+1,1);ctx.fillRect(Math.round(x),Math.round(y)-size,1,size*2+1);}
+  function drawZoneFlourish(ctx,zone,camera){
+    const x=zone.x-camera.x,y=zone.y-camera.y,age=zone.age,ratio=Math.min(1,age/.3),color=zone.spec.color||'#cfe3b3',angle=Math.atan2(zone.vector[1],zone.vector[0]);
+    ctx.strokeStyle=color;ctx.lineWidth=1;ctx.fillStyle=color;
+    if(zone.spellId==='petal_sweep'){
+      for(let trail=0;trail<3;trail++){const r=zone.radius*(.45+ratio*.45)-trail*4,start=angle-1.6+ratio*.7;ctx.beginPath();ctx.arc(x,y-10,r,start,start+1.3+ratio*.9);ctx.stroke();}
+      for(let petal=0;petal<7;petal++){const a=angle-1.3+petal*.4+age*2,r=zone.radius*(.3+ratio*.7);ctx.fillRect(Math.round(x+Math.cos(a)*r),Math.round(y-10+Math.sin(a)*r),3,2);}
+    }else if(zone.spellId==='briar_bind'){
+      for(let vine=0;vine<7;vine++){const a=vine*Math.PI*2/7,r=zone.radius*(.3+ratio*.6),px=x+Math.cos(a)*r,py=y+Math.sin(a)*r;ctx.beginPath();ctx.moveTo(x+Math.cos(a)*r*.45,y+Math.sin(a)*r*.45);ctx.lineTo(px-3,py+2);ctx.lineTo(px+2,py-5-ratio*4);ctx.lineTo(px+5,py-2);ctx.stroke();}
+    }else if(zone.spellId==='healing_bloom'){
+      const r=6+ratio*8;for(let petal=0;petal<5;petal++){const a=petal*Math.PI*2/5+age*.8,px=x+Math.cos(a)*r,py=y-16+Math.sin(a)*r;ctx.beginPath();ctx.ellipse(px,py,4,7,a,0,Math.PI*2);ctx.stroke();}magicFlare(ctx,x,y-16,'#f2edb7',3);
+      for(let mote=0;mote<6;mote++){const a=mote*2.4;magicFlare(ctx,x+Math.cos(a)*20,y-8-Math.sin(a)*6-age*25,color,1);}
+    }else if(zone.spellId==='stormy_gust'){
+      for(let stream=-1;stream<=1;stream++){const travel=age*90,px=x+zone.vector[0]*travel-zone.vector[1]*stream*10,py=y-10+zone.vector[1]*travel+zone.vector[0]*stream*10;ctx.beginPath();ctx.arc(px,py,8+ratio*6,angle-.85,angle+.85);ctx.stroke();magicFlare(ctx,px+zone.vector[0]*10,py+zone.vector[1]*10,'#e9f5e4');}
+    }else if(zone.spellId==='gale_step'){
+      for(let ribbon=-1;ribbon<=1;ribbon++){ctx.beginPath();ctx.moveTo(x-zone.vector[1]*ribbon*4,y-11+zone.vector[0]*ribbon*4);ctx.lineTo(zone.end.x-camera.x-zone.vector[1]*ribbon*4,zone.end.y-camera.y-11+zone.vector[0]*ribbon*4);ctx.stroke();}
+    }else if(zone.spellId==='cyclone'){
+      for(let mote=0;mote<10;mote++){const a=mote*2.4-age*5,r=zone.radius*(.2+.7*((mote*.17+age*.35)%1));magicFlare(ctx,x+Math.cos(a)*r,y-5+Math.sin(a)*r*.65,color);}
+    }else if(zone.spellId==='thunder_call'&&!zone.triggered){
+      for(let spark=0;spark<4;spark++){const a=spark*Math.PI/2+age*2,px=x+Math.cos(a)*zone.radius*.7,py=y+Math.sin(a)*zone.radius*.7;magicFlare(ctx,px,py,'#f2edb7',2);}
+    }else if(zone.spellId==='ice_ring'){
+      const r=zone.radius*(.35+ratio*.65);for(let shard=0;shard<10;shard++){const a=shard*Math.PI/5,px=x+Math.cos(a)*r,py=y+Math.sin(a)*r;ctx.beginPath();ctx.moveTo(px-3,py);ctx.lineTo(px,py-10-ratio*4);ctx.lineTo(px+3,py);ctx.closePath();ctx.stroke();}
+    }else if(zone.spellId==='winter_ward'){
+      const r=17+Math.sin(age*4);ctx.beginPath();for(let point=0;point<7;point++){const a=point*Math.PI/3-Math.PI/6,px=x+Math.cos(a)*r,py=y-18+Math.sin(a)*r;(point?ctx.lineTo:ctx.moveTo).call(ctx,px,py);}ctx.stroke();magicFlare(ctx,x,y-18,color,3);
+    }else if(zone.spellId==='flame_fan'){
+      for(let flame=0;flame<9;flame++){const a=angle-(zone.spec.arc||1.1)+(zone.spec.arc||1.1)*2*flame/8,r=zone.radius*(.25+ratio*.65),px=x+Math.cos(a)*r,py=y-7+Math.sin(a)*r;ctx.beginPath();ctx.moveTo(x+Math.cos(a)*r*.4,y-7+Math.sin(a)*r*.4);ctx.lineTo(px-2,py+2);ctx.lineTo(px+Math.cos(a)*7,py+Math.sin(a)*7-3);ctx.stroke();magicFlare(ctx,px,py,'#ffe1a6');}
+    }else if(zone.spellId==='cinder_trap'){
+      ctx.beginPath();for(let point=0;point<=5;point++){const a=point*Math.PI*4/5-Math.PI/2,px=x+Math.cos(a)*zone.radius*.5,py=y+Math.sin(a)*zone.radius*.5;(point?ctx.lineTo:ctx.moveTo).call(ctx,px,py);}ctx.stroke();
+      if(zone.triggered)for(let ember=0;ember<8;ember++){const a=ember*Math.PI/4,travel=10+(zone.age-(zone.duration-.42))*75;magicFlare(ctx,x+Math.cos(a)*travel,y+Math.sin(a)*travel,color,2);}
+    }else if(zone.spellId==='phoenix_pulse'){
+      const r=zone.radius*(.35+ratio*.65);for(let feather=0;feather<12;feather++){const a=feather*Math.PI/6,px=x+Math.cos(a)*r,py=y-10+Math.sin(a)*r;ctx.beginPath();ctx.moveTo(px-Math.cos(a)*10,py-Math.sin(a)*10);ctx.lineTo(px-Math.sin(a)*3,py+Math.cos(a)*3);ctx.lineTo(px+Math.cos(a)*5,py+Math.sin(a)*5);ctx.stroke();magicFlare(ctx,px,py,'#ffe0ad');}
+    }
+  }
+  function drawSpellGround(ctx,camera){
+    for(const zone of zones){
+      const x=zone.x-camera.x,y=zone.y-camera.y,origin={x:zone.origin.x-camera.x,y:zone.origin.y-camera.y},fade=Math.min(1,(zone.duration-zone.age)*3),color=zone.spec.color||'#cfe3b3';
+      ctx.globalAlpha=.6*fade;ctx.strokeStyle=color;ctx.fillStyle=color+'25';ctx.lineWidth=1;
+      if(['line','trail'].includes(zone.shape)){
+        const end={x:zone.end.x-camera.x,y:zone.end.y-camera.y},dx=-zone.vector[1]*zone.radius,dy=zone.vector[0]*zone.radius;
+        ctx.beginPath();ctx.moveTo(origin.x+dx,origin.y+dy);ctx.lineTo(end.x+dx,end.y+dy);ctx.lineTo(end.x-dx,end.y-dy);ctx.lineTo(origin.x-dx,origin.y-dy);ctx.closePath();ctx.fill();ctx.stroke();
+        if(zone.shape==='trail')for(let part=0;part<8;part++){const t=(part+.5)/8,px=origin.x+(end.x-origin.x)*t,py=origin.y+(end.y-origin.y)*t;ctx.beginPath();ctx.moveTo(px-3,py+3);ctx.lineTo(px+3,py-3);ctx.moveTo(px-3,py-3);ctx.lineTo(px+3,py+3);ctx.stroke();}
+      }else if(zone.shape==='wall'){
+        const a={x:zone.a.x-camera.x,y:zone.a.y-camera.y},b={x:zone.b.x-camera.x,y:zone.b.y-camera.y};ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.lineWidth=1;
+        const width=distance(a,b),count=Math.max(1,Math.floor(width/7));
+        for(let part=0;part<=count;part++){const t=part/count,px=a.x+(b.x-a.x)*t,py=a.y+(b.y-a.y)*t;ctx.beginPath();ctx.moveTo(px-3,py+2);ctx.lineTo(px,py-7);ctx.lineTo(px+3,py+1);ctx.stroke();}
+      }else if(zone.shape==='cone'){
+        const angle=Math.atan2(zone.vector[1],zone.vector[0]),arc=Number(zone.spec.arc)||1.2,radius=zone.radius*(.35+Math.min(1,zone.age/.22)*.65);
+        ctx.beginPath();ctx.moveTo(x,y);ctx.arc(x,y,radius,angle-arc,angle+arc);ctx.closePath();ctx.fill();ctx.stroke();
+      }else{
+        const pending=zone.shape==='lightning'&&!zone.triggered,trap=zone.shape==='trap',radius=trap?zone.radius*.65:zone.radius;
+        ctx.beginPath();ctx.ellipse(x,y,radius,zone.shape==='ring'&&zone.spellId==='winter_ward'?radius*.35:radius,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+        if(pending||trap){
+          ctx.beginPath();ctx.moveTo(x-5,y);ctx.lineTo(x+5,y);ctx.moveTo(x,y-5);ctx.lineTo(x,y+5);ctx.stroke();
+          ctx.beginPath();ctx.arc(x,y,Math.max(6,radius-4),-Math.PI/2,-Math.PI/2+Math.PI*2*Math.min(1,zone.age/(zone.delay||zone.armTime||.45)));ctx.stroke();
+        }
+        if(zone.shape==='vortex')for(let ring=0;ring<3;ring++){ctx.beginPath();ctx.arc(x,y,9+ring*12+(zone.age*15)%9,zone.age*4+ring,zone.age*4+ring+3.2);ctx.stroke();}
+        if(zone.shape==='orbit')for(let petal=0;petal<5;petal++){const angle=zone.age*4+petal*Math.PI*2/5,px=x+Math.cos(angle)*zone.radius,py=y+Math.sin(angle)*zone.radius;ctx.fillStyle=color;ctx.fillRect(Math.round(px)-2,Math.round(py)-4,4,8);}
+      }
+      drawZoneFlourish(ctx,zone,camera);
+    }
+    ctx.globalAlpha=1;
+    for(const monster of monsters){
+      const x=Math.round(monster.x-camera.x),y=Math.round(monster.y-camera.y);
+      if(monster.frozen>0){ctx.strokeStyle='#b6e7f1';ctx.fillStyle='#b6e7f133';ctx.beginPath();ctx.moveTo(x-9,y+2);ctx.lineTo(x-7,y-21);ctx.lineTo(x,y-28);ctx.lineTo(x+7,y-21);ctx.lineTo(x+9,y+2);ctx.closePath();ctx.fill();ctx.stroke();}
+      else if(monster.slowTime>0){ctx.strokeStyle='#b6e7f1';ctx.beginPath();ctx.ellipse(x,y+1,9,3,0,0,Math.PI*2);ctx.stroke();}
+      if(monster.burning){ctx.fillStyle='#edaa71';for(let flame=0;flame<3;flame++)ctx.fillRect(x-6+flame*5,y-5-Math.round(Math.sin(time*8+flame)*3),2,5);}
+    }
+  }
+  function drawEffects(ctx,camera={x:0,y:0}){
+    if(area?.kind!=='road'||area.safe===true)return;
+    ctx.save();
+    for(const bolt of missiles){
+      const x=Math.round(bolt.x-camera.x),y=Math.round(bolt.y-camera.y-10),color=bolt.spec.color||'#e3dba4';ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=2;
+      ctx.globalAlpha=.4;ctx.beginPath();ctx.moveTo(x-bolt.vector[0]*14,y-bolt.vector[1]*14);ctx.lineTo(x,y);ctx.stroke();ctx.globalAlpha=1;magicFlare(ctx,x-bolt.vector[0]*9+Math.sin(time*19)*3,y-bolt.vector[1]*9+Math.cos(time*19)*3,color);magicFlare(ctx,x,y,'#fff2cf',2);
+      if(bolt.spellId==='crescent_return'){const angle=time*12;ctx.beginPath();ctx.arc(x,y,bolt.radius,angle,angle+Math.PI*1.3);ctx.stroke();}
+      else if(bolt.spellId==='rose_lance'){ctx.beginPath();ctx.moveTo(x-bolt.vector[0]*7,y-bolt.vector[1]*7);ctx.lineTo(x+bolt.vector[0]*8,y+bolt.vector[1]*8);ctx.stroke();}
+      else if(bolt.spellId==='frost_shard'){ctx.beginPath();ctx.moveTo(x+bolt.vector[0]*8,y+bolt.vector[1]*8);ctx.lineTo(x-bolt.vector[1]*4,y+bolt.vector[0]*4);ctx.lineTo(x-bolt.vector[0]*5,y-bolt.vector[1]*5);ctx.lineTo(x+bolt.vector[1]*4,y-bolt.vector[0]*4);ctx.closePath();ctx.fill();}
+      else{ctx.fillRect(x-3,y-3,6,6);ctx.fillStyle='#fff4d1';ctx.fillRect(x-1,y-1,2,2);}
+    }
+    for(const zone of zones)if(zone.shape==='lightning'&&zone.triggered){
+      const x=Math.round(zone.x-camera.x),y=Math.round(zone.y-camera.y);ctx.strokeStyle=zone.spec.color||'#f3e7ad';ctx.lineWidth=2;ctx.globalAlpha=Math.max(0,1-(zone.age-zone.delay)/.42);ctx.beginPath();ctx.moveTo(x-7,y-100);ctx.lineTo(x+5,y-70);ctx.lineTo(x-4,y-70);ctx.lineTo(x+8,y-40);ctx.lineTo(x,y-40);ctx.lineTo(x,y);ctx.stroke();ctx.strokeStyle='#fff7d5';ctx.lineWidth=1;ctx.stroke();magicFlare(ctx,x,y,'#fff7d5',6);
+    }
+    ctx.restore();
   }
   function drawGround(ctx,camera={x:0,y:0}){
     if(area?.kind!=='road'||area.safe===true)return;
@@ -306,7 +586,7 @@
     for(const monster of monsters)if(monster.bound>0){
       const x=monster.x-camera.x,y=monster.y-camera.y;ctx.strokeStyle='#b2cd83';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(x,y,10,4,0,0,Math.PI*2);ctx.moveTo(x-7,y+2);ctx.lineTo(x-6,y-9);ctx.moveTo(x+7,y+2);ctx.lineTo(x+5,y-10);ctx.stroke();
     }
-    ctx.restore();
+    drawSpellGround(ctx,camera);ctx.restore();
   }
   function draw(entry,ctx,camera){
     const actor=entry.camp||entry.monster,x=Math.round(actor.x-camera.x),y=Math.round(actor.y-camera.y);
@@ -361,8 +641,11 @@
   }
   function snapshot(){
     return {camps:camps.map(({id,key,hp,cleared,spawned,totalSpawns,maxAlive})=>({id,key,hp,cleared,spawned,totalSpawns,maxAlive})),
-      monsters:monsters.map(({id,campKey,x,y,hp,maxHp,type,name,attackState,attackKind,attackTimer,attackData,bound,stun})=>({id,campKey,x,y,hp,maxHp,type,name,attackState,attackKind,
-        attackAim:attackData?{...attackData.aim}:null,warningRemaining:attackState==='windup'?attackTimer:0,bound,stun})),invulnerable,target:target()};
+      monsters:monsters.map(({id,campKey,x,y,hp,maxHp,type,name,attackState,attackKind,attackTimer,attackData,bound,stun,slow,slowTime,burning,frozen})=>({id,campKey,x,y,hp,maxHp,type,name,attackState,attackKind,
+        attackAim:attackData?{...attackData.aim}:null,warningRemaining:attackState==='windup'?attackTimer:0,bound,stun,slow:slow||0,slowTime:slowTime||0,burn:burning?.remaining||0,frozen:frozen||0})),
+      missiles:missiles.map(({id,spellId,x,y,leg,travelled,range})=>({id,spellId,x,y,leg,travelled,range})),
+      projectiles:missiles.map(({id,spellId,x,y,leg,travelled,range})=>({id,spellId,x,y,leg,travelled,range})),
+      zones:zones.map(({id,spellId,x,y,age,duration,triggered,shape})=>({id,spellId,x,y,age,duration,triggered,shape})),invulnerable,target:target()};
   }
-  global.BloomCombat={configure,enter,update,actors,draw,drawGround,swing,cast,hud,hint,snapshot,footprint,blockingCamp,isCleared,hurt:()=>invulnerable>0};
+  global.BloomCombat={configure,enter,update,actors,draw,drawGround,drawEffects,swing,cast,hud,hint,snapshot,footprint,blockingCamp,isCleared,hurt:()=>invulnerable>0};
 })(window);

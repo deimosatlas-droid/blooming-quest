@@ -46,7 +46,7 @@ async function viewports(){
  nativeContainer.requestFullscreen=async()=>{throw Error('fullscreen denied');};await native.toggle();assert(native.expanded(),'a rejected fullscreen API falls back to browser expansion');await native.exit();assert(!native.expanded());
  assert.equal(mobile.bindViewport({container:null,button:nativeButton,doc:nativeDoc,win:nativeWin}),null,'clients without viewport controls remain supported');
 }
-function actualGame(){
+function actualGame(full=false){
  const html=fs.readFileSync(path.join(root,'index.html'),'utf8'),elements=new Map(),buttons=[],storage=new Map();
  const gradient={addColorStop(){}},ctx=new Proxy({createRadialGradient:()=>gradient},{get:(object,key)=>object[key]??(()=>{})});
  function element(id=''){const node=new Target(id);node.getContext=()=>ctx;return node;}
@@ -60,7 +60,7 @@ function actualGame(){
  document.getElementById=id=>{if(!elements.has(id))elements.set(id,element(id));return elements.get(id);};document.createElement=()=>element();document.elementFromPoint=()=>null;
  document.querySelectorAll=selector=>buttons.filter(button=>selector.includes('[data-key]')&&button.dataset.key||selector.includes('[data-touch-action]')&&button.dataset.touchAction!==undefined);
  const C={console,Math,JSON,Image:class{},Promise,URLSearchParams,document,window,location,fetch:()=>new Promise(()=>{}),requestAnimationFrame(){},setInterval(){},localStorage:{getItem:key=>storage.get(key)??null,setItem:(key,value)=>storage.set(key,value)},fixture:{id:'control-test',name:'Touch test estate',kind:'home',safe:true,theme:'rose',w:40,h:24,tiles:Array(24).fill('g'.repeat(40)),spawn:[160,160],objects:[],portals:[],signs:[{x:160,y:160,speaker:'Touch test sign',text:'An actual interaction.'}],exits:[]}};
- vm.createContext(C);for(const file of['hero-animation.js','combat.js','mobile-controls.js','adventure.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),C,{filename:file});
+ vm.createContext(C);for(const file of(full?['spell-catalog.js','progression.js','motion.js','abilities.js','hero-animation.js','combat.js','mobile-controls.js','adventure.js']:['hero-animation.js','combat.js','mobile-controls.js','adventure.js']))vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),C,{filename:file});
  const evaluate=source=>vm.runInContext(source,C);evaluate('maps={"control-test":fixture,rosepetal:fixture};atlas={};texture={};amaal={};ready=true;playing=true;enter("control-test")');
  return{C,document,window,elements,buttons,storage,evaluate,reset:()=>evaluate('playing=true;enter("control-test")'),direction:key=>buttons.find(button=>button.dataset.key===key)};
 }
@@ -85,9 +85,19 @@ async function gameIntegration(){
  reset();evaluate('playing=false;syncTouchButtons();state.hp=1;state.food=2');heal.onclick();map.onclick();down(run,116);down(right,117);evaluate('update(.1)');close(point().x,160,'stale title-screen touches cannot move Amaal');assert.equal(evaluate('held("shift")'),false,'Run is inactive before play');assert.equal(evaluate('state.hp'),1,'title-screen action callbacks cannot heal');assert.equal(C.location.href,'');assert(game.buttons.filter(button=>button.dataset.key||button.dataset.touchAction!==undefined).every(button=>button.disabled),'all gameplay controls are disabled before play');
  reset();down(right,120);await elements.get('fullscreen').onclick();assert(elements.get('play-area').classList.contains('is-expanded'),'the real Expand button uses Safari-compatible wrapper expansion');assert(!elements.get('screen').classList.contains('is-expanded'),'expansion targets the wrapper instead of hiding controls outside a canvas-only fullscreen');assert.equal(evaluate('touchControls.snapshot().pointers'),0,'entering expanded view clears old movement input');await elements.get('fullscreen').onclick();assert.equal(document.body.style.overflow,'');
 }
+function heldCombatIntegration(){
+ const game=actualGame(true),attack=game.elements.get('touchSwing'),{evaluate,window}=game;
+ down(attack,200);assert(evaluate('heroAnim.busy()'),'touch hold begins an actual paid attack immediately');
+ for(let tick=0;tick<30;tick++)evaluate('update(.04)');
+ assert(evaluate('abilities.snapshot().stamina')<80,'holding Attack chains real stamina-funded combo strikes');
+ upAt(attack,200);attack.onclick({detail:1});assert(!evaluate('held(" ")'),'release clears the attack hold');
+ for(let tick=0;tick<35;tick++)evaluate('update(.04)');assert(!evaluate('heroAnim.busy()'),'release does not add another synthetic click attack');
+ down(attack,201);window.emit('blur');assert(!evaluate('held(" ")'),'app interruption clears held combat input');
+ evaluate('playing=false;syncTouchButtons()');down(attack,202);assert(!evaluate('held(" ")'),'title screen rejects stale combat holds');upAt(attack,202);
+}
 function responsiveMarkup(){
  const html=fs.readFileSync(path.join(root,'index.html'),'utf8'),wrapper=html.match(/<section\b[^>]*id="play-area"[^>]*>([\s\S]*?)<\/section>/)?.[1];
  assert(wrapper,'a whole-game viewport wrapper exists');for(const id of['screen','game','touchRun','touchInteract','touchSwing','touchHeal','touchMap','touchJournal','fullscreen'])assert(wrapper.includes('id="'+id+'"'),id+' stays inside the fullscreen wrapper');
  assert(html.indexOf('src="mobile-controls.js')<html.indexOf('src="adventure.js'),'pointer module loads before gameplay integration');assert.match(html,/viewport-fit=cover/);assert.match(html,/safe-area-inset-(?:top|bottom)/,'expanded play accounts for phone notches and home indicators');assert.match(html,/\.touch button\{[^}]*min-height:44px[^}]*min-width:44px/,'gameplay touch targets meet 44px minimum dimensions');assert.match(html,/\.touch\{[^}]*touch-action:none[^}]*user-select:none/,'touch controls suppress browser panning and text selection');assert.match(html,/any-pointer:coarse/,'touch controls are available on large touch tablets and laptops');assert.match(html,/\.dialog\{[^}]*overflow:auto/,'long dialogue remains scrollable on phones');assert.match(html,/\.hint\{[^}]*white-space:normal/,'interaction hints wrap on narrow screens');assert.match(html,/100dvh/,'expanded mode follows the mobile browser viewport');
 }
-Promise.resolve().then(viewports).then(gameIntegration).then(responsiveMarkup).then(()=>console.log('PASS: multi-pointer/reference-counted holds, cancellation/blur/visibility cleanup and teardown; native/Safari fullscreen; actual game Run/diagonals, keyboard coexistence, scene resets, Heal/Map/Journal/Interact/Attack, ferry/title guards and responsive touch markup.')).catch(error=>{console.error(error);process.exitCode=1;});
+Promise.resolve().then(viewports).then(gameIntegration).then(heldCombatIntegration).then(responsiveMarkup).then(()=>console.log('PASS: multi-pointer/reference-counted holds, cancellation/blur/visibility cleanup and teardown; native/Safari fullscreen; actual game Run/diagonals, keyboard coexistence, scene resets, Heal/Map/Journal/Interact/Attack, ferry/title guards and responsive touch markup.')).catch(error=>{console.error(error);process.exitCode=1;});

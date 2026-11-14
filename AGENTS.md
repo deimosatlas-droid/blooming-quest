@@ -36,6 +36,8 @@ The Pages workflow uploads only dist/. Keep .openai, Git metadata, credentials a
 
 ## Action RPG systems
 
-The v0.13 release implements original Dimraeth-inspired stamina combat, dodge, directional guard/parry, three warned enemy attack patterns, XP/levels, a nine-node skill tree, three equipped active abilities and an original forest/rose/brass HUD. Controls: Q dodge, hold C guard (opening window parries), K skills, 1–3 equipped abilities. Touch equivalents must remain available. Camp and actual kill rewards use stable one-time IDs; camp cleanup grants no kill XP.
+The v0.14 release implements 20 distinct active spells across Katana/Bloomcraft/Stormy/Frost/Ember, each with three ranks, plus six retained passives. Five equipped slots use 1–5; K opens the searchable, filterable spellbook. Load spell-catalog.js before progression.js. Existing rank-1 choices and three-slot saves migrate additively. Three starting points and two per level at 60XP intervals allow testing mixed builds; respecs remain free.
+
+Combat uses stamina, Q dodge, directional C guard/parry, warned enemy attacks and collision-safe projectiles/fields. Movement has brief analytic acceleration, immediate stops, swept collision, clamped camera smoothing and bounded frame substeps. Amaal has faster combos and runtime-articulated dodge, guard, casting and hurt poses using the approved sprites; do not describe these as a newly drawn sprite sheet. Casting releases after its wind-up; cancelling a cast or changing scene must prevent late effects. Touch equivalents must remain available. Camp and actual kill rewards use stable one-time IDs; camp cleanup grants no kill XP.
 
 docs/ARPG-SYSTEMS.md retains the expansion design. Dungeons, bosses and multi-stage NPC quests are still future work. Do not present those as implemented.

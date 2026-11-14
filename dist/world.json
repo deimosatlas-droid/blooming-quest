@@ -1,6 +1,6 @@
 {
   "title": "Forrest Hydrangea Meadows",
-  "version": "0.13 · Stamina combat, nine-node skill tree and original RPG interface",
+  "version": "0.14 · Twenty ranked spells, five-slot spellbook and fluid movement",
   "rules": {
     "townsAreSafe": true,
     "homeIsSafe": true,

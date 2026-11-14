@@ -9,10 +9,10 @@ heroAPI.requestAttack(hero);heroAPI.requestAttack(hero);heroAPI.requestAttack(he
 assert.equal(heroAPI.status().phase,'anticipation');assert.equal(heroAPI.status().queuedCount,2);
 heroAPI.update(.10,context);assert.equal(events.length,0,'anticipation cannot cause damage');
 heroAPI.update(.10,context);assert.equal(events.length,1);assert.equal(events[0].phase,'active');
-heroAPI.update(.34,context);assert.equal(events.length,1,'recovery never applies another hit');
+heroAPI.update(.16,context);assert.equal(events.length,1,'recovery never applies another hit');
 assert.equal(heroAPI.status().id,'return');
-heroAPI.update(.48,context);assert.equal(heroAPI.status().id,'thrust');
-heroAPI.update(.64,context);assert.equal(heroAPI.busy(),false);
+heroAPI.update(.34,context);assert.equal(heroAPI.status().id,'thrust');
+heroAPI.update(.46,context);assert.equal(heroAPI.busy(),false);
 assert.deepEqual(events.map(e=>e.id),['sweep','return','thrust']);
 assert.deepEqual(events.map(e=>e.damage),[1,1,2]);
 assert(events.every(e=>e.phase==='active'));assert.equal(new Set(events.map(e=>e.activationId)).size,3);

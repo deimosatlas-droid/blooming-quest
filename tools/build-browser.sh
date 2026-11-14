@@ -10,9 +10,14 @@ node tests/hero-combat.cjs
 node tests/combat.cjs
 node tests/enemy-telegraphs.cjs
 node tests/progression.cjs
+node tests/spell-catalog.cjs
+node tests/spell-combat.cjs
+node tests/animation-fluidity.cjs
+node tests/motion.cjs
 node tests/abilities.cjs
 node tests/combat-ui.cjs
 node tests/arpg-integration.cjs
+node tests/fluidity-integration.cjs
 node tests/collision-input.cjs
 node tests/scene-interactions.cjs
 node tests/forage.cjs

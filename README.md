@@ -6,7 +6,7 @@ The browser game lives in `dist/`. It runs without ChatGPT, an AI API key or a g
 
 ## Combat and skills
 
-Open **Skills (K)** for the connected Katana, Bloomcraft and Stormy tree. Spend the starting point to learn an active ability, then earn XP from actual monster kills and camp clears. Equip three abilities to 1–3; Q dodges, holding C guards, and the opening guard window can parry frontal attacks. Stamina and enemy warnings make timing matter. The rose/brass HUD shows health, stamina, level, XP, cooldowns and nearby target health. Touch controls expose the same actions. Dungeons, bosses and expanded NPC quest chains remain planned.
+Open **Skills (K)** for 20 spells across Katana, Bloomcraft, Stormy, Frost and Ember, each with three ranks. The tree retains six passives, supports school/search filters, and shows current/next-rank effects. Spend three starting points, then earn XP from actual monster kills and camp clears. Equip five spells to 1–5; Q dodges, holding C guards, and the opening guard window can parry frontal attacks. Stamina and enemy warnings make timing matter. Brief input buffering, hold-to-chain attacks, safe recovery cancels, faster combos, smooth camera tracking and dedicated runtime dodge/guard/cast/hurt poses improve responsiveness. The rose/brass HUD shows health, stamina, level, XP, cooldowns and nearby target health. Touch controls expose the same actions. Dungeons, bosses and expanded NPC quest chains remain planned.
 
 ## Playing and saves
 
@@ -34,7 +34,7 @@ See [regression checks](tests/README.md). Native render checks additionally use 
 
 ## Planned action RPG expansion
 
-[The expansion design](docs/ARPG-SYSTEMS.md) describes original Dimraeth-inspired combat, skill branches, dungeons, bosses and NPC quest chains. Combat, progression and the skill-tree interface are implemented in v0.13. Dungeons, bosses and tracked multi-stage NPC quest chains remain proposed work.
+[The expansion design](docs/ARPG-SYSTEMS.md) describes original Dimraeth-inspired combat, skill branches, dungeons, bosses and NPC quest chains. Combat, 20 ranked spells, the spellbook interface and smoother motion are implemented in v0.14. Dungeons, bosses and tracked multi-stage NPC quest chains remain proposed work.
 
 ## Artwork
 
