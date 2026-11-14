@@ -1,72 +1,97 @@
 # Blooming Quest: what is playable now
 
-This guide describes the v0.16 browser game. It is a single-player adventure in development: exploration, combat, spells, gathering and daily town life are playable; the story currently contains its opening lead.
+This guide describes the v0.17 browser game: a single-player adventure with a complete opening chapter, a replayable dungeon and continued development beyond that chapter.
 
 Play at https://deimosatlas-droid.github.io/blooming-quest/.
 
-## Amaal’s travelling kit
+## Beginning and controls
 
-The interface uses physical map, bag and spellbook icons, with leather, wood, brass and parchment menus. These open the real game systems:
+The title uses the actual Rosepetal, Amaal and Stormy artwork, with dusk light and optional drifting petals. Continue shows the saved location, day and level. New Journey asks first and backs up an existing journey before replacing it. Import and Options are available on the title; recovery Options remain usable if world loading fails.
 
-- **Map:** the illustrated Map A region, current location and eight selectable destinations. Development fast travel to every town and Rosepetal preserves the journey.
-- **Bag:** quantities of gathered fruit, noodles and poisonous crafting mushrooms, category tabs and item descriptions. Apples, pears and berries restore one heart; noodles restore two. Food is consumed only when healing succeeds. Poisonous mushrooms have no eating action.
-- **Spellbook:** learn spells, upgrade ranks, read their effects, search/filter schools and arrange five equipped slots.
-- **Journal:** the current Raeez lead and journey information.
-- **Options:** save, toggle sound and expand the game. Save-file and offline controls live inside Options, without leaving the game screen. System Options and corrective updates remain reachable on the start/loading screen.
+Choose **Keyboard & mouse**, **Touch landscape** or **Hybrid**. The choice is remembered and can be changed in Options; a narrow computer window does not force phone controls. Keyboard bindings can be changed. Options also provides text size, touch size/opacity, handedness, reduced motion/flashes, weather, master sound and separate sound-effect/ambient volumes. Extremely short phone screens retain 44-pixel controls rather than enlarging them into other controls.
 
-Menus pause gameplay while open. Keyboard and touch controls support the same core actions.
+The game fills the browser viewport. Native fullscreen is optional and requested only from a real player gesture. Sideways phones have dedicated controls; portrait has a useful fallback and rotation guidance. Single-thumb movement supports eight directions and a centre deadzone. Controls remain inside the game frame; touch camera framing includes extra scenery at world edges.
 
-## The world
+| Action | Default keyboard |
+| --- | --- |
+| Move / run | WASD or arrows / Shift |
+| Interact / gather / continue dialogue | E |
+| Attack / dodge / guard and parry | Space / Q / C |
+| Five equipped spells | 1–5 |
+| Map / Bag / Spellbook | M / B / K |
+| Journal / Options | J / O |
+| Eat noodles / close a menu | H / Escape |
 
-Explore **one home estate, seven towns, six long roads and 70 active enterable interiors**. There are 84 active areas; five additional retired room records redirect old saves safely home.
+Modern iOS, Android, Windows, macOS and Linux browsers are the targets. Automated game-code, layout-geometry and native Canvas checks do not replace real-device/browser playtesting. This is a browser game, not an App Store or Play Store installer. Controllers are not implemented.
+
+## One satchel, five pages
+
+One satchel button opens Bag, Map, Spellbook, Journal and Options in a parchment panel. Menus pause the game and clear held controls; closing returns to play. Keyboard shortcuts remain available.
+
+- **Map:** Map A, current location, town highlights and eight destinations. Development fast travel preserves progress. Short phones use a full-width map with destination details below.
+- **Bag:** real saved quantities, food categories, crafting ingredients and quest keepsakes. Apples, pears and berries heal one heart; noodles heal two. Full health consumes nothing. Poisonous mushrooms cannot be eaten.
+- **Spellbook:** learn, search, filter, upgrade and equip five spells.
+- **Journal:** the current chapter objective, clues, home progress and replay information.
+- **Options:** controls/comfort, sound, fullscreen, manual save, the actual export/import/offline/update tools, Return Home and Return to Title. Save controls stay inside the game; no duplicate listeners or external save page.
+
+The satchel badge shows available skill points or a waiting offline update. Open Options to save and apply an update.
+
+## Chapter one: the flowers that forgot the sun
+
+Read Raeez’s note on the tower bookshelf. Find Maera in Lavendyr, or read her signed remedy ledger inside the herbalist cottage. Investigate her closed bluebells, resolve the first Meadow Slime den on Lavenderway and report back. A previously cleared den is recognized.
+
+Maera provides a root-cellar key and the next lead. **Briarvault Root Cellar**, northwest of Lavendyr, includes:
+
+- A wind chime, a temporary frozen crossing and a living-root seal.
+- Three free rank-I exploration lessons: Stormy’s Gust, Frost Shard and Briar Bind. Their base lessons do not consume skill points; upgrades retain normal costs. A lesson is equipped when granted; if all slots are full, the fifth slot is used.
+- A sentry encounter, a waystone checkpoint and an unlockable shortcut. The first waystone rest in each run heals; dying after activating it returns to that checkpoint.
+- The **Briarvault Guardian**, using the already-approved minotaur artwork, with poise, warned attacks and a second phase.
+- Raeez’s field note, ribbon and Wayfarer’s Seed. The Seed allows the three inscriptions to activate by Interact on later trials.
+
+After completing the chapter, entering again starts an optional fresh trial with its own encounter/reward IDs. Cleared road camps remain peaceful. Later chapters and additional dungeons are not finished.
+
+## The world and daily life
+
+Explore one private estate, seven towns, six long roads, 70 active ordinary interiors and Briarvault. Five retired room records still redirect older saves safely home.
 
 | Place | Character |
 | --- | --- |
-| Rosepetal Tower | Amaal and Raeez’s private rose-covered tower estate, barn, gardens and practice glade |
-| Lavendyr Glade | Lavender, herbal gardens and the herbalist’s settlement |
-| Sunveil Grove | Golden trees, market streets, a bakery and workshops |
-| Tidepetal Quay | A river harbour connecting the first roads to the ferry |
-| Seabloom Port | The distant coastal harbour, warehouses and lighthouse |
-| Hydrangea Meadows | Flower-filled trading streets, streams and bridges |
-| Thornrose Hills | A sheltered hill outpost, forge and animal paddock |
-| Moonblossom Hamlet | Lantern-lit cottages, streams and evening gathering places |
+| Rosepetal Tower | Private rose-covered tower, barn, orchard, gardens and practice glade |
+| Lavendyr Glade | Herbal gardens, lavender courts and Maera’s cottage |
+| Sunveil Grove | Golden market streets, bakery and workshops |
+| Tidepetal Quay | River harbour and passenger ferry |
+| Seabloom Port | Distant coast, warehouses and lighthouse |
+| Hydrangea Meadows | Flower trading courts, streams and bridges |
+| Thornrose Hills | Hill outpost, forge and animal paddock |
+| Moonblossom Hamlet | Lantern-lit homes and evening gathering places |
 
-Walk the connected roads or use development travel. Walk onto the ship at Tidepetal or Seabloom to cross to the other port. The crossing is safe and arrives off the boarding trigger.
+Towns have smaller lanes, distinct courts, varied frontages and different central house silhouettes. The roads have separate bends, camp spacing and north/south clearing patterns; Coastroad has an inlet and Moonpath a pond. Connected boundary trees and the estate’s joined fences remain in place. Doors and ordinary interactions check approach/obstructions.
 
-Buildings can be entered, labelled belongings inspected, neighbours spoken to and actual beds used to restore health and noodles. Market, workshop and shop scenery currently supplies places to explore and NPC work locations; player buying, selling and crafting are not implemented.
+Walk onto the ship at Tidepetal or Seabloom to sail to the other port. Towns, home, ordinary interiors and boats remain safe; Briarvault is the deliberate dungeon-combat exception. Shop and workshop scenery does not provide a buying/selling or crafting economy yet.
 
-## Rosepetal and gathering
+**104 named residents retain 104 globally unique appearances** matching the approved character direction. Local schedules handle work, breaks, shopping and rest, with workstation reservations. Neighbours go to their existing homes at night and return to daytime routines; night-duty guards stay outside. Job motions, time/weather remarks, repeated greetings and chapter reactions add context. These are built-in schedules and authored dialogue, with no paid AI service.
 
-Rosepetal is a private home, not another village. It contains the tower, an enterable animal barn, connected gardens and orchard, and three hittable practice dummies that reset for another round.
+The saved clock drives routines, lighting and plant regrowth. One game hour takes about 75 seconds of active play. Regional petals, wind, mist and occasional rain can be disabled. Night scenes add warmer window/lantern spill. Existing smoke, water movement and boat bobbing remain.
 
-Eight fixed animals live at the estate: Bramble the cow, Clover the goat, four hens, Pudding the rabbit and an orchard bird. There are 28 fixed outdoor animals across the world. **Stormy is a separate following companion**, with short dialogue; Stormy is not included in that count.
+## Home and gathering
 
-There are **109 gathering sources**, including 19 at Rosepetal: apple and pear trees, wild berry bushes and three poisonous mushroom types—Rosecap Amanita, Violet Bellcap and Inky Puffcap. Pick the fruit or collect mushrooms with Interact. The plant remains, its appearance changes, and it regrows by the saved in-game day. Gathering adds items to the Bag without automatically eating them.
+Rosepetal stays a private estate with one tower, one barn and three hittable practice dummies. Eight fixed home animals include Bramble the cow, Clover the goat, four hens, Pudding the rabbit and an orchard bird; 28 fixed outdoor animals exist world-wide. Stormy is a separate following companion.
 
-Poisonous mushrooms are labelled crafting ingredients. The crafting system itself is still planned. The barn and growing beds are present, but player planting, crop tending, feeding, animal rescue, breeding and animal-management loops are not implemented.
+There are **109 gathering sources**, including 19 at home: apple/pear trees, berry bushes and Rosecap Amanita, Violet Bellcap and Inky Puffcap mushrooms. Interact picks produce while leaving the plant, records it in the Bag and allows regrowth by the saved game day. Poison mushrooms are ingredients; player crafting is still planned.
 
-## Combat and movement
+New small home rituals include sharing one apple with the animals once per game day, greetings remembered over several days, tending the kitchen garden through seedlings/leaves/flowers/ripe berries, harvesting three berry portions while leaving plants, and displaying earned keepsakes at the tower door. These are limited authored interactions, not a full farming, rescue, breeding or furniture-placement system.
 
-Fight **16 approved monster species** emerging from **24 breakable camps**, four beside each long road. The roster includes slimes, horned rabbits, beetles, boars, orcs, goblins, crows, maggots, shamans, mimics, mantises, spectres, witch doctors, skeletons, minotaurs and pumpkins.
+## Combat, spells and progression
 
-- Amaal has a three-hit katana combo. Hold Attack to chain strikes.
-- Stamina governs attacking, running, dodging, guarding and spells. It recovers when Amaal catches her breath.
-- Dodge through an attack’s timing window; solid fences and scenery still block movement.
-- Guard protects the front. Timing the opening of the guard can parry and interrupt an enemy; heavy ground attacks call for movement or a dodge.
-- Enemies show cone, charge-lane or ground-circle warnings before damage, then recover.
-- Spells support travelling projectiles, piercing/return passes, roots, freeze, slows, burns, pulls, traps, healing and wards.
+Sixteen approved road-monster species spawn from 24 breakable camps. Enemy anticipation and recovery animate throughout; species use different timings and movement. Ordinary hits can cause recoil without always resetting an attack; poise and stagger resistance prevent constant interruption. Parry stun and recovery no longer stack into two sequential delays.
 
-Camps and their waves are finite. Breaking a camp permanently stops its spawns and removes its surviving monsters. Actual kills grant 12 XP; clearing a camp grants 35 XP once. Camp cleanup grants no additional kill XP. Old saves receive credit for known cleared camps without resetting progress.
+Amaal has a three-hit katana combo, collision-safe dodge, directional guard/parry, spell casting and runtime-articulated action poses from the approved sprites. Queued follow-up attacks cost stamina when they begin. Buffered spells survive until a valid cast window; menu cancellation before spell release refunds its cost/cooldown. Sprint does not drain stamina while an attack locks walking. Blocks, parries, resistance and stamina denials give feedback. These changes do not constitute a newly drawn character or monster sprite sheet.
 
-Towns, Rosepetal, ordinary interiors and ferries remain safe. Dummies provide practice without damaging animals or neighbours. Defeat returns Amaal to a safe home/town checkpoint with restored health and keeps collected resources, skills and cleared camps.
+Actual kills award 12 XP. A camp awards its clear reward plus one-time mastery credit for its unfought wave slots, so clearing efficiently does not lose progression. This credit does not invent monster kills. Older cleared camps reconcile missing mastery credit once. Stable reward IDs prevent repeated XP claims.
 
-Motion includes brief acceleration, immediate stopping, collision-safe movement, smoother camera tracking, short buffered spell inputs, faster attack recovery and dedicated runtime-articulated dodge, guard, cast and hurt poses. Existing Amaal artwork supplies these poses; they are not a replacement sprite sheet. Automated frame-pacing checks cover 20–120 FPS, but the final feel still needs real-device playtesting.
+There are 20 active spells, each with three ranks, plus six retained passives. Equip five across schools:
 
-## Twenty spells and progression
-
-Each active spell has ranks I–III. Upgrades change actual effects such as damage, reach, duration, healing, ward charges or cooldowns.
-
-| School | Four active spells |
+| School | Active spells |
 | --- | --- |
 | Katana | Petal Sweep, Rose Lance, Returning Crescent, Thorn Dance |
 | Bloomcraft | Briar Bind, Seed Bolt, Healing Bloom, Thorn Wall |
@@ -74,38 +99,18 @@ Each active spell has ranks I–III. Upgrades change actual effects such as dama
 | Frost | Frost Shard, Ice Ring, Winter Ward, Glacial Path |
 | Ember | Ember Bolt, Flame Fan, Cinder Trap, Phoenix Pulse |
 
-Six passive upgrades remain available: Finishing Cut, Petal Return, Lingering Roots, Deep Roots, Tailwind and Wind Ward. Equip any five learned spells across schools. Learning a spell and buying each additional rank cost one skill point.
+Effects include real projectiles, piercing/return passes, roots, freeze, slows, burns, pulls, traps, healing and wards. Rank upgrades change effects. New journeys start with three skill points; levels are 60 XP apart and award two points, up to level 30. Respec remains free; gifted exploration lessons keep their free base ranks.
 
-A new journey starts with three points, earns two per level and currently reaches level 30. Levels are 60 XP apart. Surplus XP is retained, and development respecs are free, so different builds can be tried without restarting.
+Bag healing remains a deliberate paused convenience, and development fast travel remains unlocked. Difficulty and normal-speed combat feel still need hands-on balancing; an integration test using injected damage is not proof of boss difficulty.
 
-## Town life, story and audio
+## Audio, saves and independent play
 
-**104 named residents have 104 distinct appearances** across the seven towns. Free built-in schedules send them between work, breaks, shopping and evening rest. They animate tasks such as watering, crafting, sweeping, carrying cargo, reading and tending lamps. Workstations have reservations and waiting positions. These routines and authored dialogue run locally without an AI service.
+Free synthesized footsteps respond to surface and actual movement. Sword, hit, spell, parry, interaction and harvest sounds join soft ambience and harbour bells. Audio begins only after a player gesture, respects master/effect/ambient settings and falls back silently if unavailable. There is no music soundtrack or artist-song playback.
 
-A saved in-game clock drives routines, outdoor light and plant regrowth. One in-game hour takes about 75 seconds of active play. Stormy follows Amaal and can be spoken to; nearby animals have short interactions.
+The game runs without ChatGPT, a paid API or a server account. The save key remains `blooming-world-v05`; new quest and home fields are additive. Progress saves in the current browser. Export/import moves a journey between devices, browsers or hosting addresses; there is no automatic cloud synchronization. Previous-save recovery and protected New Journey backups remain available.
 
-The story starts with **Raeez’s note on the tower bookshelf**. It points Amaal toward Maera, the herbalist in Lavendyr, who acknowledges his visit. The complete Raeez campaign, tracked NPC side quests, dungeon exploration and boss encounters are still planned. Ordinary minotaurs on the road are not a released boss fight.
-
-Options can enable synthesized interaction and combat sound effects. There is currently no music soundtrack or artist-song playback.
-
-## Controls, saves and devices
-
-| Action | Keyboard |
-| --- | --- |
-| Move / run | WASD or arrows / Shift |
-| Interact / gather / continue dialogue | E |
-| Attack / dodge / guard and parry | Space / Q / C |
-| Equipped spells | 1–5 |
-| Map / Bag / Spellbook | M / B / K |
-| Journal / Options | J / O |
-| Eat noodles / close a menu | H / Escape |
-
-Phones and tablets provide a D-pad, action buttons, five spell slots and travelling-kit icons. The game fills the browser viewport by default, with all menus and controls inside it. Sideways phones have a dedicated landscape layout. Native fullscreen is requested from a real Start click where supported; Safari can keep the full browser view. Modern iOS, Android, Windows, macOS and Linux browsers are the target; actual hardware/browser layout verification is still needed. The release is a browser game, not an App Store or Play Store native installer.
-
-The game plays independently of ChatGPT, with no paid runtime APIs or gameplay-server account. Progress saves locally in the current browser, automatically and manually. Export/import save files to move between browsers, devices or hosting addresses; there is no automatic cloud save synchronization. Import retains a previous-save backup, and compatible older journeys migrate additively.
-
-Optional offline play downloads a complete game release. Updates are applied through **Save & apply update** rather than interrupting a journey. Keep an exported save when changing devices or websites.
+Optional offline mode downloads a coherent release. Apply updates explicitly with Save & apply update. Keep an exported save before changing devices or websites. The repository is public and hosting remains GitHub Pages, as requested.
 
 ## Still planned
 
-The present build does not yet include a finished campaign, tracked side-quest chains, dungeons, boss arenas, player crafting/cooking, shop economy, equipment/loot progression, creature catching or teams, animal management, multiplayer or a music soundtrack. The current map and assets provide locations for that expansion; their presence is not a claim that those systems are already playable.
+The complete Raeez campaign, more dungeons and quest chains, player crafting/cooking, shop economy, equipment/loot progression, catching or monster teams, full animal/farming management, multiplayer and music remain future work. The v0.17 opening chapter and one replayable dungeon are playable foundations for that expansion.

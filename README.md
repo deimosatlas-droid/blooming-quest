@@ -6,17 +6,17 @@ The browser game lives in `dist/`. It runs without ChatGPT, an AI API key or a g
 
 ## Amaal’s travelling kit
 
-The game now fills the browser viewport by default, with a landscape phone layout and on-game controls. Optional native fullscreen is requested only from a real Start click where supported. The medieval object toolbar opens an in-game Map (M), Bag (B), Spellbook (K), Journal (J) and Options (O). Wood, leather, brass and parchment panels match the approved visual concepts. The Map retains Map A with current location, hover highlights and development travel to all seven towns plus home. The Bag reads real saved quantities; explicitly eat apples/pears/berries for one heart or noodles for two. Poison mushrooms remain crafting-only and full health consumes nothing. Menus pause gameplay and save current position. Save-file/offline/update controls stay inside Options using their original DOM nodes, and Options remains available during loading for corrective updates. Rosepetal’s six fence groups now use continuous straight rails/walls with joined corners, open gates and no overlapping end stamps.
+The v0.17 game fills the browser viewport. A single satchel opens the Map, Bag, Spellbook, Journal and Options in paused medieval parchment menus. The title provides Continue, protected New Journey, Import and remembered keyboard/touch/hybrid profiles. Options includes remapping, touch size/opacity, handedness, text, reduced motion/flashes, weather and separate sound/ambient volumes. Actual save/offline/update controls stay inside Options and remain accessible during loading.
 
 See [everything playable now](docs/PLAYABLE-NOW.md) for the complete world, combat, spells, gathering, NPC routines, story, save and device guide, including unfinished systems.
 
 ## Combat and skills
 
-Open **Skills (K)** for 20 spells across Katana, Bloomcraft, Stormy, Frost and Ember, each with three ranks. The tree retains six passives, supports school/search filters, and shows current/next-rank effects. Spend three starting points, then earn XP from actual monster kills and camp clears. Equip five spells to 1–5; Q dodges, holding C guards, and the opening guard window can parry frontal attacks. Stamina and enemy warnings make timing matter. Brief input buffering, hold-to-chain attacks, safe recovery cancels, faster combos, smooth camera tracking and dedicated runtime dodge/guard/cast/hurt poses improve responsiveness. The rose/brass HUD shows health, stamina, level, XP, cooldowns and nearby target health. Touch controls expose the same actions. Dungeons, bosses and expanded NPC quest chains remain planned.
+Open **Skills (K)** for 20 spells across Katana, Bloomcraft, Stormy, Frost and Ember, each with three ranks. The tree retains six passives, supports school/search filters, and shows current/next-rank effects. Spend three starting points, then earn XP from actual monster kills and camp clears. Equip five spells to 1–5; Q dodges, holding C guards, and the opening guard window can parry frontal attacks. Stamina and enemy warnings make timing matter. Brief input buffering, hold-to-chain attacks, safe recovery cancels, faster combos, smooth camera tracking and dedicated runtime dodge/guard/cast/hurt poses improve responsiveness. The rose/brass HUD shows health, stamina, level, XP, cooldowns and nearby target health. Touch controls expose the same actions. The opening quest now leads through Maera’s bluebells to Briarvault: three exploration-spell puzzles, a checkpoint/shortcut, an approved-art Guardian boss, Raeez’s cache and optional repeat trials. Later chapters remain planned.
 
 ## Playing and saves
 
-Use WASD/arrows to move, Shift to run, E to interact/harvest, Space for the katana combo, M for the map and J for the journal. Phones and tablets have a D-pad plus Interact, Attack, Run, Heal, Map and Journal buttons. Expanded play keeps those controls visible. Modern iOS, Android and desktop browsers are the target; real-device verification is still needed.
+Use WASD/arrows to move, Shift to run, E to interact/harvest, Space for the katana combo, M for the map and J for the journal. Phones and tablets have single-thumb eight-way movement, combat actions, five spells and one satchel for menus. Expanded play keeps those controls visible. Modern iOS, Android and desktop browsers are the target; real-device verification is still needed.
 
 Progress is stored in the current browser. The **Save files & offline play** panel exports/imports a journey when changing website or device. Optional offline mode downloads a complete release, and an update saves before an explicit reload.
 
@@ -40,7 +40,7 @@ See [regression checks](tests/README.md). Native render checks additionally use 
 
 ## Planned action RPG expansion
 
-[The expansion design](docs/ARPG-SYSTEMS.md) describes original Dimraeth-inspired combat, skill branches, dungeons, bosses and NPC quest chains. Combat, 20 ranked spells, the spellbook interface and smoother motion are implemented in v0.14. Dungeons, bosses and tracked multi-stage NPC quest chains remain proposed work.
+[The expansion design](docs/ARPG-SYSTEMS.md) describes original Dimraeth-inspired combat, skill branches, dungeons, bosses and NPC quest chains. Combat, 20 ranked spells, the spellbook, improved enemy animation, a complete first quest and one replayable dungeon/boss are implemented in v0.17. NPCs enter their existing homes at night; regional weather, free synthesized ambience and small garden/animal/keepsake rituals are available. Later chapters and broader systems remain proposed work.
 
 ## Artwork
 

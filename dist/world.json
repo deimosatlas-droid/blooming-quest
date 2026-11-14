@@ -1,6 +1,6 @@
 {
   "title": "Forrest Hydrangea Meadows",
-  "version": "0.16 · Full-screen landscape play and joined Rosepetal fences",
+  "version": "0.17 · A living journey: chapter one, Briarvault and the travelling satchel",
   "rules": {
     "townsAreSafe": true,
     "homeIsSafe": true,
@@ -834,7 +834,8 @@
     "retainedSaveRooms": 5,
     "areas": 89,
     "heroActionFrames": 64,
-    "atlasHouseDesigns": 24
+    "atlasHouseDesigns": 24,
+    "dungeons": 1
   },
   "dayCycle": {
     "startMinutes": 480,

@@ -29,7 +29,7 @@ The Pages workflow uploads only dist/. Keep .openai, Git metadata, credentials a
 - Laptop browser first; keep the whole game process free of paid runtime APIs.
 - Preserve the save key blooming-world-v05 and migrate new fields additively. Save export/import must carry existing camps, inventory, harvest days, clock and NPC state across origins.
 - Rosepetal is a private tower estate with a barn, animals, gardens and practice targets.
-- Towns, home and boats stay safe. Overworld monsters spawn from camps beside long roads. Dungeon combat is planned as a deliberate new exception.
+- Towns, home and boats stay safe. Overworld monsters spawn from camps beside long roads. Briarvault is the deliberate dungeon-combat exception, installed by journey-content.js at load.
 - NPC appearances are unique across the whole world and match Amaal's art style.
 - Preview every new monster/boss sprite or variant for the user before adding it.
 - Preserve connected impassable fences, purposeful prop placement, readable paths and dense map-edge cover.
@@ -50,6 +50,14 @@ The v0.16 estate uses fences.js with fencePiece metadata for straight joined woo
 
 The v0.14 release implements 20 distinct active spells across Katana/Bloomcraft/Stormy/Frost/Ember, each with three ranks, plus six retained passives. Five equipped slots use 1–5; K opens the searchable, filterable spellbook. Load spell-catalog.js before progression.js. Existing rank-1 choices and three-slot saves migrate additively. Three starting points and two per level at 60XP intervals allow testing mixed builds; respecs remain free.
 
-Combat uses stamina, Q dodge, directional C guard/parry, warned enemy attacks and collision-safe projectiles/fields. Movement has brief analytic acceleration, immediate stops, swept collision, clamped camera smoothing and bounded frame substeps. Amaal has faster combos and runtime-articulated dodge, guard, casting and hurt poses using the approved sprites; do not describe these as a newly drawn sprite sheet. Casting releases after its wind-up; cancelling a cast or changing scene must prevent late effects. Touch equivalents must remain available. Camp and actual kill rewards use stable one-time IDs; camp cleanup grants no kill XP.
+Combat uses stamina, Q dodge, directional C guard/parry, warned enemy attacks and collision-safe projectiles/fields. Movement has brief analytic acceleration, immediate stops, swept collision, clamped camera smoothing and bounded frame substeps. Amaal has faster combos and runtime-articulated dodge, guard, casting and hurt poses using the approved sprites; do not describe these as a newly drawn sprite sheet. Casting releases after its wind-up; cancelling a cast or changing scene must prevent late effects. Touch equivalents must remain available. Camp and actual kill rewards use stable one-time IDs. Camp cleanup grants no invented kills; v0.17 awards one-time mastery XP for unfought wave slots, with legacy reconciliation.
 
-docs/ARPG-SYSTEMS.md retains the expansion design. Dungeons, bosses and multi-stage NPC quests are still future work. Do not present those as implemented.
+docs/ARPG-SYSTEMS.md retains the expansion design. v0.17 implements one complete opening quest and Briarvault, a replayable three-spell puzzle dungeon with a checkpoint/shortcut and an already-approved minotaur Guardian. The full campaign, further dungeons and general side-quest system remain future work. See docs/PLAYABLE-NOW.md for precise boundaries.
+
+## v0.17 journey interface and content
+
+One satchel opens Bag/Map/Spellbook/Journal/Options. Keep the hub and page overlays mutually exclusive, paused and focus-trapped; preserve shortcuts and preboot recovery Options. Keep the actual system-notice in the hub and mirror availability on the satchel badge. Source art masters live outside dist in assets-source/ui; browser icons are 144px derivatives.
+
+journey-ui.js owns the title, stored input/comfort settings and remapping (BloomJourney); journey-content.js owns additive state.journey chapter/puzzle/home/replay data and runtime Briarvault maps (BloomContent). Gifted puzzle spell base ranks are free and survive respec; upgrades use normal points. Do not conflate the two module namespaces. Atmosphere uses free local WebAudio and existing pixels; no music/artist songs.
+
+Motion cameraBounds supplies touch-safe padded camera bounds; adventure paints extended terrain/edge foliage so it cannot expose unpainted world edges. NPC static navigation/routine caches are bounded and opt-in; occupants and reservations stay dynamic. All top-level tests run in the Pages build. Native Canvas and VM checks are not browser/physical-device verification.

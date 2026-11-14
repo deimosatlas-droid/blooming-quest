@@ -5,9 +5,11 @@
   function bindHolds(options={}){
     const root=options.root||document,win=options.win||global;
     const buttons=[...root.querySelectorAll('[data-key]')],allowed=new Set(buttons),pointers=new Map(),counts=new Map(),listeners=[];
+    const padFor=button=>DIRECTIONS.has(button?.dataset?.key)?button.closest?.('.touch-pad')||null:null;
+    const pads=new Set(buttons.map(padFor).filter(pad=>typeof pad?.getBoundingClientRect==='function'));
     const listen=(target,type,handler)=>{target?.addEventListener?.(type,handler);listeners.push([target,type,handler]);};
     function paint(button){
-      const down=[...pointers.values()].some(pointer=>pointer.button===button);
+      const down=[...pointers.values()].some(pointer=>pointer.keys.has(button.dataset.key));
       button.classList?.toggle('is-held',down);button.setAttribute?.('aria-pressed',String(down));
     }
     function change(key,amount){
@@ -17,38 +19,82 @@
     }
     function release(id){
       const pointer=pointers.get(id);if(!pointer)return;
-      pointers.delete(id);change(pointer.key,-1);paint(pointer.button);
+      pointers.delete(id);for(const key of pointer.keys)change(key,-1);for(const button of buttons)paint(button);
     }
-    function press(id,button){
-      if(pointers.get(id)?.button===button)return;
-      release(id);const key=button.dataset.key;pointers.set(id,{button,key});change(key,1);paint(button);
+    function setKeys(id,keys,details){
+      let pointer=pointers.get(id);
+      if(!pointer){pointer={...details,keys:new Set()};pointers.set(id,pointer);}
+      else if(details)Object.assign(pointer,details);
+      const next=new Set(keys);
+      // Apply one transition at a time: onHeld is allowed to reset the whole
+      // controller synchronously when a menu or dialogue owns input.
+      for(const key of [...pointer.keys])if(!next.has(key)){pointer.keys.delete(key);change(key,-1);}
+      for(const key of next){
+        if(pointers.get(id)!==pointer)break;
+        if(!pointer.keys.has(key)){pointer.keys.add(key);change(key,1);}
+      }
+      for(const button of buttons)paint(button);
     }
+    const press=(id,button)=>setKeys(id,[button.dataset.key],{button,pad:null,directional:DIRECTIONS.has(button.dataset.key)});
     function reset(){for(const id of [...pointers.keys()])release(id);}
+    function padDirections(pad,event){
+      const rect=pad.getBoundingClientRect?.(),x=Number(event.clientX),y=Number(event.clientY);
+      if(!rect||!Number.isFinite(x)||!Number.isFinite(y)||!(rect.width>0)||!(rect.height>0))return null;
+      if(x<rect.left||x>rect.left+rect.width||y<rect.top||y>rect.top+rect.height)return[];
+      const dx=(x-rect.left-rect.width/2)/(rect.width/2),dy=(y-rect.top-rect.height/2)/(rect.height/2);
+      if(Math.hypot(dx,dy)<.22)return[];
+      const keys=[],ratio=Math.tan(Math.PI/8);
+      if(Math.abs(dx)>Math.abs(dy)*ratio)keys.push(dx<0?'arrowleft':'arrowright');
+      if(Math.abs(dy)>Math.abs(dx)*ratio)keys.push(dy<0?'arrowup':'arrowdown');
+      return keys;
+    }
+    function padEnabled(pad){return buttons.some(button=>padFor(button)===pad&&!button.disabled);}
+    function beginPad(pad,event,button=null){
+      if(pointers.has(event.pointerId)||!padEnabled(pad)||event.pointerType==='mouse'&&event.button!==0)return;
+      const keys=padDirections(pad,event);if(keys===null)return;
+      event.preventDefault();setKeys(event.pointerId,keys,{button,pad,directional:true});
+      try{pad.setPointerCapture?.(event.pointerId);}catch{}
+    }
+    function movePad(event){
+      const pointer=pointers.get(event.pointerId);if(!pointer?.pad)return;
+      event.preventDefault?.();const keys=padEnabled(pointer.pad)?padDirections(pointer.pad,event):[];
+      if(keys!==null)setKeys(event.pointerId,keys);
+    }
     for(const button of buttons){
       button.setAttribute?.('aria-pressed','false');
       listen(button,'pointerdown',event=>{
-        if(event.pointerType==='mouse'&&event.button!==0)return;
+        if(button.disabled||event.pointerType==='mouse'&&event.button!==0)return;
+        const pad=padFor(button);if(pads.has(pad)&&padDirections(pad,event)!==null){beginPad(pad,event,button);return;}
         event.preventDefault();press(event.pointerId,button);
         try{button.setPointerCapture?.(event.pointerId);}catch{}
       });
       listen(button,'pointermove',event=>{
-        const pointer=pointers.get(event.pointerId);if(!pointer||!DIRECTIONS.has(pointer.key))return;
+        const pointer=pointers.get(event.pointerId);if(!pointer?.directional)return;
+        if(pointer.pad){movePad(event);return;}
         // Pointer capture keeps release events reliable while a thumb can slide
         // between adjacent D-pad buttons without lifting off the screen.
         const under=root.elementFromPoint?.(event.clientX,event.clientY)?.closest?.('[data-key]');
-        if(allowed.has(under)&&DIRECTIONS.has(under.dataset.key))press(event.pointerId,under);
+        if(allowed.has(under)&&!under.disabled&&DIRECTIONS.has(under.dataset.key))press(event.pointerId,under);
       });
       for(const type of ['pointerup','pointercancel','lostpointercapture'])listen(button,type,event=>release(event.pointerId));
       listen(button,'keydown',event=>{
-        if(event.key!==' '&&event.key!=='Enter')return;
+        if(button.disabled||event.key!==' '&&event.key!=='Enter')return;
         event.preventDefault();if(!event.repeat)press('key:'+event.key,button);
       });
       listen(button,'keyup',event=>{if(event.key===' '||event.key==='Enter'){event.preventDefault();release('key:'+event.key);}});
       listen(button,'blur',()=>{for(const [id,pointer]of [...pointers])if(pointer.button===button&&String(id).startsWith('key:'))release(id);});
     }
+    for(const pad of pads){
+      // Empty corner cells belong to the same control: a thumb can begin on a
+      // diagonal, slide through all eight sectors, or rest in the centre.
+      listen(pad,'pointerdown',event=>beginPad(pad,event));listen(pad,'pointermove',movePad);
+      listen(pad,'pointerleave',event=>{if(pointers.get(event.pointerId)?.pad===pad)setKeys(event.pointerId,[]);});
+      for(const type of ['pointerup','pointercancel','lostpointercapture'])listen(pad,type,event=>release(event.pointerId));
+    }
     // Captured events normally reach the button; window listeners also release
     // a finger if a browser interrupts capture during rotation or app switching.
     for(const type of ['pointerup','pointercancel'])listen(win,type,event=>release(event.pointerId));
+    listen(win,'pointermove',movePad);
     listen(win,'blur',reset);listen(win,'pagehide',reset);listen(win,'orientationchange',reset);listen(win,'resize',reset);
     listen(root,'visibilitychange',()=>{if(root.hidden||root.visibilityState==='hidden')reset();});
     return {reset,snapshot:()=>({pointers:pointers.size,held:[...counts.keys()]}),destroy(){reset();for(const[target,type,handler]of listeners)target?.removeEventListener?.(type,handler);}};

@@ -2,8 +2,8 @@
 (function(global){
   'use strict';
   const doc=typeof document==='undefined'?null:document,$=id=>doc?.getElementById?.(id)||null;
-  const VIEWS={map:'The Blooming Atlas',bag:'Amaal’s Satchel',journal:'Amaal’s Journal',options:'By the Campfire'};
-  const CATEGORIES={all:'All',fruit:'Fruit',meals:'Meals',crafting:'Crafting'};
+  const VIEWS={kit:'Amaal’s Travelling Kit',map:'The Blooming Atlas',bag:'Amaal’s Satchel',journal:'Amaal’s Journal',options:'By the Campfire'};
+  const CATEGORIES={all:'All',fruit:'Fruit',meals:'Meals',quest:'Keepsakes',crafting:'Crafting'};
   const ITEMS={
     apple:{name:'Apple',category:'fruit',edible:true,description:'A crisp wild apple. Eat one to restore one heart.'},
     pear:{name:'Pear',category:'fruit',edible:true,description:'A ripe woodland pear. Eat one to restore one heart.'},
@@ -36,8 +36,8 @@
     const saved=state(),result=[];
     for(const[id,value]of Object.entries(saved.inventory||{})){
       const quantity=count(value);if(!quantity)continue;
-      const known=own(ITEMS,id)&&id!=='noodles';
-      result.push({id:known?id:'stored:'+id,key:id,count:quantity,...(known?ITEMS[id]:{name:String(id).replace(/_/g,' ').replace(/^./,letter=>letter.toUpperCase()),category:'crafting',description:'An item carried in your satchel.'})});
+      const authored=global.BloomContent?.itemInfo?.(id),known=own(ITEMS,id)&&id!=='noodles'||authored;
+      result.push({id:known?id:'stored:'+id,key:id,count:quantity,...(authored||(known?ITEMS[id]:{name:String(id).replace(/_/g,' ').replace(/^./,letter=>letter.toUpperCase()),category:'crafting',description:'An item carried in your satchel.'}))});
     }
     if(count(saved.food))result.push({id:'noodles',count:count(saved.food),...ITEMS.noodles});
     return result.sort((a,b)=>Object.keys(CATEGORIES).indexOf(a.category)-Object.keys(CATEGORIES).indexOf(b.category)||a.name.localeCompare(b.name));
@@ -105,7 +105,7 @@
     const data=world(),destinations=towns(),current=locationInfo();
     if(!destinations.some(town=>town.id===selectedTown))selectedTown=current.id||destinations[0]?.id;
     const layout=el('div','map-layout'),chart=el('div','map-chart'),art=el('div','map-art'),image=el('img','traveller-map-image');
-    image.src='assets/map-a-world.png?v=16';image.alt='The Blooming Atlas: seven towns, Rosepetal estate, long roads and the ferry passage';image.width=1448;image.height=1086;image.draggable=false;art.appendChild(image);
+    image.src='assets/map-a-world.png?v=17';image.alt='The Blooming Atlas: seven towns, Rosepetal estate, long roads and the ferry passage';image.width=1448;image.height=1086;image.draggable=false;art.appendChild(image);
     if(doc.createElementNS){
       const svg=doc.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 1000 1000');svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('class','traveller-routes');svg.setAttribute('aria-hidden','true');
       for(const route of [...(data.roads||[]),...(data.ferries||[])]){const points=ROUTES[route.id];if(!points)continue;const path=doc.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',points.map((point,index)=>(index?'L':'M')+(point[0]*10)+' '+(point[1]*10)).join(' '));path.setAttribute('class','traveller-route'+(route.id==='petalferry'?' ferry':''));path.dataset.mapRoute=route.id;path.classList?.toggle('is-linked',route.from===selectedTown||route.to===selectedTown);svg.appendChild(path);}art.appendChild(svg);
@@ -127,6 +127,8 @@
     return(world().roads||[]).reduce((total,road)=>total+[1,2,3,4].filter(index=>{const key=road.id+':camp-'+index;return(Array.isArray(cleared)?cleared.includes(key):cleared?.[key]===true)||progress[key]?.cleared===true;}).length,0);
   }
   function renderJournal(body){
+    const authored=global.BloomContent?.journal?.();
+    if(authored){const page=el('div','journal-page'),entry=el('div','journal-entry');entry.appendChild(el('p','journal-eyebrow','The search for Raeez'));entry.appendChild(el('h3','',authored.title));entry.appendChild(el('p','',authored.objective));for(const text of authored.entries||[])entry.appendChild(el('p','',text));page.appendChild(entry);body.appendChild(page);return;}
     const saved=state(),page=el('div','journal-page'),story=el('div','journal-entry');story.appendChild(el('p','journal-eyebrow','The search for Raeez'));story.appendChild(el('h3','',saved.note?'A note, and a road east':'Before dinner'));
     story.appendChild(el('p','',saved.note?'Raeez’s note says the flowers along the old road have stopped opening. He went to ask the herbalist. Follow Lavenderway Fields east to Lavendyr Glade.':'Raeez has not returned. Check the bookshelf inside our tower at Rosepetal Estate for his note.'));story.appendChild(el('p','journal-draft-note','The opening story is a draft. The later quest trail is still being written.'));page.appendChild(story);
     const notes=el('div','journal-entry');notes.appendChild(el('h3','','Notes from the road'));notes.appendChild(el('p','',locationInfo().label));notes.appendChild(el('p','',clearedCampCount()+' / '+(world().livingWorld?.camps||24)+' monster camps cleared. Broken camps stay quiet.'));notes.appendChild(el('p','','The towns, our home and boat crossings are safe. Monsters emerge from camps beside the long roads.'));
@@ -151,7 +153,8 @@
     grid.appendChild(button((options.native??options.expanded)?'Leave fullscreen':'Enter fullscreen','traveller-option',()=>{if(opened)result(()=>config.onExpand?.(),'View updated.');}));
     grid.appendChild(button('Save files & offline play','traveller-option',openSaveFiles));
     if(returnHome){returnHome.disabled=options.playing===false;returnHome.classList?.toggle('traveller-option',true);grid.appendChild(returnHome);}body.appendChild(grid);if(portablePanel)body.appendChild(portablePanel);body.appendChild(el('p','options-help','Your journey saves in this browser. Export a save file before changing device or browser. Optional offline play downloads the game for this device.'));
-    const keys=el('div','options-help');keys.appendChild(el('h3','','On the road'));keys.appendChild(el('p','','WASD / arrows · move   Shift · run   E · interact   Space · hold to chain attacks   Q · dodge   C · guard / parry   1–5 · spells   B · bag   M · map   K · spellbook   J · journal   O · options'));body.appendChild(keys);
+    const keys=el('div','options-help');keys.appendChild(el('h3','','On the road'));keys.appendChild(el('p','',global.BloomJourney?.getProfile?.()==='touch'?'Slide the movement pad to walk. Hold Attack to chain cuts; hold Guard and time its beginning to parry. Open your satchel for the map, belongings, journal and spellbook.':'WASD / arrows · move   Shift · run   E · interact   Space · hold to chain attacks   Q · dodge   C · guard / parry   1–5 · spells   B · bag   M · map   K · spellbook   J · journal   O · options'));body.appendChild(keys);
+    if(global.BloomJourney?.renderOptions){const preferences=el('div','traveller-preferences');global.BloomJourney.renderOptions(preferences);body.appendChild(preferences);}
   }
   function renderTabs(){
     const target=$('traveller-tabs');if(!target)return;clear(target);
@@ -161,33 +164,44 @@
   }
   function keydown(event){
     if(!opened)return;const target=event.target||doc.activeElement,editing=Boolean(target?.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(target?.tagName||''));
+    const mapped=global.BloomJourney?.mapKey?.(event.key)??event.key?.toLowerCase();
     if(event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation?.();event.stopPropagation?.();close();return;}
     if(event.key==='Tab'){
-      const focusable=[...($('traveller-overlay')?.querySelectorAll?.('button:not(:disabled), summary, a[href], input:not(:disabled), select:not(:disabled), [tabindex="0"]')||[])].filter(node=>!node.closest?.('[hidden]')&&(typeof node.getClientRects!=='function'||node.getClientRects().length));
+      const focusable=[...($(view==='kit'?'kit-overlay':'traveller-overlay')?.querySelectorAll?.('button:not(:disabled), summary, a[href], input:not(:disabled), select:not(:disabled), [tabindex="0"]')||[])].filter(node=>!node.closest?.('[hidden]')&&(typeof node.getClientRects!=='function'||node.getClientRects().length));
       if(focusable.length){const first=focusable[0],last=focusable.at(-1),active=doc.activeElement;if(event.shiftKey&&(active===first||!focusable.includes(active))){event.preventDefault();last.focus?.();}else if(!event.shiftKey&&(active===last||!focusable.includes(active))){event.preventDefault();first.focus?.();}}
     }else if(!editing&&!['Enter',' '].includes(event.key)){
-      event.preventDefault();const shortcut={b:'bag',m:'map',j:'journal',o:'options'}[event.key?.toLowerCase()];if(shortcut)open(shortcut);if(event.key?.toLowerCase()==='k'&&config.onSpells){close();config.onSpells();}
+      event.preventDefault();const shortcut={b:'bag',m:'map',j:'journal',o:'options'}[mapped];if(shortcut)open(shortcut);if(mapped==='k'&&config.onSpells){close();config.onSpells();}
     }
     event.stopPropagation?.();
   }
   function bind(){
     if(bound||!doc)return;bound=true;
     for(const[id,destination]of [['kit-map','map'],['kit-bag','bag'],['kit-journal','journal'],['kit-options','options']])if($(id))$(id).onclick=()=>open(destination);
+    if($('kit-toggle'))$('kit-toggle').onclick=()=>opened&&view==='kit'?close():openKit();
+    if($('kit-close'))$('kit-close').onclick=close;
+    if($('kit-overlay')&&$('open-skills'))$('open-skills').onclick=()=>{if(config.getEnabled?.('spells')===false)return;close();config.onSpells?.();};
+    $('kit-overlay')?.addEventListener?.('click',event=>{if(event.target===$('kit-overlay'))close();});
     if($('traveller-close'))$('traveller-close').onclick=close;
     $('traveller-overlay')?.addEventListener?.('click',event=>{if(event.target===$('traveller-overlay'))close();});doc.addEventListener?.('keydown',keydown,true);
   }
-  function configure(options={}){config=options;configured=true;captureSystemTools();parkSystemTools();bind();update();}
+  function configure(options={}){config=options;configured=true;captureSystemTools();parkSystemTools();bind();if($('kit-toggle')&&$('kit-overlay'))$('play-area')?.classList?.toggle('satchel-ready',true);update();}
+  function openKit(){return open('kit');}
   function open(next='bag'){
-    if(!own(VIEWS,next)||!configured||!$('traveller-overlay')||config.getEnabled?.(next)===false)return false;
-    if(!opened){if(config.onPause?.(next)===false)return false;previousFocus=doc.activeElement||$('kit-'+next);opened=true;$('traveller-overlay').hidden=false;$('play-area')?.classList?.toggle('traveller-open',true);}
-    view=next;if(next==='map'&&!seenMap){selectedTown=locationInfo().id||'rosepetal';seenMap=true;}signature='';feedback('');renderTabs();update();$('traveller-close')?.focus?.({preventScroll:true});return true;
+    if(!own(VIEWS,next)||!configured||!$(next==='kit'?'kit-overlay':'traveller-overlay')||(config.getEnabled?.(next)===false&&!(next==='kit'&&config.getEnabled?.('options')!==false)))return false;
+    if(!opened){if(config.onPause?.(next)===false)return false;previousFocus=doc.activeElement||$('kit-toggle')||$('kit-'+next);opened=true;$('play-area')?.classList?.toggle('traveller-open',true);}
+    view=next;$('traveller-overlay').hidden=next==='kit';if($('kit-overlay'))$('kit-overlay').hidden=next!=='kit';$('play-area')?.classList?.toggle('is-kit-open',next==='kit');
+    if(next==='map'&&!seenMap){selectedTown=locationInfo().id||'rosepetal';seenMap=true;}signature='';feedback('');if(next!=='kit')renderTabs();update();$(next==='kit'?'kit-close':'traveller-close')?.focus?.({preventScroll:true});return true;
   }
   function close(){
-    if(!opened)return false;opened=false;if($('traveller-overlay'))$('traveller-overlay').hidden=true;$('play-area')?.classList?.toggle('traveller-open',false);config.onResume?.();update();previousFocus?.focus?.({preventScroll:true});previousFocus=null;return true;
+    if(!opened)return false;opened=false;if($('traveller-overlay'))$('traveller-overlay').hidden=true;if($('kit-overlay'))$('kit-overlay').hidden=true;$('play-area')?.classList?.toggle('traveller-open',false);$('play-area')?.classList?.toggle('is-kit-open',false);config.onResume?.();update();const destination=previousFocus?.closest?.('#kit-overlay')?$('kit-toggle'):previousFocus;destination?.focus?.({preventScroll:true});previousFocus=null;return true;
   }
   function update(){
 
     for(const[id,destination]of [['kit-map','map'],['kit-bag','bag'],['kit-journal','journal'],['kit-options','options']]){const node=$(id);if(node){node.disabled=!configured||config.getEnabled?.(destination)===false;node.setAttribute?.('aria-expanded',String(opened&&view===destination));}}
+    const toggle=$('kit-toggle');if(toggle){toggle.disabled=!configured||(config.getEnabled?.('kit')===false&&config.getEnabled?.('options')===false);toggle.setAttribute('aria-expanded',String(opened&&view==='kit'));}
+    if($('kit-overlay')&&$('open-skills'))$('open-skills').disabled=!configured||config.getEnabled?.('spells')===false;
+    const updateReady=$('system-notice')?.hidden===false,points=Number(global.BloomProgression?.snapshot?.(state())?.points)||0,badge=$('kit-update-dot');if(badge){badge.hidden=!updateReady&&!points;badge.textContent=updateReady?'!':String(points);badge.setAttribute?.('aria-label',updateReady?'Game update ready':points+' skill points available');}
+    if(view==='kit')return;
     if(!opened)return;const title=$('traveller-title');if(title)title.textContent=VIEWS[view];
     const saved=state(),next=JSON.stringify([view,category,selectedItem,selectedTown,saved.inventory,saved.food,saved.hp,saved.note,saved.progression?.xp,saved.clearedCamps,saved.campProgress,world().version,world().towns?.length,area(),view==='map'?saved.x:null,view==='map'?saved.y:null,view==='options'?config.getOptions?.():null]);
     if(next===signature)return;signature=next;const body=$('traveller-body');if(!body)return;
@@ -195,5 +209,5 @@
     if(view==='bag')renderBag(content);else if(view==='map')renderMap(content);else if(view==='journal')renderJournal(content);else renderOptions(content);body.appendChild(content);
     const candidates=[...(body.querySelectorAll?.('button:not(:disabled), a[href]')||[])];const focusTarget=candidates.find(node=>remembered.item&&node.dataset.inventoryItem===remembered.item||remembered.category&&node.dataset.bagCategory===remembered.category||remembered.town&&node.dataset.mapTown===remembered.town&&node.dataset.mapPin===remembered.pin||remembered.travel&&node.dataset.fastTravel===remembered.travel||remembered.use&&node.dataset.useItem===remembered.use);(systemFocus||focusTarget)?.focus?.({preventScroll:true});
   }
-  global.BloomTraveller={configure,open,close,isOpen:()=>opened,update};
+  global.BloomTraveller={configure,open,openKit,close,isOpen:()=>opened,isKitOpen:()=>opened&&view==='kit',update};
 })(window);

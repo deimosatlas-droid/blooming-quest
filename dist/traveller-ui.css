@@ -35,3 +35,5 @@ main{max-width:1130px;margin:13px auto;padding:0 22px}.intro{margin-bottom:13px;
  .play-area.is-expanded .slot-copy>b,.play-area:fullscreen .slot-copy>b{font-size:10px;line-height:1.1}
  .play-area.is-expanded .slot-copy>small,.play-area:fullscreen .slot-copy>small{display:none}
 }
+/* Give a short phone the whole atlas; destination details remain scrollable below. */
+@media(max-width:700px) and (orientation:landscape){body.play-screen #play-area .map-layout{display:block}body.play-screen #play-area .map-summary{border-left:0;border-top:4px double #9d8354;padding:15px 18px}body.play-screen #play-area .map-chart{padding:12px}body.play-screen #play-area .map-art{min-width:0}body.play-screen #play-area .map-destinations{grid-template-columns:repeat(3,minmax(0,1fr))}}

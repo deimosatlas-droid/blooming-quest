@@ -58,7 +58,7 @@
       if(attack!==current)return; // A defeat or map transition can reset the attack.
       if(current.elapsed>=current.duration-1e-8){
         lastCombo=current.index;attack=null;idleAge=0;
-        if(queued){queued--;if(DIR[context.intentFace])hero.face=context.intentFace;begin(hero,(lastCombo+1)%MOVES.length);}
+        if(queued){queued--;if(context.onQueuedAttack?.()===false){queued=0;break;}if(DIR[context.intentFace])hero.face=context.intentFace;begin(hero,(lastCombo+1)%MOVES.length);}
       }
     }
   }

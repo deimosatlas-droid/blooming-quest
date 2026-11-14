@@ -6,6 +6,19 @@
   function hash(value){let n=2166136261;for(const ch of String(value))n=Math.imul(n^ch.charCodeAt(0),16777619);return(n>>>0)/4294967296;}
   function distance(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1]);}
   function text(value){return String(value||'').toLowerCase();}
+  function homeFor(area,person){
+    const doors=(area.portals||[]).filter(p=>p.kind==='door'&&p.target);
+    if(!doors.length)return null;
+    const origin=[Number(person.x)||0,Number(person.y)||0],authored=person.routine?.home;
+    const explicit=Array.isArray(authored)&&typeof authored[0]==='number'?authored:Array.isArray(authored)?authored[0]?.point||authored[0]:authored?.point;
+    const named=person.name&&doors.find(p=>text(p.label).includes(text(person.name)));
+    const homes=doors.filter(p=>!/workshop|warehouse|storehouse|inn|shop|forge|florist|book|hall|market|herbal|glass|barn|lighthouse/i.test(p.label||''));
+    return(Array.isArray(explicit)?[...doors].sort((a,b)=>distance([a.x,a.y],explicit)-distance([b.x,b.y],explicit))[0]:named)||[...(homes.length?homes:doors)].sort((a,b)=>distance([a.x,a.y],origin)-distance([b.x,b.y],origin))[0];
+  }
+  function isResting(person,clock,index=0){
+    const id=person.id||'resident-'+index,phase=hash(id),minute=clock.minutes,wake=360+Math.floor(phase*42),rest=1220+Math.floor(phase*42),nightShift=jobFor(person)==='watch'&&phase>.52;
+    return nightShift?minute>=360&&minute<690+Math.floor(hash(id+'lunch')*70):minute<wake||minute>=rest;
+  }
   function jobFor(person){
     const role=text(person.role),type=text(person.type),s=role+' '+type;
     if(/lamplight|lantern keeper|lightkeeper|lighthouse keeper/.test(role))return'lamplighter';
@@ -85,7 +98,7 @@
     for(const [i,p]of(area.portals||[]).entries())if(p.kind==='door'){
       const label=(p.label||'Home').replace(/^Enter /,'');
       const building=(area.objects||[]).find(o=>o.label===label);
-      const node=add([p.x,p.y+18],label,['home'],[p.x,p.y-8],'door-'+i,building?[building.x,building.y]:[p.x,p.y],'home');if(node)doors.push(node);
+      const node=add([p.x,p.y+18],label,['home'],[p.x,p.y-8],'door-'+i,building?[building.x,building.y]:[p.x,p.y],'home');if(node){node.targetArea=p.target;node.door=[p.x,p.y];doors.push(node);}
     }
     for(const [i,e]of(area.exits||[]).entries())add([e.side==='west'?56:area.w*16-56,e.y],'the road gate',['watch'],[e.side==='west'?8:area.w*16-8,e.y],'exit-'+i);
     const fallbackPoints=person.authoredRoute?.length?person.authoredRoute:person.route?.length?person.route:[origin];
@@ -105,7 +118,7 @@
       return out;
     }
     const pureHomes=doors.filter(n=>!/workshop|warehouse|storehouse|inn|shop|forge|florist|book|hall|market|herbal|glass|barn|lighthouse/i.test(n.label));
-    const byName=doors.find(n=>text(n.label).includes(text(person.name))&&person.name);
+    const preferredHome=homeFor(area,person),byName=doors.find(n=>n.targetArea===preferredHome?.target)||doors.find(n=>text(n.label).includes(text(person.name))&&person.name);
     let home=byName||[...(pureHomes.length?pureHomes:doors)].sort((a,b)=>distance(a.point,origin)-distance(b.point,origin))[0]||defaultNode;
     // Neighbours sharing a home use different safe porch positions, not one stack of sprites.
     const porch=resolve([home.point[0]+(Math.floor(phase*3)-1)*10,home.point[1]+Math.floor(hash(id+'porch')*2)*8]);
@@ -124,6 +137,7 @@
     }
     const authored=person.routine||{},h=explicit(authored.home,'the home porch','home'),w=explicit(authored.work,'the workplace',JOB_TAGS[job][0]),l=explicit(authored.lunch,'the lunch seat','rest'),sh=explicit(authored.shop,'the neighbourhood shop','market'),e=explicit(authored.evening,'the evening resting place','rest');
     if(h.length)home=h[0];if(w.length)work=w;if(l.length)lunch=l;if(sh.length)shops=sh;if(e.length)evening=e;
+    if(!home.targetArea&&preferredHome)home={...home,targetArea:preferredHome.target,door:[preferredHome.x,preferredHome.y]};
     const plan={id,job,personality,tone:TONES[personality]||TONES.warm,phase,home,work,lunch:lunch.length?lunch:[home],shops:shops.length?shops:[home],evening:evening.length?evening:[home],action:ACTIONS[job],nightShift:job==='watch'&&phase>.52};
     const stagger=Math.floor(phase*42),lunchStagger=Math.floor(hash(id+'lunch')*70),cycle=job==='dock'||job==='merchant'?24:job==='gardener'||job==='watch'?32:42;
     plan.stations=destinations;
@@ -133,8 +147,8 @@
   function at(plan,clock){
     const minute=clock.minutes,t=plan.times;let phase,start,nodes,action,label;
     if(plan.nightShift&&(minute<360||minute>=1200)){phase='night-watch';start=minute<360?0:1200;nodes=plan.work;action='watch';label='Keeping the night watch';}
-    else if(plan.nightShift&&minute<t.lunch){phase='home';start=360;nodes=[plan.home];action='rest';label='Resting by the porch';}
-    else if(minute<t.wake||minute>=t.rest){phase='home';start=minute<t.wake?0:t.rest;nodes=[plan.home];action='rest';label='Resting by the porch';}
+    else if(plan.nightShift&&minute<t.lunch){phase='home';start=360;nodes=[plan.home];action='rest';label='Resting at home';}
+    else if(minute<t.wake||minute>=t.rest){phase='home';start=minute<t.wake?0:t.rest;nodes=[plan.home];action='rest';label='Resting at home';}
     else if(minute<t.start){phase='breakfast';start=t.wake;nodes=[plan.home];action='break';label='Taking a breakfast break';}
     else if(minute<t.lunch){phase='morning-work';start=t.start;nodes=plan.work;action=plan.action;label=workLabel(action,plan.job);}
     else if(minute<t.lunchEnd){phase='lunch';start=t.lunch;nodes=plan.lunch;action='break';label='Taking a midday break';}
@@ -177,5 +191,5 @@
     const intro={inspect:'I am checking that the work area is ready before the next job.',water:'A little water at the roots, never on the petals.',fill:'I am filling the watering can for the next growing bed.',tend:'The animals and growing beds need a little care every day.',hammer:'A steady hand makes a repair last.',craft:'There is always something worth mending.',carry:'These supplies have a place waiting for them.',mend:'I am checking the fittings before the lamps are needed.',watch:'Someone should keep an eye on the road gate.',serve:'I am keeping the stall ready for the neighbours.',read:'Just a few quiet pages before the next part of the day.',sweep:'A clear doorstep is a small welcome.',play:'There is still time to play before heading home.',lamp:'One wick at a time. The evening is brighter for it.',break:task.phase==='lunch'?'A midday break, then back to work.':'A little breakfast break before the day begins.',shop:'I am picking up a few supplies before I head back.',rest:task.phase==='home'?'I am taking a quiet moment by my door.':'I am taking a little rest here.'}[task.action]||task.label+'.';
     return intro+' '+plan.tone;
   }
-  global.BloomRoutines={create,at,forNode,context,jobFor};
+  global.BloomRoutines={create,at,forNode,context,jobFor,homeFor,isResting};
 })(window);

@@ -7,9 +7,14 @@
   let stand = () => true, navigation = [], columns = 0, rows = 0, chimneys = [], gardens = [], time = 0;
   let links=new Uint8Array(0),components=new Int32Array(0),sprites={},texture=null,rememberTime=0;
   let worldClock={day:1,minutes:480,actors:{},stationState:{}},onClockProgress=null,onClockChange=null,lastClockMinute=-1,lastSaveBucket=-1;
+  let getAreas=null,lastIndoorCheck=-1;
   const STEPS=[[1,0],[0,1],[-1,0],[0,-1]];
   let reservations=new Map(),waitingSpots=new Map(),stationQueues=new Map(),idleBounds=[];
   let partCache=new Map(),partCanvas=null;
+  // Only authored static collision is cached. Occupants, claims and queues are
+  // recreated on every entry and continue to participate in every movement.
+  const navigationCache=new Map(),NAVIGATION_CACHE_LIMIT=8;
+  let navigationBuilds=0,navigationHits=0,cachedPlans=null,planBuilds=0,planHits=0;
   const HUMAN_GAP=16,STATION_GAP=23,IDLE_GAP=23;
   function normalizeClock(value){
     const clock=value&&typeof value==='object'?value:{};
@@ -61,15 +66,15 @@
     return typeof entry === 'number' ? { row:entry } : entry;
   }
   function configure(options = {}) {
-    if(residentsImage!==(options.residentsImage||null)){partCache=new Map();partCanvas=null;}
-    residentsImage = options.residentsImage || null;
-    animalsImage = options.animalsImage || null;
-    animalLayout = options.animalLayout || null;
+    if('residentsImage'in options){if(residentsImage!==(options.residentsImage||null)){partCache=new Map();partCanvas=null;}residentsImage=options.residentsImage||null;}
+    if('animalsImage'in options)animalsImage=options.animalsImage||null;
+    if('animalLayout'in options)animalLayout=options.animalLayout||null;
     if(options.texture)texture=options.texture;
     if(options.clockState){if(options.clockState!==worldClock)rememberPeople();worldClock=normalizeClock(options.clockState);}
     else worldClock=normalizeClock(worldClock);
     if('onClockProgress'in options)onClockProgress=options.onClockProgress;
     if('onClockChange'in options)onClockChange=options.onClockChange;
+    if('getAreas'in options)getAreas=typeof options.getAreas==='function'?options.getAreas:null;
     lastClockMinute=Math.floor(absoluteMinute());lastSaveBucket=Math.floor(lastClockMinute/30);
     onClockChange?.(clock());
   }
@@ -103,7 +108,40 @@
     for(let i=1;i<=steps;i++) if(!stand(from[0]+(to[0]-from[0])*i/steps,from[1]+(to[1]-from[1])*i/steps)) return false;
     return true;
   }
+  function staticCollision(area){
+    const cells=new Map(),size=32;
+    for(const object of area.objects||[])if(object.hit){
+      const box=object.hit;
+      for(let y=Math.floor(box[1]/size);y<=Math.floor((box[1]+box[3])/size);y++)for(let x=Math.floor(box[0]/size);x<=Math.floor((box[0]+box[2])/size);x++){
+        const key=x+':'+y,list=cells.get(key)||[];list.push(box);cells.set(key,list);
+      }
+    }
+    return(x,y)=>{
+      for(const[dx,dy]of[[-4,-2],[4,-2],[-4,2],[4,2]])if(['w','x','s'].includes(area.tiles?.[Math.floor((y+dy)/16)]?.[Math.floor((x+dx)/16)]||'x'))return false;
+      const seen=new Set();
+      for(let cy=Math.floor((y-2)/size);cy<=Math.floor((y+2)/size);cy++)for(let cx=Math.floor((x-4)/size);cx<=Math.floor((x+4)/size);cx++)for(const box of cells.get(cx+':'+cy)||[]){
+        if(seen.has(box))continue;seen.add(box);
+        if(x+4>box[0]&&x-4<box[0]+box[2]&&y+2>box[1]&&y-2<box[1]+box[3])return false;
+      }
+      return true;
+    };
+  }
+  function navigationSignature(area,buildings){
+    return JSON.stringify([area.w,area.h,area.tiles,(area.objects||[]).map(o=>[o.sprite,o.x,o.y,o.scale,o.hit,o.label]),area.portals,area.workstations,buildings,area.navigationRevision||0]);
+  }
+  function restoreNavigation(signature){
+    const cached=navigationCache.get(map.id||map);
+    if(!cached||cached.signature!==signature)return false;
+    navigation=cached.navigation;links=cached.links;components=cached.components;cachedPlans=cached.plans;navigationHits++;
+    navigationCache.delete(map.id||map);navigationCache.set(map.id||map,cached);return true;
+  }
+  function cacheNavigation(signature){
+    const key=map.id||map;cachedPlans=new Map();navigationCache.delete(key);navigationCache.set(key,{signature,navigation,links,components,plans:cachedPlans});
+    while(navigationCache.size>NAVIGATION_CACHE_LIMIT)navigationCache.delete(navigationCache.keys().next().value);
+  }
+  function invalidateNavigation(id){if(id===undefined)navigationCache.clear();else navigationCache.delete(id);}
   function buildNavigation(){
+    navigationBuilds++;
     navigation=Array.from({length:columns*rows},(_,i)=>stand((i%columns)*16+8,Math.floor(i/columns)*16+8));
     links=new Uint8Array(navigation.length);components=new Int32Array(navigation.length);components.fill(-1);
     for(let i=0;i<navigation.length;i++)if(navigation[i]){
@@ -149,7 +187,7 @@
     return true;
   }
   function humanSpace(actor,x,y,gap=HUMAN_GAP){
-    return !people.some(other=>other!==actor&&other.positionReady!==false&&Math.hypot(other.x-x,other.y-y)<gap-.001);
+    return !people.some(other=>other!==actor&&!other.hidden&&other.positionReady!==false&&Math.hypot(other.x-x,other.y-y)<gap-.001);
   }
   function peopleLine(actor,from,to){
     if(!actor)return true;const steps=Math.max(1,Math.ceil(Math.hypot(to[0]-from[0],to[1]-from[1])/5));
@@ -192,7 +230,10 @@
       speed:source.speed||(isAnimal?12+phase*7:18+phase*6),positionReady:true};
     if(!isAnimal&&map.kind==='town'&&global.BloomRoutines){
       const initial=anchorNode(start),group=initial>=0?components[initial]:-1;
-      actor.plan=global.BloomRoutines.create(map,source,index,{atlas:sprites,safePoint,reachable:p=>{const n=anchorNode(p);return n>=0&&components[n]===group;}});
+      const planKey=JSON.stringify([source.id,source.name,source.role,source.type,source.x,source.y,source.route,source.authoredRoute,source.routine,source.personality]);
+      actor.plan=cachedPlans?.get(planKey);
+      if(actor.plan)planHits++;
+      else{actor.plan=global.BloomRoutines.create(map,source,index,{atlas:sprites,safePoint,reachable:p=>{const n=anchorNode(p);return n>=0&&components[n]===group;}});planBuilds++;cachedPlans?.set(planKey,actor.plan);}
       actor.task=global.BloomRoutines.at(actor.plan,clock());actor.state=actor.task.state;actor.navGroup=group;actor.positionReady=false;actor.spawnOrigin=start;
       const remembered=worldClock.actors[map.id+':'+id];
       const fresh=remembered&&remembered.task===actor.task.key&&absoluteMinute()-remembered.at>=0&&absoluteMinute()-remembered.at<20&&stand(remembered.x,remembered.y);
@@ -202,19 +243,52 @@
     }
     return actor;
   }
+  function indoorResidents(area){
+    const routines=global.BloomRoutines,areas=getAreas?.();
+    if(area.kind!=='interior'||!areas||!routines?.homeFor||!routines?.isResting)return[];
+    const result=[],ids=new Set((area.residents||[]).map(p=>p.id));
+    for(const town of Object.values(areas))if(town.kind==='town')for(const[index,person]of(town.residents||[]).entries()){
+      if(ids.has(person.id)||routines.homeFor(town,person)?.target!==area.id||!routines.isResting(person,clock(),index))continue;
+      result.push({...person,homeGuest:true,homeTown:town.id,homeIndex:index});ids.add(person.id);
+    }
+    return result;
+  }
+  function placeIndoorResident(source,index){
+    const furniture=(map.objects||[]).filter(o=>/bed|chair|bench|stool/.test(o.sprite||'')),candidates=[];
+    for(const object of furniture)for(const[dx,dy]of[[0,16],[20,10],[-20,10]]){const p=safePoint(object.x+dx,object.y+dy);if(p)candidates.push(p);}
+    for(let y=72;y<rows*16-32;y+=24)for(let x=40;x<columns*16-32;x+=24)candidates.push([x,y]);
+    const spot=candidates.find(p=>stand(...p)&&humanSpace(null,...p,20)&&!(map.portals||[]).some(door=>Math.hypot(door.x-p[0],door.y-p[1])<30));
+    if(!spot)return null;
+    const actor=makeActor({...source,x:spot[0],y:spot[1],route:[spot]},index,false);
+    if(actor){actor.state='home';actor.pause=Infinity;actor.sleeping=true;actor.hidden=false;actor.indoors=true;actor.sourcePerson=source;}
+    return actor;
+  }
+  function syncIndoorResidents(){
+    if(map?.kind!=='interior'||!getAreas)return;
+    const minute=Math.floor(absoluteMinute());if(minute===lastIndoorCheck)return;lastIndoorCheck=minute;
+    const present=new Set(people.map(person=>person.id));
+    for(const[source,index]of indoorResidents(map).map((person,index)=>[person,index]))if(!present.has(source.id)){
+      const actor=placeIndoorResident(source,index);if(actor){people.push(actor);present.add(actor.id);}
+    }
+  }
   function enter(nextMap,options={}) {
-    rememberPeople();reservations=new Map();waitingSpots=new Map();stationQueues=new Map();map=nextMap;time=0;rememberTime=0;sprites=options.atlas||{};if(options.texture)texture=options.texture;
-    const physical=options.canStand||(()=>true);
+    rememberPeople();reservations=new Map();waitingSpots=new Map();stationQueues=new Map();map=nextMap;time=0;rememberTime=0;cachedPlans=null;lastIndoorCheck=-1;sprites=options.atlas||{};if(options.texture)texture=options.texture;
+    // Callers opt in only for immutable authored maps. Arbitrary collision
+    // callbacks keep their previous live behaviour, including test fixtures.
+    const cacheable=options.staticNavigation===true&&Array.isArray(map.tiles)&&!['road','dungeon'].includes(map.kind);
+    const physical=cacheable?staticCollision(map):options.canStand||(()=>true);
     const buildings=(map.objects||[]).filter(o=>/^(town_house_|house_)/.test(o.sprite)||['rose_tower','estate_barn','estate_greenhouse','lighthouse'].includes(o.sprite)).map(o=>{
       const a=sprites[o.sprite];if(!a)return null;const scale=o.scale||1;
       return[o.x-a.anchor[0]*scale-2,o.y-a.anchor[1]*scale-1,a.rect[2]*scale+4,a.rect[3]*scale-3];
     }).filter(Boolean);
     stand=(x,y)=>physical(x,y)&&!buildings.some(([bx,by,bw,bh])=>x>bx&&x<bx+bw&&y>by&&y<by+bh);
     columns=map.w;rows=map.h;
-    const hasRoutines=(map.residents?.length||0)+(map.animals?.length||0)>0;
-    if(hasRoutines)buildNavigation();else{navigation=[];links=new Uint8Array(0);components=new Int32Array(0);}
+    const guests=indoorResidents(map),hasRoutines=(map.residents?.length||0)+(map.animals?.length||0)+guests.length>0;
+    if(hasRoutines){const signature=cacheable?navigationSignature(map,buildings):null;if(!cacheable||!restoreNavigation(signature)){buildNavigation();if(cacheable)cacheNavigation(signature);}}
+    else{navigation=[];links=new Uint8Array(0);components=new Int32Array(0);}
     idleBounds=(map.objects||[]).map(o=>{const a=sprites[o.sprite],scale=o.scale??1;if(!a||scale<.2)return null;return[o.x-a.anchor[0]*scale-2,o.y-a.anchor[1]*scale-1,a.rect[2]*scale+4,a.rect[3]*scale+3];}).filter(Boolean);
     people=(map.residents||[]).map((p,i)=>makeActor(p,i,false)).filter(Boolean);
+    for(const[source,index]of guests.map((person,index)=>[person,index])){const actor=placeIndoorResident(source,index);if(actor)people.push(actor);}
     for(const actor of people)if(actor.plan){actor.scheduledTask=global.BloomRoutines.at(actor.plan,clock());actor.desiredTaskKey=actor.scheduledTask.key;}
     restoreStations();
     for(const actor of people)if(actor.plan){
@@ -342,6 +416,11 @@
     if(initial){actor.x=p[0];actor.y=p[1];}
   }
   function assignTask(actor,desired,initial=false){
+    // A home is a destination shared by its household, not a capacity-one
+    // workstation. Each resident leaves the outdoor collision set at the door.
+    if(desired.phase==='home'&&desired.node.targetArea&&getAreas?.()?.[desired.node.targetArea]){
+      releaseStation(actor);actor.task=desired;actor.path=[];actor.pause=0;actor.state='home';actor.working=false;return true;
+    }
     if(actor.cooldownUntil>absoluteMinute()){waitNearby(actor,desired,initial);return false;}
     for(const candidate of desired.candidates||[desired.node])if(canReserve(actor,candidate)){
       const key=stationKey(candidate);removeQueued(actor);waitingSpots.delete(actor.id);actor.stationKey=key;actor.waitingFor=null;actor.reservationStatus='approaching';
@@ -364,7 +443,7 @@
     if(!moved){actor.blocked+=dt;if(actor.blocked>.7){actor.path=[];actor.pause=.25+actor.phase*.35;actor.blocked=0;}}
   }
   function updateRoutine(actor,dt){
-    const desired=global.BloomRoutines.at(actor.plan,clock());actor.walking=false;actor.brisk=false;
+    const desired=global.BloomRoutines.at(actor.plan,clock());actor.walking=false;actor.brisk=false;actor.hidden=false;actor.indoors=false;
     if(actor.desiredTaskKey!==desired.key){releaseStation(actor);actor.cooldownUntil=0;actor.desiredTaskKey=desired.key;actor.scheduledTask=desired;assignTask(actor,desired);actor.blocked=0;}
     else actor.scheduledTask=desired;
     const claim=actor.stationKey?reservations.get(actor.stationKey):null;
@@ -379,6 +458,7 @@
     const target=actor.task.node.point,d=Math.hypot(target[0]-actor.x,target[1]-actor.y);
     if(d<=2.5){
       actor.state=actor.waitingFor?'waiting':actor.task.state;actor.working=actor.state==='work';actor.path=[];actor.blocked=0;
+      if(actor.task.phase==='home'&&actor.plan.home.targetArea&&getAreas?.()?.[actor.plan.home.targetArea]){actor.hidden=true;actor.indoors=true;}
       const current=actor.stationKey?reservations.get(actor.stationKey):null;
       if(current){
         current.status='occupied';actor.reservationStatus='occupied';
@@ -395,8 +475,11 @@
   }
   function update(dt,hero) {
     if(!map)return;
-    time+=dt;advanceClock(dt);rememberTime+=dt;
-    for(const actor of people){if(actor.plan)updateRoutine(actor,dt);else updateActor(actor,dt);}
+    time+=dt;advanceClock(dt);rememberTime+=dt;syncIndoorResidents();
+    for(const actor of people){
+      if(actor.homeGuest){actor.hidden=!global.BloomRoutines.isResting(actor.sourcePerson,clock(),actor.homeIndex);actor.sleeping=actor.talkPause<=0||!actor.talkPause;actor.walking=false;if(actor.talkPause>0)actor.talkPause-=dt;}
+      else if(actor.plan)updateRoutine(actor,dt);else updateActor(actor,dt);
+    }
     for(const actor of animals)updateActor(actor,dt);
     if(rememberTime>=2){rememberTime=0;rememberPeople();}
     if(companion&&hero) {
@@ -416,7 +499,7 @@
   }
   function actors(camera={x:0,y:0},width=384,height=256) {
     return [...(residentsImage?people:[]),...(animalsImage?animals.filter(a=>animalEntry(a.type)):[]),...(companion?[companion]:[])]
-      .filter(a=>a.x>camera.x-24&&a.x<camera.x+width+24&&a.y>camera.y-12&&a.y<camera.y+height+48)
+      .filter(a=>!a.hidden&&a.x>camera.x-24&&a.x<camera.x+width+24&&a.y>camera.y-12&&a.y<camera.y+height+48)
       .map(actor=>({life:true,sort:actor.y,actor}));
   }
   function spriteParts(row,col){
@@ -453,10 +536,15 @@
       else if(action==='carry'||action==='serve'){pose.leftArmY=-1;pose.rightArmY=-1;pose.rightArmX=action==='serve'?Math.round(Math.sin(t*2+offset)):0;}
       else if(action==='lamp'){pose.rightArmY=-2;pose.headY=-1;}
       else if(action==='tend'){pose.rightArmX=Math.round(Math.sin(t*2+offset));pose.rightArmY=-1;}
+      else if(action==='inspect'){pose.rightArmX=side*Math.round((Math.sin(t*2+offset)+1)*.75);pose.headY=Math.sin(t*1.6+offset)>.3?1:0;}
+      else if(action==='mend'){pose.leftArmY=-1;pose.rightArmY=-1-Math.round(Math.max(0,Math.sin(t*3.5+offset)));pose.headY=-1;}
+      else if(action==='watch'){pose.headFace=['left',actor.face,'right',actor.face][Math.floor(t*.23+actor.phase*4)%4];pose.torsoY=0;}
+      else if(action==='play'){pose.torsoY=-Math.round(Math.max(0,Math.sin(t*2.4+offset))*2);pose.leftArmX=-1;pose.rightArmX=1;pose.headY=pose.torsoY;}
     }else if(actor.talkPause<=0&&(t+actor.phase*13)%13>8.5&&(t+actor.phase*13)%13<10.8){
       pose.headFace=actor.phase>.5?'left':'right';pose.headX=actor.phase>.5?-1:1;
     }
     if(actor.plan?.job==='dock'&&walk||actor.task?.phase==='shopping'){pose.leftArmY=-1;pose.rightArmY=-1;}
+    if(actor.homeGuest&&actor.sleeping){pose.headY=1;pose.headX=Math.round(Math.sin(t*.25+offset));pose.leftArmY=1;pose.rightArmY=1;}
     return pose;
   }
   function drawResident(actor,ctx,x,y){
@@ -481,6 +569,7 @@
     if(actor.kind==='resident'&&residentsImage) {
       const pose=drawResident(actor,ctx,x,y);
       if(actor.plan)workEffect(actor,ctx,x+pose.baseX,y,pose);
+      if(actor.homeGuest&&actor.sleeping){ctx.save?.();ctx.font='6px monospace';ctx.fillStyle='#e4d6a6';ctx.fillText?.('z',x+7,y-32-Math.round(Math.sin(time*.8+actor.phase)));ctx.restore?.();}
       return;
     }
     const sprite=animalEntry(actor.type);
@@ -527,6 +616,7 @@
     let closest=null;
     const interactable=[...(residentsImage?people:[]),...(animalsImage?animals.filter(a=>animalEntry(a.type)):[]),...(companion?[companion]:[])];
     for(const actor of interactable) {
+      if(actor.hidden)continue;
       const d=Math.hypot(hero.x-actor.x,hero.y-actor.y);
       const priority=d+(actor.kind==='animal'?5:0);
       if(d<27&&(!closest||priority<closest.d))closest={type:'resident',id:actor.id,name:actor.name||'Neighbour',label:(actor.kind==='animal'?'Greet ':'Talk to ')+(actor.name||'neighbour'),d:priority,actor};
@@ -541,6 +631,7 @@
     let line=lines[actor.talkCount++%lines.length];
     if(actor.plan&&typeof line==='string'&&clock().hour>=12)line=line.replace(/^Morning([,!])/i,(m,p)=>(clock().hour>=17?'Evening':'Afternoon')+p);
     const result=[[actor.name||'Neighbour',line]];
+    if(actor.homeGuest)result.push([actor.name||'Neighbour','I am resting at home. We can catch up properly when I am back in town.']);
     if(actor.plan&&actor.task)result.push([actor.name||'Neighbour',global.BloomRoutines.context(actor.plan,actor.task,actor.state)]);
     return result;
   }
@@ -566,10 +657,10 @@
     }
   }
   function snapshot() {
-    return [...people,...animals,...(companion?[companion]:[])].map(actor=>({id:actor.id,x:actor.x,y:actor.y,face:actor.face,type:actor.type,walking:actor.walking,pause:actor.pause,state:actor.state||'routine',activity:actor.task?.action||null,task:actor.task?.label||null,destination:actor.task?.node.label||null,target:actor.task?.node.point?.slice()||null,personality:actor.plan?.personality||null,job:actor.plan?.job||null,stationKey:actor.stationKey||null,reservationStatus:actor.reservationStatus||null,waitingFor:actor.waitingFor||null,breakUntil:actor.cooldownUntil||null,brisk:Boolean(actor.brisk)}));
+    return [...people,...animals,...(companion?[companion]:[])].map(actor=>({id:actor.id,x:actor.x,y:actor.y,face:actor.face,type:actor.type,walking:actor.walking,pause:actor.pause,state:actor.state||'routine',activity:actor.task?.action||null,task:actor.task?.label||null,destination:actor.task?.node.label||null,target:actor.task?.node.point?.slice()||null,personality:actor.plan?.personality||null,job:actor.plan?.job||null,stationKey:actor.stationKey||null,reservationStatus:actor.reservationStatus||null,waitingFor:actor.waitingFor||null,breakUntil:actor.cooldownUntil||null,brisk:Boolean(actor.brisk),indoors:Boolean(actor.indoors),hidden:Boolean(actor.hidden),homeGuest:Boolean(actor.homeGuest)}));
   }
   function inspectRoutines(){return people.filter(p=>p.plan).map(p=>({id:p.id,job:p.plan.job,personality:p.plan.personality,home:p.plan.home,work:p.plan.work,lunch:p.plan.lunch,shops:p.plan.shops,evening:p.plan.evening,times:p.plan.times}));}
   function animation(id){const actor=people.find(p=>p.id===id);if(!actor)return null;const col=DIRECTIONS[actor.face]??0,row=Number.isInteger(actor.spriteRow)?actor.spriteRow:(ROLE_ROWS[actor.type]??7);return{...animationPose(actor),parts:{...spriteParts(row,col)},spriteRow:row,face:actor.face};}
   function inspectReservations(){return [...reservations.values()].map(claim=>({...claim,point:claim.point.slice()}));}
-  global.BloomLife={configure,enter,update,actors,draw,interaction,talk,ambient,snapshot,clock,inspectRoutines,inspectReservations,animation};
+  global.BloomLife={configure,enter,update,actors,draw,interaction,talk,ambient,snapshot,clock,inspectRoutines,inspectReservations,animation,invalidateNavigation,navigationStats:()=>({builds:navigationBuilds,hits:navigationHits,cached:navigationCache.size,planBuilds,planHits})};
 })(window);

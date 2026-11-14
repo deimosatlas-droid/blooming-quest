@@ -2,10 +2,22 @@
 (function(global){
   'use strict';
   let image=null,layout={},area=null,options={},hero=null,progress=null;
-  let camps=[],monsters=[],effects=[],missiles=[],zones=[],time=0,invulnerable=0,attackLock=0,session=0,attackSequence=0,activations=new Set();
+  let camps=[],monsters=[],effects=[],missiles=[],zones=[],time=0,invulnerable=0,attackLock=0,session=0,attackSequence=0,persistentDirty=false,activations=new Set();
   const DIRECTIONS={right:[1,0],down:[0,1],left:[-1,0],up:[0,-1]};
   const clamp=(value,low,high)=>Math.max(low,Math.min(high,value));
   const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+  const activeArea=()=>Boolean(area&&['road','dungeon'].includes(area.kind)&&area.safe!==true);
+  // Species share approved art, but their pace and movement have a personality.
+  const TEMPERAMENTS={
+    orc:{warning:.48,recovery:.30,poise:2},skeleton:{warning:.40,recovery:.25,poise:2},
+    beetle:{warning:.34,recovery:.22,poise:2},crow:{warning:.32,recovery:.22,poise:2,orbit:true},
+    goblin:{warning:.44,recovery:.30,poise:3,orbit:true},maggot:{warning:.50,recovery:.34,poise:2},
+    mimic:{warning:.56,recovery:.36,poise:3},minotaur:{warning:.78,recovery:.52,poise:5,heavy:true},
+    boar:{warning:.48,recovery:.34,poise:3},horned_rabbit:{warning:.36,recovery:.24,poise:2},
+    mantis:{warning:.46,recovery:.30,poise:3},spectre:{warning:.44,recovery:.30,poise:3},
+    shaman:{warning:.64,recovery:.36,poise:3,ranged:true},witchdoctor:{warning:.70,recovery:.42,poise:3,ranged:true},
+    pumpkin:{warning:.66,recovery:.42,poise:3},slime:{warning:.50,recovery:.30,poise:2}
+  };
   function footprint(camp,sprites={}){
     if(Array.isArray(camp.hit)&&camp.hit.length===4)return camp.hit;
     const type=String(camp.type||'wood').replace(/^camp_/,''),sprite=sprites['camp_'+type],scale=camp.scale||1;
@@ -18,9 +30,9 @@
     return Boolean((Array.isArray(cleared)?cleared.includes(key):cleared?.[key])||state.campProgress?.[key]?.cleared);
   }
   function blockingCamp(x,y,currentArea,id,state={},sprites={}){
-    if(currentArea?.kind!=='road'||currentArea.safe===true)return null;
+    if(!['road','dungeon'].includes(currentArea?.kind)||currentArea.safe===true)return null;
     return (currentArea.camps||[]).find((camp,index)=>{
-      if(isCleared(camp,id,state,index))return false;
+      if(camp.hidden||isCleared(camp,id,state,index))return false;
       const [hx,hy,w,h]=footprint(camp,sprites);
       return x+4>hx&&x-4<hx+w&&y+2>hy&&y-2<hy+h;
     })||null;
@@ -28,6 +40,20 @@
   function dictionary(value){
     if(Array.isArray(value))return Object.fromEntries(value.map(key=>[key,true]));
     return value&&typeof value==='object'?value:{};
+  }
+  function reconcileCamps(records,state={},onReward){
+    state.campMastery=dictionary(state.campMastery);const credits=[],claims=state.progression?.claimedRewards||{};
+    for(const [mapId,map]of Object.entries(records||{})){
+      if(!['road','dungeon'].includes(map.kind)||map.safe===true)continue;
+      for(const [index,source]of (map.camps||[]).entries()){
+        const key=mapId+':'+String(source.id||'camp-'+index);
+        if(!isCleared(source,mapId,state,index)||state.campMastery[key])continue;
+        let missing=0;for(let slot=1;slot<=clamp(Number(source.totalSpawns??8),0,30);slot++)if(!claims['monster:'+key+':monster:'+slot])missing++;
+        state.campMastery[key]=true;
+        if(missing){const credit={id:'camp-mastery:'+key,xp:missing*12,kind:'camp-mastery'};credits.push(credit);if(onReward)onReward(credit);else global.BloomProgression?.grant?.(state,credit.id,credit.xp);}
+      }
+    }
+    return credits;
   }
   function profileFor(type){return layout.types?.[type]||layout.monsters?.[type]||null;}
   function framesFor(profile,direction,attack=false){
@@ -41,7 +67,7 @@
     for(let r=8;r<=72;r+=8)for(const [dx,dy]of[[r,0],[-r,0],[0,r],[0,-r],[r,r],[-r,r],[r,-r],[-r,-r]])if(canStand(x+dx,y+dy))return [x+dx,y+dy];
     return null;
   }
-  function changed(){options.onProgress?.();}
+  function changed(){if(persistentDirty){persistentDirty=false;options.onProgress?.();}}
   function reward(id,xp,kind){options.onReward?.({id,xp,kind});}
   function attackKind(type,profile={}){
     if(['cone','lunge','circle'].includes(profile.attackKind))return profile.attackKind;
@@ -60,22 +86,24 @@
       if(safe){spawnAt=safe;break;}
     }
     if(!spawnAt)return false;
-    const health=clamp(Number(profile.health)||2,1,20);
-    monsters.push({id:monsterId(camp,slot),campKey:camp.key,type:camp.monster,name:profile.name||camp.monster,
+    const health=clamp(Number(camp.monsterHealth??profile.health)||2,1,120),temperament={...(TEMPERAMENTS[camp.monster]||{}),...(profile.combat||{})};
+    monsters.push({id:monsterId(camp,slot),campKey:camp.key,type:camp.monster,name:camp.monsterName||profile.name||camp.monster,
       x:spawnAt[0],y:spawnAt[1],homeX:spawnAt[0],homeY:spawnAt[1],hp:health,maxHp:health,
-      speed:clamp(Number(profile.speed)||25,10,65),damage:clamp(Number(profile.damage)||1,1,3),
+      speed:clamp(Number(camp.monsterSpeed??profile.speed)||25,10,65),damage:clamp(Number(camp.monsterDamage??profile.damage)||(temperament.heavy?2:1),1,3),
       phase:slot*1.73,face:1,direction:'down',walking:false,stun:restore?.5:.4,attack:0,striking:0,
-      bound:0,attackState:'idle',attackKind:attackKind(camp.monster,profile),attackTimer:0,attackData:null,profile});
+      bound:0,attackState:'idle',attackKind:attackKind(camp.monster,profile),attackTimer:0,attackData:null,profile,temperament,
+      poise:camp.boss?7:temperament.poise||2,poiseMax:camp.boss?7:temperament.poise||2,poiseAge:0,staggerGuard:0,recoil:0,boss:Boolean(camp.boss),phaseTwo:false});
     return true;
   }
   function enter(nextArea,config={}){
     session++;area=nextArea;options=config;hero=config.hero;
-    camps=[];monsters=[];effects=[];missiles=[];zones=[];time=0;invulnerable=0;attackLock=0;attackSequence=0;activations.clear();
-    if(!hero||area.kind!=='road'||area.safe===true||config.id==='petalferry')return;
+    camps=[];monsters=[];effects=[];missiles=[];zones=[];time=0;invulnerable=0;attackLock=0;attackSequence=0;persistentDirty=false;activations.clear();
+    if(!hero||!activeArea()||config.id==='petalferry')return;
     const state=config.state||{};
     state.clearedCamps=dictionary(state.clearedCamps);
     state.defeatedMonsters=dictionary(state.defeatedMonsters);
     state.campProgress=dictionary(state.campProgress);
+    state.campMastery=dictionary(state.campMastery);
     progress=state;
     const mapId=config.id||area.id||'road';
     camps=(area.camps||[]).filter(c=>Number.isFinite(c.x)&&Number.isFinite(c.y)).map((source,index)=>{
@@ -91,6 +119,11 @@
       state.campProgress[key]={hp:camp.hp,spawned:camp.spawned,cleared};
       return camp;
     });
+    // Older cleared saves receive the same complete encounter budget once.
+    for(const camp of camps)if(camp.cleared&&!state.campMastery[camp.key]){
+      const credit=unearnedCampXP(camp);state.campMastery[camp.key]=true;persistentDirty=true;
+      if(credit)reward('camp-mastery:'+camp.key,credit,'camp-mastery');changed();
+    }
     for(const camp of camps)if(!camp.cleared)for(let slot=1;slot<=Math.min(camp.spawned,camp.totalSpawns);slot++){
       if(!state.defeatedMonsters[monsterId(camp,slot)])spawn(camp,slot,true);
     }
@@ -132,14 +165,17 @@
   }
   function beginAttack(monster){
     const dx=hero.x-monster.x,dy=hero.y-monster.y,length=Math.hypot(dx,dy),fallback=DIRECTIONS[monster.direction]||DIRECTIONS.down;
-    const direction=length?[dx/length,dy/length]:fallback,kind=monster.attackKind;
-    const warning={cone:.65,lunge:.75,circle:.85}[kind];
-    const travel=clamp(length,18,46);
+    const direction=length?[dx/length,dy/length]:fallback;
+    if(monster.boss&&monster.hp<=monster.maxHp*.5&&!monster.phaseTwo){monster.phaseTwo=true;effects.push({x:monster.x,y:monster.y-38,text:'GUARDIAN AWAKENS',life:1.1,color:'#f3c581'});}
+    const kind=monster.boss&&monster.phaseTwo?['lunge','cone','circle'][attackSequence%3]:monster.attackKind;
+    const temperament=monster.temperament||{},warning=monster.boss?(kind==='circle'?.88:.70):(Number(temperament.warning)||{cone:.65,lunge:.75,circle:.85}[kind]);
+    const travel=clamp(length,18,monster.boss?64:52);
     monster.direction=Math.abs(direction[0])>Math.abs(direction[1])?(direction[0]>0?'right':'left'):(direction[1]>0?'down':'up');
     monster.face=direction[0]<0?-1:1;monster.walking=false;monster.attackState='windup';monster.attackTimer=warning;
     monster.attackData={id:'enemy:'+session+':'+monster.id+':'+(++attackSequence),kind,origin:{x:monster.x,y:monster.y},
       aim:kind==='circle'?{x:hero.x,y:hero.y}:{x:monster.x+direction[0]*travel,y:monster.y+direction[1]*travel},
-      direction,warning,reach:kind==='cone'?27:travel,radius:kind==='circle'?23:11,arc:1.03,active:.22,recovery:kind==='cone'?.65:.85,spent:false};
+      direction,warning,reach:kind==='cone'?(monster.boss?39:27):travel,radius:kind==='circle'?(monster.boss?31:23):11,arc:1.03,
+      active:kind==='lunge'?.24:.19,recovery:monster.boss?.48:Number(temperament.recovery)||(kind==='cone'?.65:.85),spent:false};
   }
   function resolveAttack(monster,previous){
     const attack=monster.attackData;if(!attack||attack.spent||invulnerable>0)return;
@@ -155,10 +191,10 @@
     const defended=options.defend?.({source:{x:attack.origin.x,y:attack.origin.y},damage:monster.damage,
       parryable:attack.kind!=='circle',heavy:attack.kind==='circle'||monster.type==='minotaur',id:attack.id})||{};
     if(defended.parried){
-      monster.stun=.9;monster.striking=0;monster.attackState='recovery';monster.attackTimer=.9;monster.attackData=null;invulnerable=.12;
-      effects.push({x:monster.x,y:monster.y-29,text:'PARRY',life:.8,color:'#e8d79d'});return;
+      monster.stun=.9;monster.striking=0;monster.attackState='recovery';monster.attackTimer=.9;monster.attackData=null;monster.staggerGuard=1.2;invulnerable=.12;
+      effects.push({x:monster.x,y:monster.y-29,text:'PARRY',life:.8,color:'#e8d79d'});options.onFeedback?.({kind:'parry',text:'Parry!',target:{x:monster.x,y:monster.y}});return;
     }
-    if(defended.blocked){invulnerable=.12;effects.push({x:hero.x,y:hero.y-29,text:'BLOCK',life:.55,color:'#b9ded8'});return;}
+    if(defended.blocked){invulnerable=.12;const label=defended.kind==='dodge'?'DODGE':defended.kind==='ward'?'WARD':'BLOCK';effects.push({x:hero.x,y:hero.y-29,text:label,life:.55,color:'#b9ded8'});options.onFeedback?.({kind:defended.kind||'block',text:label,target:{x:hero.x,y:hero.y}});return;}
     const amount=defended.damage===undefined?monster.damage:clamp(Math.floor(Number(defended.damage)||0),0,10);
     if(amount<=0)return;
     invulnerable=.95;effects.push({x:hero.x,y:hero.y-29,text:'−'+amount,life:.65,color:'#ffb5aa'});
@@ -181,10 +217,18 @@
       if(monster.attackState==='active'&&monster.attackTimer<=0){monster.attackState='recovery';monster.attackTimer=data.recovery;monster.striking=0;}
       return;
     }
-    if(monster.attackState==='recovery'&&monster.attackTimer<=0){monster.attackState='idle';monster.attackData=null;}
+    if(monster.attackState==='recovery'){
+      // Recovery remains readable while the creature shuffles back or circles.
+      if(data&&monster.bound<=0){
+        const side=monster.temperament?.orbit?(Math.sin(monster.phase)>0?1:-1):0,back=monster.temperament?.ranged?1.1:.35;
+        const dx=-data.direction[0]*back-data.direction[1]*side*.6,dy=-data.direction[1]*back+data.direction[0]*side*.6;
+        push(monster,dx,dy,monster.speed*dt*(monster.temperament?.ranged?.7:.3));monster.walking=true;
+      }
+      if(monster.attackTimer<=0){monster.attackState='idle';monster.attackData=null;monster.attack=.12;}
+    }
   }
   function update(dt){
-    if(!area||area.kind!=='road'||area.safe===true||!hero)return;
+    if(!activeArea()||!hero)return;
     const currentSession=session;
     time+=dt;invulnerable=Math.max(0,invulnerable-dt);attackLock=Math.max(0,attackLock-dt);
     effects=effects.filter(effect=>(effect.life-=dt)>0);
@@ -196,7 +240,7 @@
       camp.timer-=dt;
       if(camp.timer<=0){
         const slot=camp.spawned+1;
-        if(spawn(camp,slot)){camp.spawned=slot;progress.campProgress[camp.key].spawned=slot;changed();}
+        if(spawn(camp,slot)){camp.spawned=slot;progress.campProgress[camp.key].spawned=slot;persistentDirty=true;changed();}
         camp.timer=camp.spawnEvery;
       }
     }
@@ -204,7 +248,9 @@
     for(const monster of monsters){
       if(monster.frozen>0){monster.walking=false;continue;}
       monster.attack=Math.max(0,monster.attack-dt);monster.stun=Math.max(0,monster.stun-dt);monster.striking=Math.max(0,monster.striking-dt);monster.bound=Math.max(0,monster.bound-dt);
-      if(monster.stun>0){monster.walking=false;continue;}
+      monster.recoil=Math.max(0,(monster.recoil||0)-dt);monster.staggerGuard=Math.max(0,(monster.staggerGuard||0)-dt);monster.resistNotice=Math.max(0,(monster.resistNotice||0)-dt);monster.poiseAge+=dt;
+      if(monster.poiseAge>1.4)monster.poise=monster.poiseMax;
+      if(monster.stun>0){monster.walking=false;if(monster.attackState==='recovery'){monster.attackTimer=Math.max(0,monster.attackTimer-dt);if(!monster.attackTimer){monster.attackState='idle';monster.attackData=null;}}continue;}
       const camp=camps.find(c=>c.key===monster.campKey);
       if(!camp||camp.cleared)continue;
       const heroDistance=distance(monster,hero),campDistance=distance(camp,hero),leash=Number(camp.leash)||230;
@@ -212,10 +258,11 @@
       if(monster.attackState!=='idle'){
         updateAttack(monster,dt);if(currentSession!==session)return;continue;
       }
-      const reach={cone:25,lunge:54,circle:58}[monster.attackKind];
-      if(pursuing&&heroDistance<=reach&&clearLine(monster,hero)){beginAttack(monster);continue;}
+      const reach=monster.temperament?.ranged?90:monster.boss?68:{cone:25,lunge:54,circle:58}[monster.attackKind];
+      if(pursuing&&!monster.attack&&heroDistance<=reach&&clearLine(monster,hero)){beginAttack(monster);continue;}
       if(monster.bound>0){monster.walking=false;continue;}
-      if(pursuing)move(monster,hero.x,hero.y,dt);
+      if(pursuing&&monster.attack&&monster.temperament?.orbit){const dx=(hero.x-monster.x)/(heroDistance||1),dy=(hero.y-monster.y)/(heroDistance||1),side=Math.sin(monster.phase)>0?1:-1;move(monster,monster.x-dy*side*16,monster.y+dx*side*16,dt*.6);}
+      else if(pursuing)move(monster,hero.x,hero.y,dt);
       else{
         const radius=distance(monster,{x:monster.homeX,y:monster.homeY})>48?0:10;
         move(monster,monster.homeX+Math.sin(time*.35+monster.phase)*radius,monster.homeY+Math.cos(time*.32+monster.phase)*radius,dt*.55);
@@ -230,35 +277,50 @@
     return (dx*direction[0]+dy*direction[1])/length>Math.cos(Number(spec.arc)||Math.acos(.25));
   }
   function defeat(monster,earned=true){
-    progress.defeatedMonsters[monster.id]=true;
+    progress.defeatedMonsters[monster.id]=true;persistentDirty=true;
     monsters=monsters.filter(m=>m.id!==monster.id);
     if(earned)reward('monster:'+monster.id,12,'monster');
+    const camp=camps.find(camp=>camp.key===monster.campKey);
+    if(earned&&camp&&!camp.cleared&&(camp.boss||camp.clearOnDefeat)&&camp.spawned>=camp.totalSpawns&&!monsters.some(actor=>actor.campKey===camp.key))clear(camp);
+  }
+  function unearnedCampXP(camp){
+    const claims=(options.getState?.()||progress)?.progression?.claimedRewards;
+    let unearned=0;for(let slot=1;slot<=camp.totalSpawns;slot++){
+      // Live camps have never performed cleanup; their defeated flags are exact.
+      // Cleared legacy camps need the XP ledger to distinguish kills from cleanup.
+      const id=monsterId(camp,slot),claimed=camp.cleared&&claims?claims['monster:'+id]:progress?.defeatedMonsters?.[id];
+      if(!claimed)unearned++;
+    }
+    return unearned*12;
   }
   function clear(camp){
+    if(camp.cleared)return;
+    const mastery=unearnedCampXP(camp);progress.campMastery[camp.key]=true;
     camp.cleared=true;camp.hp=0;
     progress.clearedCamps[camp.key]=true;
-    progress.campProgress[camp.key]={hp:0,spawned:camp.spawned,cleared:true};
+    progress.campProgress[camp.key]={hp:0,spawned:camp.spawned,cleared:true};persistentDirty=true;
     for(const monster of monsters.filter(m=>m.campKey===camp.key))defeat(monster,false);
     effects.push({x:camp.x,y:camp.y-27,text:'CAMP CLEARED',life:1.4,color:'#f5e4a6'});
-    reward('camp:'+camp.key,35,'camp');
+    // Completing a camp credits its full encounter, even when waves are skipped.
+    reward('camp:'+camp.key,(Number(camp.rewardXp)||35)+mastery,camp.boss?'boss':'camp');
     options.onClear?.(camp);
   }
   function swing(attacker=hero,spec={}){
     const result={hits:0,kills:0,camps:0};
-    if(!attacker||!area||area.kind!=='road'||area.safe===true||(!spec.activationId&&attackLock>0)||spec.activationId&&activations.has(spec.activationId))return result;
+    if(!attacker||!activeArea()||(!spec.activationId&&attackLock>0)||spec.activationId&&activations.has(spec.activationId))return result;
     if(spec.activationId){activations.add(spec.activationId);if(activations.size>200)activations.delete(activations.values().next().value);}else attackLock=.30;
     const damage=Math.max(1,Number(spec.damage)||1),knockback=Number(spec.knockback)||5;
     for(const monster of [...monsters])if(inArc(monster,attacker,6,spec)&&(!options.canStrike||options.canStrike(attacker,monster))){
-      monster.hp-=damage;monster.stun=damage>1?.3:.2;monster.attackState='idle';monster.attackData=null;monster.striking=0;result.hits++;
+      monster.hp-=damage;recoil(monster,damage,{heavy:damage>1||spec.id==='thrust'});result.hits++;
       effects.push({x:monster.x,y:monster.y-24,text:'−'+damage,life:.6,color:'#fff0be'});
       const fallback=DIRECTIONS[attacker.face]||DIRECTIONS.down;
       push(monster,monster.x===attacker.x&&monster.y===attacker.y?fallback[0]:monster.x-attacker.x,monster.x===attacker.x&&monster.y===attacker.y?fallback[1]:monster.y-attacker.y,knockback);
       const killed=monster.hp<=0;options.onImpact?.({kind:'melee',spellId:spec.spellId||spec.id||'katana',damage,killed,target:{x:monster.x,y:monster.y}});if(killed){defeat(monster);result.kills++;}
     }
-    for(const camp of camps)if(spec.camps!==false&&!camp.cleared&&inArc(camp,attacker,13,spec)&&(!options.canStrike||options.canStrike(attacker,camp))){
+    for(const camp of camps)if(spec.camps!==false&&!camp.hidden&&!camp.cleared&&inArc(camp,attacker,13,spec)&&(!options.canStrike||options.canStrike(attacker,camp))){
       const campDamage=Math.max(1,Number(spec.campDamage)||damage);
       camp.hp=Math.max(0,camp.hp-campDamage);camp.hit=.22;result.hits++;
-      progress.campProgress[camp.key].hp=camp.hp;
+      progress.campProgress[camp.key].hp=camp.hp;persistentDirty=true;
       effects.push({x:camp.x,y:camp.y-29,text:'−'+campDamage,life:.6,color:'#fff0be'});
       options.onImpact?.({kind:'melee',damage:campDamage,killed:camp.hp<=0,target:{x:camp.x,y:camp.y}});
       if(camp.hp<=0){clear(camp);result.camps++;}
@@ -290,9 +352,20 @@
   };
   function remember(id){activations.add(id);if(activations.size>512)activations.delete(activations.values().next().value);}
   function interrupt(monster,seconds=.2){monster.stun=Math.max(monster.stun,seconds);monster.attackState='idle';monster.attackData=null;monster.striking=0;}
+  function recoil(monster,damage,spec={}){
+    monster.recoil=.14;monster.poiseAge=0;
+    if(monster.staggerGuard>0)return;
+    monster.poise-=Math.max(1,Number(spec.poiseDamage)||Number(damage)||1);
+    if(monster.poise<=0||spec.forceInterrupt){
+      interrupt(monster,monster.boss?.22:spec.heavy?.28:.18);monster.poise=monster.poiseMax;monster.staggerGuard=monster.boss?1.5:1.0;
+      effects.push({x:monster.x,y:monster.y-31,text:'STAGGER',life:.55,color:'#e7ce91'});options.onFeedback?.({kind:'stagger',text:'Stagger',target:{x:monster.x,y:monster.y}});
+    }
+  }
   function status(monster,spec={}){
-    if(Number(spec.rootDuration)>0)monster.bound=Math.max(monster.bound,clamp(Number(spec.rootDuration),.1,12));
-    if(Number(spec.freezeDuration)>0){monster.frozen=Math.max(monster.frozen||0,clamp(Number(spec.freezeDuration),.1,8));interrupt(monster,.1);}
+    const resistance=monster.boss?.45:1;
+    if(Number(spec.rootDuration)>0)monster.bound=Math.max(monster.bound,clamp(Number(spec.rootDuration)*resistance,.1,12));
+    if(Number(spec.freezeDuration)>0){monster.frozen=Math.max(monster.frozen||0,clamp(Number(spec.freezeDuration)*resistance,.1,8));interrupt(monster,.1);}
+    if(monster.boss&&(Number(spec.rootDuration)>0||Number(spec.freezeDuration)>0)&&!monster.resistNotice){effects.push({x:monster.x,y:monster.y-31,text:'RESISTS CONTROL',life:.7,color:'#bdd9e4'});monster.resistNotice=.8;}
     if(Number(spec.slow)>0){monster.slow=Math.max(monster.slow||0,clamp(Number(spec.slow),0,.85));monster.slowTime=Math.max(monster.slowTime||0,clamp(Number(spec.slowDuration)||1,.1,10));}
     if(Number(spec.burnDamage)>0&&Number(spec.burnDuration)>0){
       const previous=monster.burning,damage=clamp(Math.floor(Number(spec.burnDamage)),1,8),duration=clamp(Number(spec.burnDuration),.1,10);
@@ -306,7 +379,7 @@
     if(damage){
       monster.hp=Math.max(0,monster.hp-damage);result.hits++;
       effects.push({x:monster.x,y:monster.y-24,text:'−'+damage,life:.6,color:spec.color||'#fff0be'});
-      if(spec.interrupt!==false)interrupt(monster,damage>1?.3:.2);
+      if(spec.interrupt!==false)recoil(monster,damage,{heavy:damage>1});
       const force=clamp(Number(spec.force)||0,0,48);
       if(force)push(monster,monster.x-source.x,monster.y-source.y,force);
     }
@@ -345,7 +418,7 @@
   }
   function cast(kind,config={}){
     const result={hits:0,kills:0,camps:0,scheduled:false};
-    if(!hero||area?.kind!=='road'||area.safe===true||!Object.prototype.hasOwnProperty.call(SPELL_DEFAULTS,kind))return result;
+    if(!hero||!activeArea()||!Object.prototype.hasOwnProperty.call(SPELL_DEFAULTS,kind))return result;
     const activationId='ability:'+kind+':'+String(config.id??(++attackSequence));
     if(activations.has(activationId))return result;
     const supplied=global.BloomSpells?.resolve?.(kind,Number(config.rank)||1)||{};
@@ -445,8 +518,8 @@
     return distance(zone,monster)<=zone.radius+5;
   }
   function zoneBurst(zone,freeze=false){
-    for(const monster of [...monsters])if(zoneContains(zone,monster)&&clearLine(zone.origin,monster))damageMonster(monster,zone.spec.damage,zone.origin,{...zone.spec,freezeDuration:freeze?zone.spec.duration:0});
-    changed();
+    let hit=false;for(const monster of [...monsters])if(zoneContains(zone,monster)&&clearLine(zone.origin,monster))hit=damageMonster(monster,zone.spec.damage,zone.origin,{...zone.spec,freezeDuration:freeze?zone.spec.duration:0})||hit;
+    if(hit)changed();
   }
   function updateZones(dt){
     for(const zone of zones){
@@ -463,8 +536,8 @@
       if(!['orbit','vortex','wall','trail'].includes(zone.shape))continue;
       if(zone.shape==='vortex')for(const monster of monsters)if(zoneContains(zone,monster)&&clearLine(zone.origin,monster))push(monster,zone.x-monster.x,zone.y-monster.y,clamp(Number(zone.spec.force)||22,0,60)*dt*1.5);
       zone.timer-=dt;if(zone.timer>0)continue;zone.timer+=zone.tick;
-      for(const monster of [...monsters])if(zoneContains(zone,monster)&&clearLine(zone.origin,monster))damageMonster(monster,zone.spec.damage,zone.origin,{...zone.spec,force:0,interrupt:zone.shape==='orbit',impactKind:'field'});
-      changed();
+      let hit=false;for(const monster of [...monsters])if(zoneContains(zone,monster)&&clearLine(zone.origin,monster))hit=damageMonster(monster,zone.spec.damage,zone.origin,{...zone.spec,force:0,interrupt:zone.shape==='orbit',impactKind:'field'})||hit;
+      if(hit)changed();
     }
     zones=zones.filter(zone=>zone.age<zone.duration);
   }
@@ -475,7 +548,7 @@
     if(effects.length>160)effects=effects.slice(-160);
   }
   function actors(camera={x:0,y:0}){
-    return [...camps.map(camp=>({combat:true,kind:'camp',camp,sort:camp.y-6})),...monsters.map(monster=>({combat:true,kind:'monster',monster,sort:monster.y}))]
+    return [...camps.filter(camp=>!camp.hidden).map(camp=>({combat:true,kind:'camp',camp,sort:camp.y-6})),...monsters.map(monster=>({combat:true,kind:'monster',monster,sort:monster.y}))]
       .filter(entry=>{const actor=entry.camp||entry.monster;return actor.x>camera.x-90&&actor.x<camera.x+474&&actor.y>camera.y-20&&actor.y<camera.y+336;});
   }
   function magicFlare(ctx,x,y,color,size=1){ctx.fillStyle=color;ctx.fillRect(Math.round(x)-size,Math.round(y),size*2+1,1);ctx.fillRect(Math.round(x),Math.round(y)-size,1,size*2+1);}
@@ -547,7 +620,7 @@
     }
   }
   function drawEffects(ctx,camera={x:0,y:0}){
-    if(area?.kind!=='road'||area.safe===true)return;
+    if(!activeArea())return;
     ctx.save();
     for(const bolt of missiles){
       const x=Math.round(bolt.x-camera.x),y=Math.round(bolt.y-camera.y-10),color=bolt.spec.color||'#e3dba4';ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=2;
@@ -563,7 +636,7 @@
     ctx.restore();
   }
   function drawGround(ctx,camera={x:0,y:0}){
-    if(area?.kind!=='road'||area.safe===true)return;
+    if(!activeArea())return;
     ctx.save();
     for(const monster of monsters){
       const data=monster.attackData;if(!data||!['windup','active'].includes(monster.attackState))continue;
@@ -597,29 +670,34 @@
       options.drawSprite?.(ruins?'camp_ruins':'camp_'+camp.type,x,y,camp.scale||1,ctx);ctx.restore();
       return;
     }
-    const monster=entry.monster,frames=framesFor(monster.profile,monster.direction,monster.striking>0);
+    const monster=entry.monster,acting=['windup','active','recovery'].includes(monster.attackState),frames=framesFor(monster.profile,monster.direction,acting);
     if(!image||!frames.length)return;
-    const frame=monster.striking>0?Math.min(frames.length-1,Math.floor((1-monster.striking/(monster.strikeDuration||.22))*frames.length)):
-      monster.walking?Math.floor(time*(monster.profile.fps||5)+monster.phase)%frames.length:0;
+    const data=monster.attackData,anticipation=monster.attackState==='windup'?clamp(1-monster.attackTimer/(data?.warning||.65),0,1):0;
+    const recovery=monster.attackState==='recovery'?clamp(1-monster.attackTimer/(data?.recovery||.9),0,1):0;
+    const pose=monster.attackState==='windup'?anticipation*.3:monster.attackState==='active'?.3+.6*(1-monster.striking/(monster.strikeDuration||.22)):.9+recovery*.1;
+    const frame=acting?Math.min(frames.length-1,Math.floor(pose*frames.length)):
+      Math.floor(time*(monster.walking?(monster.profile.fps||5):Math.min(3,monster.profile.fps||3))+monster.phase)%frames.length;
     const [sx,sy,w,h]=frames[frame];
     const scale=monster.profile.scale||1,anchor=monster.profile.anchor||[w/2,h];
-    const bob=monster.walking?Math.round(Math.sin(time*10+monster.phase)) : 0;
+    const vector=data?.direction||DIRECTIONS[monster.direction]||DIRECTIONS.down;
+    const bob=monster.walking?Math.round(Math.sin(time*10+monster.phase)):Math.round(Math.sin(time*3+monster.phase)*.65);
+    const crouch=Math.round(anticipation*2+(monster.recoil>0?Math.sin(monster.recoil/.14*Math.PI)*2:0)),lean=Math.round(vector[0]*(anticipation*-3+(monster.attackState==='active'?3:0)));
     ctx.fillStyle='#21392855';ctx.beginPath();ctx.ellipse(x,y+1,Math.min(10,w*scale*.26),2,0,0,Math.PI*2);ctx.fill();
     ctx.save();
     if(monster.stun>0)ctx.globalAlpha=Math.floor(time*25)%2?.5:1;
-    if(monster.face<0&&!monster.profile.directions&&monster.profile.flip!==false){ctx.translate(x,y);ctx.scale(-1,1);ctx.drawImage(image,sx,sy,w,h,-anchor[0]*scale,-anchor[1]*scale+bob,w*scale,h*scale);}
-    else ctx.drawImage(image,sx,sy,w,h,x-anchor[0]*scale,y-anchor[1]*scale+bob,w*scale,h*scale);
+    ctx.translate(x,y);if(monster.face<0&&!monster.profile.directions&&monster.profile.flip!==false)ctx.scale(-1,1);
+    ctx.drawImage(image,sx,sy,w,h,Math.round(-anchor[0]*scale+lean),Math.round(-anchor[1]*scale+bob+crouch),Math.round(w*scale),Math.max(1,Math.round(h*scale-crouch)));
     ctx.restore();
   }
   function target(attacker=hero){
-    if(!attacker||area?.kind!=='road'||area.safe===true)return null;
+    if(!attacker||!activeArea())return null;
     const choices=[...monsters.filter(m=>distance(m,attacker)<55).map(monster=>({...monster,kind:'monster',d:distance(monster,attacker)})),
-      ...camps.filter(c=>!c.cleared&&distance(c,attacker)<72).map(camp=>({...camp,kind:'camp',d:distance(camp,attacker)+8}))];
+      ...camps.filter(c=>!c.hidden&&!c.cleared&&distance(c,attacker)<72).map(camp=>({...camp,kind:'camp',d:distance(camp,attacker)+8}))];
     return choices.sort((a,b)=>a.d-b.d)[0]||null;
   }
-  function hint(attacker=hero){const selected=target(attacker);return selected?'Space · '+selected.name+' · '+selected.hp+'/'+selected.maxHp:null;}
+  function hint(attacker=hero){const selected=target(attacker);return selected?.kind==='camp'?'Attack · Break '+selected.name:null;}
   function hud(ctx,camera){
-    if(area?.kind!=='road'||area.safe===true)return;
+    if(!activeArea())return;
     ctx.save();ctx.textAlign='left';ctx.font='8px monospace';
     for(const monster of monsters)if(monster.hp<monster.maxHp||distance(monster,hero)<55){
       const profile=monster.profile,frame=framesFor(profile)[0];
@@ -627,11 +705,6 @@
       const x=Math.round(monster.x-camera.x)-9,y=Math.round(monster.y-camera.y-height)-5;
       if(x<-18||x>384||y<-4||y>256)continue;
       ctx.fillStyle='#17352de8';ctx.fillRect(x-1,y-1,20,5);ctx.fillStyle='#cd7160';ctx.fillRect(x,y,18*monster.hp/monster.maxHp,3);
-    }
-    const selected=target();
-    if(selected){
-      ctx.fillStyle='#17372de8';ctx.fillRect(8,235,Math.min(366,selected.name.length*5+112),15);
-      ctx.fillStyle='#f4e8c1';ctx.fillText(selected.name+'  '+selected.hp+'/'+selected.maxHp+'  SPACE · KATANA',13,245);
     }
     for(const effect of effects){
       const x=Math.round(effect.x-camera.x),y=Math.round(effect.y-camera.y-Math.max(0,1-effect.life/.65)*8);
@@ -641,11 +714,11 @@
   }
   function snapshot(){
     return {camps:camps.map(({id,key,hp,cleared,spawned,totalSpawns,maxAlive})=>({id,key,hp,cleared,spawned,totalSpawns,maxAlive})),
-      monsters:monsters.map(({id,campKey,x,y,hp,maxHp,type,name,attackState,attackKind,attackTimer,attackData,bound,stun,slow,slowTime,burning,frozen})=>({id,campKey,x,y,hp,maxHp,type,name,attackState,attackKind,
-        attackAim:attackData?{...attackData.aim}:null,warningRemaining:attackState==='windup'?attackTimer:0,bound,stun,slow:slow||0,slowTime:slowTime||0,burn:burning?.remaining||0,frozen:frozen||0})),
+      monsters:monsters.map(({id,campKey,x,y,hp,maxHp,type,name,attackState,attackKind,attackTimer,attackData,bound,stun,slow,slowTime,burning,frozen,poise,poiseMax,boss,phaseTwo})=>({id,campKey,x,y,hp,maxHp,type,name,attackState,attackKind,
+        attackAim:attackData?{...attackData.aim}:null,warningRemaining:attackState==='windup'?attackTimer:0,bound,stun,slow:slow||0,slowTime:slowTime||0,burn:burning?.remaining||0,frozen:frozen||0,poise,poiseMax,boss,phaseTwo})),
       missiles:missiles.map(({id,spellId,x,y,leg,travelled,range})=>({id,spellId,x,y,leg,travelled,range})),
       projectiles:missiles.map(({id,spellId,x,y,leg,travelled,range})=>({id,spellId,x,y,leg,travelled,range})),
       zones:zones.map(({id,spellId,x,y,age,duration,triggered,shape})=>({id,spellId,x,y,age,duration,triggered,shape})),invulnerable,target:target()};
   }
-  global.BloomCombat={configure,enter,update,actors,draw,drawGround,drawEffects,swing,cast,hud,hint,snapshot,footprint,blockingCamp,isCleared,hurt:()=>invulnerable>0};
+  global.BloomCombat={configure,enter,update,actors,draw,drawGround,drawEffects,swing,cast,hud,hint,snapshot,target,footprint,blockingCamp,isCleared,reconcileCamps,hurt:()=>invulnerable>0};
 })(window);

@@ -58,4 +58,15 @@ for(const id of['combat-slot-0','combat-slot-1','combat-slot-2','combat-slot-3',
 assert.match(html,/<button[^>]*id="touchSwing"[^>]*data-key=" "[^>]*data-touch-action=" "/);
 assert(html.indexOf('src="spell-catalog.js')<html.indexOf('src="progression.js'));assert(html.indexOf('src="progression.js')<html.indexOf('src="combat-ui.js'));assert(html.indexOf('src="combat-ui.js')<html.indexOf('src="adventure.js'));
 const css=fs.readFileSync(path.join(root,'combat-ui.css'),'utf8');assert.match(css,/repeat\(5,minmax\(44px,1fr\)\)/,'all five mobile slots retain44px targets');assert.match(css,/\.spell-search input\{font-size:16px/,'mobile search avoids Safari focus zoom');assert.match(css,/\.skill-equip button\{flex:0 0 44px;min-width:44px;min-height:44px\}/,'equip targets wrap with44px minimum width');
+// A stationary HUD must not repeatedly request DOM changes. Count attempted
+// assignments as well as attribute/class/style calls, not merely final values.
+let writes=0;
+for(const element of nodes.values()){
+  for(const key of['textContent','hidden','disabled','innerHTML','title']){let value=element[key];Object.defineProperty(element,key,{get:()=>value,set:next=>{writes++;value=next;},configurable:true});}
+  const setAttribute=element.setAttribute.bind(element);element.setAttribute=(...args)=>{writes++;return setAttribute(...args);};
+  const toggle=element.classList.toggle;element.classList.toggle=(...args)=>{writes++;return toggle(...args);};
+  element.style=new Proxy(element.style,{set(target,key,value){writes++;target[key]=value;return true;}});
+}
+ui.update();writes=0;for(let i=0;i<180;i++)ui.update();assert.equal(writes,0,'unchanged HUD performs zero DOM write attempts over180updates');
+combat={...combat,stamina:43.2,target:{name:'Test goblin',hp:1,maxHp:4}};ui.update();assert(writes>0,'changed combat values still update HUD');assert.equal($('stamina-value').textContent,'44 / 100');assert.equal($('enemy-fill').style.width,'25.0%');
 console.log('PASS: 20-spell/26-node browser, five schools/search, real learn/rank upgrades and stat previews, five-slot equip/cast/cooldowns, respec/XP, modal editing/focus/pause guards and responsive fullscreen controls.');

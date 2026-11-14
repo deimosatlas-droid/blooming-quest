@@ -10,10 +10,15 @@
   const maxStamina=()=>mods().maxStamina||100;
   const canAct=()=>options.canAct?Boolean(options.canAct()):true;
   const face=()=>VECTORS[hero()?.face]||VECTORS.down;
-  function tell(text){feedback=text;feedbackAge=1.3;options.onMessage?.(text);}
+  function tell(text){feedback=text;feedbackAge=1.3;options.onMessage?.(text);options.onFeedback?.({kind:/stamina|breath/i.test(text)?'stamina':/parry/i.test(text)?'parry':/guard broken/i.test(text)?'guard-break':/recover|learn and equip/i.test(text)?'unavailable':'ability',text});}
   function configure(config={}){options=config;stamina=Math.min(stamina,maxStamina());}
-  function reset(config={}){guarding=false;guardAge=0;guardLock=0;dodge=null;dodgeCooldown=0;haste=0;ward=0;wardCharges=0;effects=[];regenDelay=0;feedback='';feedbackAge=0;casting=null;queued=null;if(config.refill)stamina=maxStamina();}
-  function release(){guarding=false;guardAge=0;dodge=null;casting=null;queued=null;}
+  function cancelUnreleased(refund=true){
+    const cancelled=casting;
+    if(cancelled&&!cancelled.released&&refund){stamina=Math.min(maxStamina(),stamina+cancelled.spell.stamina);cooldowns[cancelled.spell.id]=0;regenDelay=0;}
+    casting=null;queued=null;return Boolean(cancelled&&!cancelled.released);
+  }
+  function reset(config={}){cancelUnreleased();guarding=false;guardAge=0;guardLock=0;dodge=null;dodgeCooldown=0;haste=0;ward=0;wardCharges=0;effects=[];regenDelay=0;feedback='';feedbackAge=0;if(config.refill)stamina=maxStamina();}
+  function release(config={}){const refunded=cancelUnreleased(config.refund!==false);guarding=false;guardAge=0;dodge=null;if(refunded){feedback='Unreleased spell cancelled · stamina returned';feedbackAge=1.3;}}
   function spend(amount,quiet=false){
     if(stamina+1e-8<amount){if(!quiet)tell('Catch your breath—stamina is too low.');return false;}
     stamina=Math.max(0,stamina-amount);regenDelay=.65;return true;
@@ -37,7 +42,7 @@
     if(!canAct()||!Number.isInteger(slot)||slot<0||slot>=5)return false;
     const spell=resolvedSpell(slot);
     if(!spell){if(!fromBuffer)tell('Open Skills [K] to learn and equip a spell.');return false;}
-    if(dodge||casting||guarding||options.canSkill?.()===false){if(!fromBuffer)queued={slot,remaining:.24,name:spell.name};return false;}
+    if(dodge||casting||guarding||options.canSkill?.()===false){if(!fromBuffer)queued={slot,remaining:.65,name:spell.name};return false;}
     if(cooldowns[spell.id]>0){if(!fromBuffer)tell(spell.name+' is recovering.');return false;}
     if(!spend(spell.stamina))return false;
     options.onPrepareCast?.();queued=null;
@@ -65,8 +70,8 @@
   }
   function defend(attack={}){
     const h=hero();if(!h)return{blocked:false};
-    if(dodge&&dodge.age<=dodge.protect){tell('Dodged');return{blocked:true,damage:0};}
-    if(ward>0&&wardCharges>0){wardCharges--;if(!wardCharges)ward=0;tell('Ward absorbed the hit.');return{blocked:true,damage:0};}
+    if(dodge&&dodge.age<=dodge.protect){tell('Dodged');return{blocked:true,damage:0,kind:'dodge'};}
+    if(ward>0&&wardCharges>0){wardCharges--;if(!wardCharges)ward=0;tell('Ward absorbed the hit.');return{blocked:true,damage:0,kind:'ward'};}
     const vector=face(),dx=(attack.source?.x??h.x)-h.x,dy=(attack.source?.y??h.y)-h.y,length=Math.hypot(dx,dy);
     if(!guarding||length>0&&(dx*vector[0]+dy*vector[1])/length<.2)return{blocked:false};
     if(attack.parryable!==false&&guardAge<=.2&&stamina>=10){
@@ -75,7 +80,7 @@
     }
     if(attack.heavy||attack.parryable===false){tell('Heavy attack—dodge the warning!');return{blocked:false};}
     if(!spend(16,true)){guarding=false;guardLock=.65;tell('Guard broken—recover stamina.');return{blocked:false};}
-    effects.push({kind:'block',x:h.x,y:h.y,age:0,duration:.25,color:'#b4d5bd'});tell('Guarded');return{blocked:true,damage:0};
+    effects.push({kind:'block',x:h.x,y:h.y,age:0,duration:.25,color:'#b4d5bd'});tell('Guarded');return{blocked:true,damage:0,kind:'guard'};
   }
   function update(dt,input={}){
     dt=Math.max(0,Math.min(.1,Number(dt)||0));
@@ -99,7 +104,7 @@
         if(current.cast){const origin=current.cast.spec.origin,end={x:h.x,y:h.y};options.onCast?.('gale_step',{...current.cast.spec,end,range:Math.hypot(end.x-origin.x,end.y-origin.y)});options.onChange?.();}
       }
     }
-    const sprinting=Boolean(input.running&&input.moving&&!guarding&&!dodge&&!casting&&stamina>0);
+    const sprinting=Boolean(input.running&&input.moving&&!input.attacking&&!guarding&&!dodge&&!casting&&stamina>0);
     if(sprinting){stamina=Math.max(0,stamina-12*dt);regenDelay=.65;}
     else if(!regenDelay&&!dodge&&!casting&&!input.attacking)stamina=Math.min(maxStamina(),stamina+dt*(guarding?4:23));
     stamina=Math.min(maxStamina(),Math.max(0,stamina));

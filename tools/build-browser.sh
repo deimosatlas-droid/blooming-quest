@@ -5,31 +5,9 @@ set -eu
 for source in dist/*.js; do
   node --check "$source"
 done
-node tests/adventure.cjs
-node tests/hero-combat.cjs
-node tests/combat.cjs
-node tests/enemy-telegraphs.cjs
-node tests/progression.cjs
-node tests/spell-catalog.cjs
-node tests/spell-combat.cjs
-node tests/animation-fluidity.cjs
-node tests/motion.cjs
-node tests/abilities.cjs
-node tests/combat-ui.cjs
-node tests/traveller-ui.cjs
-node tests/traveller-integration.cjs
-node tests/system-access.cjs
-node tests/screen-layout.cjs
-node tests/fullscreen-lifecycle.cjs
-node tests/rosepetal-fences.cjs
-node tests/arpg-integration.cjs
-node tests/fluidity-integration.cjs
-node tests/collision-input.cjs
-node tests/scene-interactions.cjs
-node tests/forage.cjs
-node tests/world-map.cjs
-node tests/save-transfer.cjs
-node tests/offline.cjs
-node tests/mobile-controls.cjs
+for test in tests/*.cjs; do
+  node "$test"
+done
 python3 tools/export-standalone.py --prepare-only
 python3 tools/export-standalone.py --check
+python3 tests/standalone-export.py

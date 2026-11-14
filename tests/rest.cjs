@@ -18,21 +18,22 @@ const C={console,Math,JSON,Image:class{},Promise,URLSearchParams,fetch:()=>new P
 vm.createContext(C);vm.runInContext(fs.readFileSync(root+'adventure.js','utf8'),C);
 vm.runInContext('atlas=testAtlas;texture={};amaal={};playing=true;ready=true;',C);
 const cases=[
-  ['vegetable flower bed',garden,false],['garden bed fence',fence,false],['Hill Rest Inn exterior',inn,false],
+  ['vegetable flower bed',garden,false],['garden bed fence',fence,false,false],['Hill Rest Inn exterior',inn,false],
   ['ordinary bench',{...bench,label:'A place to sit'},false],['bedroom bed',bed,true],
   ['explicit rest flag',{...bench,label:'Shaded bench',rest:true},true],
   ['explicit rest action',{...bench,label:'Quiet seat',action:'rest'},true]
 ];
-for(const[label,source,shouldRest]of cases){
+for(const[label,source,shouldRest,shouldInspect=true]of cases){
   const object={...source,x:200,y:160};
   if(source.hit)object.hit=[source.hit[0]+200-source.x,source.hit[1]+160-source.y,...source.hit.slice(2)];
   C.fixture={id:'rest-regression',name:'Rest regression',kind:'interior',w:30,h:20,theme:'inside',
     tiles:Array.from({length:20},()=> 'g'.repeat(30)),objects:[object],portals:[],signs:[],exits:[],spawn:[200,184]};
+  C.testInspect=shouldInspect;
   vm.runInContext(`
     while(speaking){typed=fullText.length;nextLine()}
     maps={'rest-regression':fixture};enter('rest-regression');state.hp=2;state.food=0;
-    if(findInteraction()?.type!=='object')throw Error('fixture is inspected through real E interaction');
-    keyAction('e');
+    if((findInteraction()?.type==='object')!==testInspect)throw Error('only purposeful fixtures offer an inspection');
+    keyAction('e');if(!testInspect)save();
   `,C);
   assert.equal(vm.runInContext('state.hp',C),shouldRest?5:2,label+' health behavior');
   assert.equal(vm.runInContext('state.food',C),shouldRest?3:0,label+' noodle behavior');
@@ -40,4 +41,8 @@ for(const[label,source,shouldRest]of cases){
   const saved=JSON.parse(storage['blooming-world-v05']);
   assert.equal(saved.hp,shouldRest?5:2);assert.equal(saved.food,shouldRest?3:0);
 }
-console.log('PASS: current vegetable-bed, garden-fence and inn-exterior labels only inspect; ordinary benches do not heal; real sleeping beds and explicit rest actions restore health/noodles through E and preserve the existing save key.');
+C.fixture={id:'rest-regression',name:'Blocked bed',kind:'interior',w:30,h:20,theme:'inside',tiles:Array.from({length:20},()=> 'g'.repeat(30)),objects:[{sprite:'bed',label:'A sleeping bed',x:200,y:160,hit:[186,147,28,8]},{sprite:'bookshelf',x:200,y:175,hit:[192,169,16,5]}],portals:[],signs:[],exits:[],spawn:[200,184]};
+vm.runInContext("maps={'rest-regression':fixture};enter('rest-regression');state.hp=2;state.food=0;if(findInteraction())throw Error('bed must not be reached through furniture');keyAction('e')",C);
+assert.equal(vm.runInContext('state.hp',C),2,'an obstructed bed cannot heal through furniture');
+assert.equal(vm.runInContext('state.food',C),0,'an obstructed bed cannot refill supplies');
+console.log('PASS: vegetable-bed/inn labels inspect without healing, fences stay quiet, benches do not heal, unobstructed beds/explicit rest restore supplies, and furniture blocks resting through it.');

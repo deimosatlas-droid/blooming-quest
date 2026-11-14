@@ -38,14 +38,14 @@
   function migrate(state){
     if(!object(state))throw new TypeError('A game save is required for progression.');
     const saved=object(state.progression)?state.progression:{};
-    const p={...saved,xp:integer(saved.xp),skills:{},ranks:{},loadout:[null,null,null,null,null],claimedRewards:flags(saved.claimedRewards)};
+    const p={...saved,xp:integer(saved.xp),skills:{},ranks:{},loadout:[null,null,null,null,null],claimedRewards:flags(saved.claimedRewards),gifts:flags(saved.gifts)};
     for(const key of legacyCamps)if(isCleared(state,key)&&!p.claimedRewards['camp:'+key]){
       p.xp=Math.min(MAX_XP,p.xp+35);p.claimedRewards['camp:'+key]=true;
     }
     const known=object(saved.skills)?saved.skills:{},ranks=object(saved.ranks)?saved.ranks:{};
     let available=pointsFor(p.xp);
-    for(const node of definitions)if(own(known,node.id)&&known[node.id]===true&&available>=node.cost&&node.requires.every(id=>p.skills[id])){
-      p.skills[node.id]=true;if(node.kind==='active')p.ranks[node.id]=1;available-=node.cost;
+    for(const node of definitions)if((own(known,node.id)&&known[node.id]===true||p.gifts[node.id]&&node.kind==='active')&&(p.gifts[node.id]||available>=node.cost)&&node.requires.every(id=>p.skills[id])){
+      p.skills[node.id]=true;if(node.kind==='active')p.ranks[node.id]=1;if(!p.gifts[node.id])available-=node.cost;
     }
     // Preserve all affordable learned spells before allocating rank upgrades.
     for(const node of definitions)if(p.skills[node.id]&&node.kind==='active'){
@@ -63,7 +63,7 @@
     if(!known||known.xp!==p.xp||known.skills!==p.skills||known.ranks!==p.ranks||known.loadout!==p.loadout||known.claims!==p.claimedRewards)migrate(state);
     return state.progression;
   }
-  function spent(p){return definitions.reduce((sum,node)=>sum+(p.skills[node.id]?(node.kind==='active'?p.ranks[node.id]||1:node.cost):0),0);}
+  function spent(p){return definitions.reduce((sum,node)=>sum+(p.skills[node.id]?(node.kind==='active'?(p.ranks[node.id]||1)-(p.gifts[node.id]?1:0):node.cost):0),0);}
   function snapshot(state){
     const p=ready(state),level=levelFor(p.xp),next=LEVELS[level];
     return{level,xp:p.xp,xpIntoLevel:p.xp-LEVELS[level-1],xpForNext:next===undefined?0:next-LEVELS[level-1],points:pointsFor(p.xp)-spent(p),
@@ -99,7 +99,14 @@
   }
   function respec(state){
     const p=ready(state);p.skills={};p.ranks={};p.loadout=[null,null,null,null,null];mark(p);
+    if(Object.keys(p.gifts||{}).length)migrate(state);
     return{ok:true,message:'Spells reset. All earned skill points are available again.'};
+  }
+  function giftSpell(state,id){
+    const node=byId[id];if(!node||node.kind!=='active')return{ok:false,message:'That lesson is unavailable.'};
+    const p=ready(state),already=Boolean(p.skills[id]);p.gifts[id]=true;migrate(state);
+    const next=ready(state);if(!next.loadout.includes(id))next.loadout[next.loadout.indexOf(null)>=0?next.loadout.indexOf(null):4]=id;
+    return{ok:true,message:node.name+(already?' is now a gifted lesson.':' learned from the resonator. Equipped and ready.'),gift:true};
   }
   function grant(state,rewardId,xp){
     if(typeof rewardId!=='string'||!rewardId||rewardId.length>240||['__proto__','constructor','prototype'].includes(rewardId)||
@@ -123,5 +130,5 @@
     if(id==='stormy_gust'){result.gustHaste=p.skills.tailwind?.3:0;result.windWard=p.skills.wind_ward?1:0;}
     return result;
   }
-  global.BloomProgression=Object.freeze({definitions,branches,migrate,snapshot,learn,upgrade,equip,respec,grant,modifiers,spell});
+  global.BloomProgression=Object.freeze({definitions,branches,migrate,snapshot,learn,upgrade,equip,respec,grant,giftSpell,modifiers,spell});
 })(window);

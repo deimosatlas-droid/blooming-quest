@@ -38,6 +38,21 @@
     wind_ward:'<path d="M17 3 29 8v9c0 7-7 12-12 15C12 29 5 24 5 17V8Z"/><path d="M10 14h11c6 0 5-6 1-5M10 20h12m-12 5h7"/>'
   };
   let config={},configured=false,bound=false,opened=false,selected='petal_sweep',previousFocus=null,treeSignature='',school='all',query='';
+  const written=new WeakMap();
+  function memory(element){let values=written.get(element);if(!values){values=new Map();written.set(element,values);}return values;}
+  function property(element,key,value){if(element&&element[key]!==value)element[key]=value;}
+  function attribute(element,key,value){
+    if(!element)return;const next=String(value),values=memory(element),current=typeof element.getAttribute==='function'?element.getAttribute(key):values.get('attr:'+key);
+    if(current!==next){element.setAttribute?.(key,next);values.set('attr:'+key,next);}
+  }
+  function style(element,key,value){
+    if(!element?.style)return;const values=memory(element),custom=key.startsWith('--'),current=custom?(element.style.getPropertyValue?.(key)??values.get('style:'+key)):element.style[key];
+    if(current!==value){if(custom)element.style.setProperty?.(key,value);else element.style[key]=value;values.set('style:'+key,value);}
+  }
+  function toggle(element,key,value){
+    if(!element?.classList)return;const next=Boolean(value),values=memory(element),current=element.classList.contains?.(key)??values.get('class:'+key);
+    if(current!==next){element.classList.toggle?.(key,next);values.set('class:'+key,next);}
+  }
   const text=(id,value)=>{const element=$(id),next=String(value);if(element&&element.textContent!==next)element.textContent=next;};
   const clamp=(value,min,max)=>Math.max(min,Math.min(max,Number(value)||0));
   const icon=kind=>'<svg viewBox="0 0 34 36" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICON_PATHS[kind]||ICON_PATHS.katana)+'</svg>';
@@ -94,7 +109,7 @@
     doc.addEventListener?.('keydown',event=>{
       if(!opened)return;
       const target=event.target||doc.activeElement,editing=Boolean(target?.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(target?.tagName||''));
-      if(event.key==='Escape'||!editing&&event.key?.toLowerCase()==='k'){
+      if(event.key==='Escape'||!editing&&(global.BloomJourney?.mapKey?.(event.key)??event.key?.toLowerCase())==='k'){
         event.preventDefault();event.stopImmediatePropagation?.();event.stopPropagation?.();close();return;
       }
       // Native editing stays available; every event remains inside the grimoire.
@@ -122,32 +137,33 @@
     $('play-area')?.classList?.toggle('skills-open',false);config.onResume?.();update();
     previousFocus?.focus?.({preventScroll:true});previousFocus=null;return true;
   }
-  function meter(id,fill,value,maximum){const target=$(id),max=Math.max(1,Number(maximum)||1),amount=clamp(value,0,max);if(target){target.setAttribute?.('aria-valuemax',String(max));target.setAttribute?.('aria-valuenow',String(Math.round(amount*10)/10));}if($(fill))$(fill).style.width=(amount/max*100).toFixed(1)+'%';}
+  function meter(id,fill,value,maximum){const target=$(id),max=Math.max(1,Number(maximum)||1),amount=clamp(value,0,max);attribute(target,'aria-valuemax',max);attribute(target,'aria-valuenow',Math.round(amount*10)/10);style($(fill),'width',(amount/max*100).toFixed(1)+'%');}
   function update(){
     const current=model();if(!current)return;
     const{state,progression:p,combat:c,enabled}=current,nodes=definitions();
     text('combat-level',String(p.level).padStart(2,'0'));text('stamina-value',Math.ceil(clamp(c.stamina,0,c.maxStamina||100))+' / '+(c.maxStamina||100));
     meter('health-meter','health-fill',state.hp??5,5);meter('stamina-meter','stamina-fill',c.stamina??100,c.maxStamina||100);meter('xp-meter','xp-fill',p.level>=p.maxLevel?1:p.xpIntoLevel,p.level>=p.maxLevel?1:p.xpForNext||1);
     text('combat-state',(c.status|| (c.guarding?'GUARDING':c.dodging?'DODGING':'READY FOR THE ROAD'))+(c.queued?' · QUEUED':''));
-    if($('cast-display'))$('cast-display').hidden=!c.casting;
+    property($('cast-display'),'hidden',!c.casting);
     if(c.casting){const id=c.currentSpell?.id||c.currentSpell||c.casting?.id;const spell=nodes.find(node=>node.id===id);text('cast-spell-name',spell?.name||c.currentSpell?.name||'Casting');meter('cast-meter','cast-fill',c.castProgress||0,1);}
-    if($('enemy-target'))$('enemy-target').hidden=!c.target;
+    property($('enemy-target'),'hidden',!c.target);
     if(c.target){text('enemy-name',c.target.name);text('enemy-health',c.target.hp+' / '+c.target.maxHp);meter('enemy-meter','enemy-fill',c.target.hp,c.target.maxHp);}
-    doc?.querySelector?.('.combat-vitals')?.classList?.toggle('is-guarding',Boolean(c.guarding));
-    doc?.querySelector?.('.combat-vitals')?.classList?.toggle('is-exhausted',Number(c.stamina)<24);
-    for(const id of ['combat-dodge','combat-guard'])if($(id))$(id).disabled=!enabled||opened;
-    if($('open-skills'))$('open-skills').disabled=!enabled&&!opened;
-    const badge=$('skill-point-badge');if(badge){badge.hidden=!p.points;text('skill-point-badge',p.points);}
+    const vitals=doc?.querySelector?.('.combat-vitals');toggle(vitals,'is-guarding',Boolean(c.guarding));toggle(vitals,'is-exhausted',Number(c.stamina)<24);
+    for(const id of ['combat-dodge','combat-guard'])property($(id),'disabled',!enabled||opened);
+    property($('open-skills'),'disabled',!enabled&&!opened);
+    const badge=$('skill-point-badge');if(badge){property(badge,'hidden',!p.points);text('skill-point-badge',p.points);}
     for(let i=0;i<5;i++){
       const button=$('combat-slot-'+i);if(!button)continue;
       const id=p.loadout?.[i],node=nodes.find(node=>node.id===id),rank=node?rankOf(p,node):0,spell=node?resolved(state,node,rank):null,remaining=Math.max(0,Number(c.cooldowns?.[id])||0);
       text('slot-name-'+i,node?.name||'Empty slot');text('slot-cost-'+i,spell?(spell.stamina+' sta · R'+rank):'Learn a spell');
+      property(button,'title',node?node.name+' · rank '+rank+' · '+spell.stamina+' stamina':'Empty spell slot');
+      const key=button.querySelector?.('kbd');if(key){const label=global.BloomJourney?.prompt?.('slot'+(i+1))||String(i+1);if(key.textContent!==label)key.textContent=label;}
       const mark=$('slot-icon-'+i),kind=iconKind(node),signature=node?.id||'empty';
       if(mark&&mark.dataset?.icon!==signature){mark.innerHTML=node?icon(kind):'✧';if(mark.dataset)mark.dataset.icon=signature;}
-      button.style.setProperty?.('--skill-color',COLORS[node?.branch]||'#9cac8e');button.classList?.toggle('is-empty',!node);button.classList?.toggle('is-casting',Boolean(c.casting&&(c.currentSpell===id||c.currentSpell?.id===id)));
-      button.disabled=!enabled||opened||!node||remaining>0||Number(c.stamina)<spell.stamina;
-      button.setAttribute?.('aria-label',node?node.name+', rank '+rank+', '+spell.stamina+' stamina'+(remaining>0?', ready in '+Math.ceil(remaining)+' seconds':''):'Spell slot '+(i+1)+' is empty. Open Skills to learn an ability.');
-      const cooldown=$('slot-cooldown-'+i);if(cooldown){cooldown.hidden=remaining<=0;text('slot-cooldown-'+i,remaining>=1?Math.ceil(remaining):remaining.toFixed(1));}
+      style(button,'--skill-color',COLORS[node?.branch]||'#9cac8e');toggle(button,'is-empty',!node);toggle(button,'is-casting',Boolean(c.casting&&(c.currentSpell===id||c.currentSpell?.id===id)));
+      property(button,'disabled',!enabled||opened||!node||remaining>0||Number(c.stamina)<spell.stamina);
+      attribute(button,'aria-label',node?node.name+', rank '+rank+', '+spell.stamina+' stamina'+(remaining>0?', ready in '+Math.ceil(remaining)+' seconds':''):'Spell slot '+(i+1)+' is empty. Open Skills to learn an ability.');
+      const cooldown=$('slot-cooldown-'+i);if(cooldown){property(cooldown,'hidden',remaining<=0);text('slot-cooldown-'+i,remaining>=1?Math.ceil(remaining):remaining.toFixed(1));}
     }
     if(opened){
       text('tree-level','Level '+p.level);text('tree-xp',p.level>=p.maxLevel?p.xp+' XP · maximum level':p.xpIntoLevel+' / '+p.xpForNext+' XP');

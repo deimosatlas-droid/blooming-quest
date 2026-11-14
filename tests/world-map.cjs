@@ -1,6 +1,7 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../dist'),world=JSON.parse(fs.readFileSync(path.join(root,'world.json')));
+const releaseVersion=fs.readFileSync(path.join(root,'index.html'),'utf8').match(/adventure\.js\?v=(\d+)/)[1];
 class Element{
  constructor(tag='div'){this.tagName=tag.toUpperCase();this.children=[];this.attributes={};this.dataset={};this.textContent='';this.hidden=false;this.disabled=false;this._classes=new Set();this.style={setProperty:(k,v)=>{this.style[k]=v;}};this.classList={add:k=>this._classes.add(k),remove:k=>this._classes.delete(k),contains:k=>this._classes.has(k),toggle:(k,on)=>{if(on===undefined)on=!this._classes.has(k);if(on)this._classes.add(k);else this._classes.delete(k);return on;}};}
  set className(value){this._classes=new Set(String(value).split(/\s+/).filter(Boolean));}get className(){return [...this._classes].join(' ');}
@@ -27,14 +28,14 @@ for(const town of world.towns){
  button.onfocus();assert.equal(map.getState().hoveredId,town.id,'keyboard focus has hover parity');button.onblur();
  button.onclick();assert.equal(map.getState().selectedId,town.id);assert.equal(pressed().length,1);assert.equal(elements.detailname.textContent,town.name);assert.equal(elements.travel.disabled,false,'every town unlocked');
  assert.equal(elements.detaillist.children.length,town.places.length);elements.travel.onclick();
- assert.equal(sandbox.location.href,'index.html?area='+town.id+'&devtravel=1&v=16');assert.equal(storage['blooming-world-v05'],originalSave,'fast travel preserves quest, inventory, health and camps');
+ assert.equal(sandbox.location.href,'index.html?area='+town.id+'&devtravel=1&v='+releaseVersion);assert.equal(storage['blooming-world-v05'],originalSave,'fast travel preserves quest, inventory, health and camps');
 }
 const destination=sandbox.location.href;assert.equal(map.choose('missing-town'),false);assert.equal(map.fastTravel('missing-town'),false);assert.equal(sandbox.location.href,destination);
 // A new visit restores selection, while an interior still places Amaal at its parent town.
 storage['blooming-world-v05']=JSON.stringify({...save,area:'rosepetal_0'});map.initialize(world);assert.match(elements['current-location'].getAttribute('aria-label'),/Rosepetal/);assert.equal(map.getState().selectedId,'moonblossom');
 elements['map-art'].onerror();assert(elements['map-shell'].classList.contains('image-error'));assert.match(elements['map-status'].textContent,/still choose/);assert.equal(map.fastTravel('seabloom'),true,'town travel works even if artwork fails');
-let prevented=false;events.keydown({key:'m',target:{tagName:'BODY'},preventDefault(){prevented=true;}});assert(prevented);assert.equal(sandbox.location.href,'index.html?devtravel=1&v=16');
-const html=fs.readFileSync(path.join(root,'world-map.html'),'utf8');assert.match(html,/world\.js\?v=16/);assert.match(html,/assets\/map-a-world\.png\?v=16/);assert(!html.includes('3 days')&&!html.includes('1 day'),'no invented journey-time copy');
+let prevented=false;events.keydown({key:'m',target:{tagName:'BODY'},preventDefault(){prevented=true;}});assert(prevented);assert.equal(sandbox.location.href,'index.html?devtravel=1&v='+releaseVersion);
+const html=fs.readFileSync(path.join(root,'world-map.html'),'utf8');assert.match(html,new RegExp('world\\.js\\?v='+releaseVersion));assert.match(html,new RegExp('assets/map-a-world\\.png\\?v='+releaseVersion));assert(!html.includes('3 days')&&!html.includes('1 day'),'no invented journey-time copy');
 const home=world.towns.find(town=>town.id==='rosepetal');assert.equal(home.locationType,'home-estate');assert.equal(home.residents,0,'the private estate has no village residents');
 assert.equal(world.towns.filter(town=>town.locationType==='town').length,7,'seven towns accompany the home estate');assert.match(html,/Seven towns, a home estate/);
 map.choose('rosepetal');assert.match(elements.detailtype.textContent,/HOME/);assert.match(elements['safe-label'].textContent,/home estate/);assert.match(elements['town-hotspots'].children.find(button=>button.dataset.town==='rosepetal').getAttribute('aria-label'),/home estate/);

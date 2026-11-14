@@ -2,11 +2,18 @@
   "id": "./",
   "name": "Blooming Quest — Amaal’s Journey",
   "short_name": "Blooming Quest",
-  "description": "Explore Amaal’s flower-filled world, home estate and long woodland roads.",
+  "description": "Amaal’s independent pixel-art journey: Rosepetal, seven towns, spells and the Briarvault mystery.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#101d18",
   "theme_color": "#163326",
-  "icons": [{"src":"app-icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]
+  "icons": [
+    {
+      "src": "app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
 }

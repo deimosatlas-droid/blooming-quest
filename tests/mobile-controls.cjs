@@ -33,6 +33,28 @@ assert(!down(right,30,{pointerType:'mouse',button:2}).defaultPrevented,'right-cl
 const originalCapture=right.setPointerCapture;right.setPointerCapture=()=>{throw Error('capture interrupted');};down(right,31);win.emit('pointercancel',{pointerId:31});assert(!held.arrowright,'capture failure still has a working cancellation path');right.setPointerCapture=originalCapture;
 down(right,40);control.destroy();assert(!held.arrowright);for(const target of[doc,win,...buttons])for(const handlers of target.events.values())assert.equal(handlers.size,0,'destroy removes every registered hold listener');down(right,41);assert(!held.arrowright,'destroyed controls no longer change game input');
 
+function singleThumbPad(){
+ const document=new Target(),window=new Target(),pad=new Target('touch-pad'),arrows=['arrowup','arrowdown','arrowleft','arrowright'].map(key=>new Target(key,key)),attack=new Target('attack',' '),guard=new Target('guard','c'),all=[...arrows,attack,guard],values={};
+ pad.getBoundingClientRect=()=>({left:20,top:30,width:140,height:140});for(const arrow of arrows){const original=arrow.closest.bind(arrow);arrow.closest=selector=>selector==='.touch-pad'?pad:original(selector);}
+ document.querySelectorAll=()=>all;const controller=mobile.bindHolds({root:document,win:window,onHeld:(key,value)=>values[key]=value});
+ const move=(x,y,id=301)=>pad.emit('pointermove',{pointerId:id,clientX:20+x,clientY:30+y});
+ pad.emit('pointerdown',{pointerId:301,pointerType:'touch',button:0,clientX:150,clientY:40});
+ assert(values.arrowright&&values.arrowup,'one thumb can start diagonally in an empty corner of the pad');assert.equal(controller.snapshot().pointers,1);assert.equal(pad.captured,301,'the complete pad owns pointer capture');
+ const sectors=[[70,6,['arrowup']],[130,10,['arrowup','arrowright']],[134,70,['arrowright']],[130,130,['arrowdown','arrowright']],[70,134,['arrowdown']],[10,130,['arrowdown','arrowleft']],[6,70,['arrowleft']],[10,10,['arrowup','arrowleft']]];
+ for(const[x,y,expected]of sectors){move(x,y);assert.deepEqual(Object.keys(values).filter(key=>values[key]).sort(),expected.sort(),'thumb sector '+x+','+y+' holds exactly the expected axes');}
+ move(70,70);assert.equal(controller.snapshot().held.length,0,'resting the thumb in the centre deadzone stops movement without lifting');assert.equal(controller.snapshot().pointers,1);
+ move(130,10);down(attack,302);down(guard,303);assert(values.arrowup&&values.arrowright&&values[' ']&&values.c,'one-thumb diagonals coexist with separately held attack and guard');
+ move(180,70);assert(!values.arrowup&&!values.arrowright&&values[' ']&&values.c,'leaving the pad releases movement without canceling combat fingers');move(130,10);assert(values.arrowup&&values.arrowright,'returning inside capture resumes movement');
+ pad.emit('pointerleave',{pointerId:301});assert(!values.arrowup&&!values.arrowright,'a boundary event also clears the thumb axes');move(130,10);pad.emit('pointercancel',{pointerId:301});assert(!values.arrowup&&!values.arrowright&&values[' ']&&values.c,'canceling a diagonal releases both axes only');upAt(attack,302);upAt(guard,303);
+ const up=arrows[0];down(up,304,{clientX:150,clientY:40});up.emit('keydown',{key:'Enter',repeat:false});assert(values.arrowup&&values.arrowright);pad.emit('lostpointercapture',{pointerId:304});assert(values.arrowup&&!values.arrowright,'accessible keyboard hold survives release of an overlapping diagonal thumb');up.emit('keyup',{key:'Enter'});assert(!values.arrowup);
+ pad.setPointerCapture=()=>{throw Error('capture interrupted');};pad.emit('pointerdown',{pointerId:305,pointerType:'touch',button:0,clientX:150,clientY:40});window.emit('pointermove',{pointerId:305,clientX:400,clientY:40});assert(!values.arrowup&&!values.arrowright,'window movement releases both axes when capture fails outside the pad');window.emit('pointercancel',{pointerId:305});assert.equal(controller.snapshot().pointers,0);
+ pad.emit('pointerdown',{pointerId:306,pointerType:'touch',button:0,clientX:150,clientY:40});controller.reset();move(130,10,306);assert.equal(controller.snapshot().held.length,0,'a reset for scene/menu changes cannot resurrect a captured diagonal');
+ for(const arrow of arrows)arrow.disabled=true;pad.emit('pointerdown',{pointerId:307,pointerType:'touch',button:0,clientX:150,clientY:40});assert.equal(controller.snapshot().pointers,0,'disabled gameplay arrows also disable empty pad corners');for(const arrow of arrows)arrow.disabled=false;
+ controller.destroy();for(const target of[document,window,pad,...all])for(const handlers of target.events.values())assert.equal(handlers.size,0,'destroy removes pad and fallback listeners');
+ let guarded;guarded=mobile.bindHolds({root:document,win:window,onHeld:()=>guarded.reset()});pad.emit('pointerdown',{pointerId:308,pointerType:'touch',button:0,clientX:150,clientY:40});assert.equal(guarded.snapshot().held.length,0,'a synchronous pause rejection cannot leave the second diagonal axis stuck');assert.equal(guarded.snapshot().pointers,0);guarded.destroy();
+}
+singleThumbPad();
+
 const settle=async()=>{for(let tick=0;tick<8;tick++)await Promise.resolve();};
 async function viewports(){
  const d=new Target(),w=new Target(),container=new Target('play-area'),button=new Target('fullscreen'),canvas=new Target('game'),pad=new Target('touch');container.children=[canvas,pad];d.body={style:{overflow:'auto'}};d.fullscreenEnabled=false;d.fullscreenElement=null;
@@ -47,7 +69,7 @@ async function viewports(){
  nativeContainer.requestFullscreen=async()=>{throw Error('fullscreen denied');};await native.toggle();assert(native.expanded(),'a rejected fullscreen API falls back to browser expansion');await native.exit();assert(!native.expanded());
  assert.equal(mobile.bindViewport({container:null,button:nativeButton,doc:nativeDoc,win:nativeWin}),null,'clients without viewport controls remain supported');
 }
-function actualGame(full=false){
+function actualGame(full=false,thumb=false){
  const html=fs.readFileSync(path.join(root,'index.html'),'utf8'),elements=new Map(),buttons=[],storage=new Map();
  const gradient={addColorStop(){}},ctx=new Proxy({createRadialGradient:()=>gradient},{get:(object,key)=>object[key]??(()=>{})});
  function element(id=''){const node=new Target(id);node.getContext=()=>ctx;return node;}
@@ -60,10 +82,17 @@ function actualGame(full=false){
  const document=new Target(),window=new Target(),location={href:'',search:''};document.body=element();document.body.style.overflow='';document.hidden=false;document.visibilityState='visible';
  document.getElementById=id=>{if(!elements.has(id))elements.set(id,element(id));return elements.get(id);};document.createElement=()=>element();document.elementFromPoint=()=>null;
  document.querySelectorAll=selector=>buttons.filter(button=>selector.includes('[data-key]')&&button.dataset.key||selector.includes('[data-touch-action]')&&button.dataset.touchAction!==undefined);
+ if(thumb){const pad=element('thumb-pad');pad.getBoundingClientRect=()=>({left:0,top:0,width:140,height:140});elements.set('thumb-pad',pad);for(const button of buttons)if(/^arrow/.test(button.dataset.key||'')){const original=button.closest.bind(button);button.closest=selector=>selector==='.touch-pad'?pad:original(selector);}}
  const C={console,Math,JSON,Image:class{},Promise,URLSearchParams,document,window,location,fetch:()=>new Promise(()=>{}),requestAnimationFrame(){},setInterval(){},localStorage:{getItem:key=>storage.get(key)??null,setItem:(key,value)=>storage.set(key,value)},fixture:{id:'control-test',name:'Touch test estate',kind:'home',safe:true,theme:'rose',w:40,h:24,tiles:Array(24).fill('g'.repeat(40)),spawn:[160,160],objects:[],portals:[],signs:[{x:160,y:160,speaker:'Touch test sign',text:'An actual interaction.'}],exits:[]}};
  vm.createContext(C);for(const file of(full?['spell-catalog.js','progression.js','motion.js','abilities.js','hero-animation.js','combat.js','mobile-controls.js','adventure.js']:['hero-animation.js','combat.js','mobile-controls.js','adventure.js']))vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),C,{filename:file});
  const evaluate=source=>vm.runInContext(source,C);evaluate('maps={"control-test":fixture,rosepetal:fixture};atlas={};texture={};amaal={};ready=true;playing=true;enter("control-test")');
  return{C,document,window,elements,buttons,storage,evaluate,reset:()=>evaluate('playing=true;enter("control-test")'),direction:key=>buttons.find(button=>button.dataset.key===key)};
+}
+function singleThumbGameIntegration(){
+ const game=actualGame(false,true),right=game.direction('arrowright'),pad=game.elements.get('thumb-pad'),{evaluate}=game;
+ down(right,310,{clientX:130,clientY:10});evaluate('update(.1)');const position=evaluate('({x:hero.x,y:hero.y})');assert(position.x>160&&position.y<160,'a single thumb moves the actual hero diagonally');assert(Math.abs(Math.hypot(position.x-160,position.y-160)-6.2)<1e-8,'actual diagonal walking is normalized to cardinal speed');
+ pad.emit('pointercancel',{pointerId:310});const stopped=evaluate('({x:hero.x,y:hero.y})');evaluate('update(.1)');assert.deepEqual(evaluate('({x:hero.x,y:hero.y})'),stopped,'cancel stops both actual movement axes');
+ down(right,311,{clientX:130,clientY:10});evaluate('say([["Amaal","Pause for a moment."]])');pad.emit('pointermove',{pointerId:311,clientX:10,clientY:130});assert.equal(evaluate('touchControls.snapshot().held.length'),0,'opening actual dialogue clears the diagonal controller');assert.equal(evaluate('held("arrowup")||held("arrowright")||held("arrowleft")||held("arrowdown")'),false,'a paused diagonal cannot leak movement keys');
 }
 async function gameIntegration(){
  const game=actualGame(),{C,document,window,elements,evaluate,reset,direction}=game,point=()=>evaluate('({x:hero.x,y:hero.y})'),close=(actual,expected,label)=>assert(Math.abs(actual-expected)<1e-8,label+': expected '+expected+', got '+actual);
@@ -101,4 +130,4 @@ function responsiveMarkup(){
  assert(wrapper,'a whole-game viewport wrapper exists');for(const id of['screen','game','touchRun','touchInteract','touchSwing','touchHeal','touchMap','touchJournal','fullscreen'])assert(wrapper.includes('id="'+id+'"'),id+' stays inside the fullscreen wrapper');
  assert(html.indexOf('src="mobile-controls.js')<html.indexOf('src="adventure.js'),'pointer module loads before gameplay integration');assert.match(html,/viewport-fit=cover/);assert.match(html,/safe-area-inset-(?:top|bottom)/,'expanded play accounts for phone notches and home indicators');assert.match(html,/\.touch button\{[^}]*min-height:44px[^}]*min-width:44px/,'gameplay touch targets meet 44px minimum dimensions');assert.match(html,/\.touch\{[^}]*touch-action:none[^}]*user-select:none/,'touch controls suppress browser panning and text selection');assert.match(html,/any-pointer:coarse/,'touch controls are available on large touch tablets and laptops');assert.match(html,/\.dialog\{[^}]*overflow:auto/,'long dialogue remains scrollable on phones');assert.match(html,/\.hint\{[^}]*white-space:normal/,'interaction hints wrap on narrow screens');assert.match(html,/100dvh/,'expanded mode follows the mobile browser viewport');
 }
-Promise.resolve().then(viewports).then(gameIntegration).then(heldCombatIntegration).then(responsiveMarkup).then(()=>console.log('PASS: multi-pointer/reference-counted holds, cancellation/blur/visibility cleanup and teardown; native/Safari fullscreen; actual game Run/diagonals, keyboard coexistence, scene resets, Heal/Map/Journal/Interact/Attack, ferry/title guards and responsive touch markup.')).catch(error=>{console.error(error);process.exitCode=1;});
+Promise.resolve().then(viewports).then(gameIntegration).then(singleThumbGameIntegration).then(heldCombatIntegration).then(responsiveMarkup).then(()=>console.log('PASS: single-thumb eight-way pad/deadzone, normalized real-game diagonals, multi-pointer/reference-counted holds, cancellation/blur/visibility cleanup and teardown; native/Safari fullscreen; keyboard coexistence, scene/menu resets, Heal/Map/Journal/Interact/Attack, ferry/title guards and responsive touch markup.')).catch(error=>{console.error(error);process.exitCode=1;});
