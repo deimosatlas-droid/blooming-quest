@@ -1,0 +1,127 @@
+/* The game is the whole viewport. Native fullscreen is an optional browser enhancement. */
+html:has(body.play-screen){width:100%;height:100%;overflow:hidden;background:#0d1a13}
+body.play-screen{position:fixed;inset:0;width:100%;height:100%;margin:0;padding:0;overflow:hidden;overscroll-behavior:none;touch-action:auto;background:#0d1a13}
+body.play-screen .game-masthead,body.play-screen .intro,body.play-screen .journey-notes,body.play-screen main>.note{display:none!important}
+body.play-screen main,body.play-screen .layout{position:static;width:100%;height:100%;max-width:none;margin:0;padding:0;display:block}
+body.play-screen #play-area,body.play-screen #play-area.is-expanded,body.play-screen #play-area:fullscreen{--edge:8px;position:fixed;inset:0;z-index:1;display:block;width:100%;height:100vh;height:100dvh;max-height:none;padding:0;margin:0;overflow:hidden;touch-action:auto;border:0;outline:0;gap:0;background:repeating-linear-gradient(5deg,#b49a5610 0 1px,transparent 1px 9px),radial-gradient(ellipse at center,#334b31,#101e16 77%);isolation:isolate}
+body.play-screen #play-area:before,body.play-screen #play-area:after{content:'';position:absolute;top:0;bottom:0;width:max(0px,calc((100vw - 150dvh)/2));pointer-events:none;background:linear-gradient(90deg,#2b3521aa,#19291a99);z-index:0}
+body.play-screen #play-area:before{left:0;border-right:1px solid #b29b5b44}body.play-screen #play-area:after{right:0;border-left:1px solid #b29b5b44}
+body.play-screen #play-area .screen{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1;display:block;width:min(100vw,150vh);width:min(100vw,150dvh);height:auto;max-width:100%;max-height:100%;aspect-ratio:3/2;flex:none;margin:0;border:0;outline:0;border-radius:0;box-shadow:0 0 0 1px #a78d4b55,0 0 45px #0005;overflow:hidden;background:#182c20}
+body.play-screen #play-area .screen:before,body.play-screen #play-area .screen:after{display:none}
+body.play-screen #game{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;touch-action:none}
+/* Compact resource and location labels stay away from the centre of the world. */
+body.play-screen #play-area .combat-vitals{left:8px!important;top:8px!important;width:128px;max-width:36%;padding:4px 7px!important;border-width:2px!important;pointer-events:none}
+body.play-screen #play-area .vitals-portrait,body.play-screen #play-area .vitals-heading b,body.play-screen #play-area .health-meter,body.play-screen #play-area .combat-vitals small{display:none!important}
+body.play-screen #play-area .vitals-heading{gap:4px;min-height:20px}.play-screen #play-area .combat-vitals .hearts{font-size:13px!important;letter-spacing:1px;line-height:1.15!important}
+body.play-screen #play-area .level-crest{width:20px;height:20px;align-self:center;font-size:10px;border-width:1px;flex:none}
+body.play-screen #play-area .resource-label{font-size:6px;margin:3px 0 2px;line-height:1.1;letter-spacing:.3px}
+body.play-screen #play-area .resource-meter{height:5px;border-width:1px}
+body.play-screen #play-area .xp-meter{height:2px;margin-top:3px}
+body.play-screen #play-area .place{left:8px;right:auto;top:66px;max-width:155px;padding:4px 7px;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-width:1px;pointer-events:none}
+body.play-screen #play-area .dayclock{left:8px;right:auto;top:90px;max-width:170px;font-size:9px;padding:3px 5px;pointer-events:none}
+body.play-screen #play-area .quick{display:none}
+body.play-screen #play-area .cast-display{top:74px;bottom:auto;left:50%;width:118px;min-width:0;max-width:34%;padding:4px 6px;border-width:1px;transform:translateX(-50%);pointer-events:none}
+body.play-screen #play-area .cast-display>span{font-size:9px;margin-bottom:3px}
+body.play-screen #play-area .enemy-target{left:50%;right:auto;top:112px;width:118px;max-width:34%;transform:translateX(-50%);padding:4px 6px;border-width:1px}
+body.play-screen #play-area .enemy-target b{font-size:9px;max-width:76px}.play-screen #play-area .enemy-target>span{font-size:7px}
+body.play-screen #play-area .hint{top:142px;bottom:auto;left:50%;max-width:42%;min-width:0;transform:translateX(-50%);font-size:10px;line-height:1.3;padding:5px 7px;border-width:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;pointer-events:none}
+body.play-screen #play-area .hint:not([hidden])~.dialog{z-index:15}
+/* All travelling objects are on the game, with one always-reachable system menu. */
+body.play-screen #play-area .traveller-kit{position:absolute;z-index:20;right:calc(env(safe-area-inset-right) + 110px);top:calc(env(safe-area-inset-top) + 8px);display:flex;align-items:center;width:206px;height:58px;min-height:0;max-width:none;margin:0;padding:3px 4px;gap:5px;grid-column:auto;grid-row:auto;border-width:2px;border-radius:3px;background:repeating-linear-gradient(4deg,#b8a35f10 0 1px,transparent 1px 7px),#34291de0;box-shadow:0 2px 6px #0004}
+body.play-screen #play-area .kit-caption,body.play-screen #play-area .kit-rivet,body.play-screen #play-area .traveller-kit:before,body.play-screen #play-area .traveller-kit:after{display:none}
+body.play-screen #play-area .kit-objects{display:flex;align-items:center;justify-content:space-between;flex:none;width:146px;max-width:none;gap:4px}
+body.play-screen #play-area .kit-object,body.play-screen #play-area .skill-book.kit-object{display:flex;flex:none;flex-direction:column;align-items:center;justify-content:center;gap:0;width:46px;min-width:46px;max-width:46px;height:48px;min-height:48px;margin:0;padding:0;border:0}
+body.play-screen #play-area .kit-object img{width:36px;height:35px;object-fit:contain;filter:drop-shadow(1px 2px 1px #100a0866)}
+body.play-screen #play-area .kit-object>span,body.play-screen #play-area .skill-book.kit-object>span:last-of-type{font-size:9px;line-height:1.1;min-width:44px;padding:2px 2px 1px;gap:0}
+body.play-screen #play-area .kit-object kbd{display:none}
+body.play-screen #play-area .kit-object>b#skill-point-badge{top:0;right:0;min-width:15px;height:15px;border-width:1px;font-size:9px}
+body.play-screen #play-area .kit-small-tools{display:flex;flex:none;flex-direction:row;align-items:center;width:44px;min-width:44px;gap:0;margin:0}
+body.play-screen #play-area #kit-journal{width:44px;min-width:44px;height:44px;min-height:44px;padding:3px}
+body.play-screen #play-area .kit-small-tools svg{width:24px;height:28px}
+body.play-screen #play-area .kit-small-tools span,body.play-screen #play-area #kit-options{display:none}
+body.play-screen #play-area .system-button,body.play-screen #play-area #fullscreen{position:absolute;z-index:45;right:calc(env(safe-area-inset-right) + 8px);top:calc(env(safe-area-inset-top) + 8px);width:44px;height:44px;min-width:44px;min-height:44px;display:grid;place-items:center;padding:2px;border:3px double #b89d61;border-radius:5px;background:#322d20e8;box-shadow:0 2px 6px #0005;color:#ead5a0;font:25px Georgia;touch-action:manipulation}
+body.play-screen #play-area #fullscreen{right:calc(env(safe-area-inset-right) + 58px);font-size:0}
+body.play-screen #play-area #fullscreen:before{content:'⤢';font:26px Georgia;color:#ead5a0}
+body.play-screen #play-area .system-notice{position:absolute;z-index:44;right:calc(env(safe-area-inset-right) + 8px);top:calc(env(safe-area-inset-top) + 72px);max-width:160px;min-height:44px;padding:6px 10px;background:#e9d39e;color:#34452c;border:3px double #8f7345;font:12px Georgia}
+body.play-screen #play-area .system-notice[hidden]{display:none!important}
+/* The five spell runes never take a strip of height away from the map. */
+body.play-screen #play-area .combat-hotbar{position:absolute;z-index:18;left:50%;bottom:calc(env(safe-area-inset-bottom) + 8px);transform:translateX(-50%);display:block;width:326px;max-width:calc(100% - 24px);height:66px;min-height:0;max-height:none;margin:0;padding:4px;border:2px solid #a58c55;grid-column:auto;grid-row:auto;border-radius:4px;background:#2b2b1ad9;box-shadow:0 3px 8px #0005}
+body.play-screen #play-area .hotbar-defense{display:none}
+body.play-screen #play-area .skill-loadout{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;width:100%;height:100%}
+body.play-screen #play-area .skill-slot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:44px;min-height:44px;width:auto;height:100%;padding:4px 2px;border-width:1px;border-radius:11px 2px 11px 2px}
+body.play-screen #play-area .slot-icon{width:25px;height:25px;margin:0;flex:none}.play-screen #play-area .slot-icon svg{width:24px;height:24px}
+body.play-screen #play-area .slot-copy{display:flex;gap:0;text-align:center;align-items:center}.play-screen #play-area .slot-copy>b{font-size:9px;line-height:1.05;max-width:57px}.play-screen #play-area .slot-copy>small{display:none}
+body.play-screen #play-area .skill-slot>kbd{font-size:8px;top:2px;left:2px;padding:0 2px}
+body.play-screen #play-area .combat-help,body.play-screen #play-area .touch-caption{display:none}
+body.play-screen #play-area .toolbar{display:contents!important}
+body.play-screen #play-area .toolbar>span,body.play-screen #play-area #sound,body.play-screen #play-area #save{display:none}
+body.play-screen #play-area #status{position:absolute;z-index:17;left:50%;bottom:calc(env(safe-area-inset-bottom) + 80px);transform:translateX(-50%);width:max-content;max-width:min(520px,calc(100% - 320px));min-height:0;margin:0;padding:3px 7px;color:#e8dab4;background:#1c2a1dd6;border:1px solid #8b835153;border-radius:2px;font:10px Georgia;line-height:1.3;text-align:center;pointer-events:none}
+body.play-screen #play-area #status:empty{display:none}
+/* Save tools move, as one existing DOM node, into the paused Options page. */
+body.play-screen #play-area>.portable-tools{display:none!important}
+body.play-screen #play-area .traveller-body .portable-tools{display:block!important;margin:12px 18px 20px;padding:12px 15px;border:4px double #9e8552;background:#ded0a9;color:#3d4b31}
+body.play-screen #play-area .portable-tools summary{min-height:44px;display:flex;align-items:center;color:#455a35;font:15px Georgia;cursor:pointer}
+body.play-screen #play-area .portable-tools .portable-actions{display:flex;flex-wrap:wrap;gap:8px}.play-screen #play-area .portable-tools button{min-height:44px;font-size:12px}
+body.play-screen #play-area .portable-tools p{color:#5b6645;font-size:12px;line-height:1.6}
+/* Opening a book or a journal keeps the same screen and uses its own scroll area. */
+body.play-screen #play-area .skill-overlay,body.play-screen #play-area .traveller-overlay{position:absolute;inset:0;z-index:1000;display:grid;place-items:center;padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));overflow:hidden;touch-action:auto;overscroll-behavior:contain}
+body.play-screen #play-area .skill-overlay[hidden],body.play-screen #play-area .traveller-overlay[hidden]{display:none!important}
+body.play-screen #play-area .traveller-window{max-width:1040px;max-height:calc(100vh - max(6px,env(safe-area-inset-top)) - max(6px,env(safe-area-inset-bottom)));max-height:calc(100dvh - max(6px,env(safe-area-inset-top)) - max(6px,env(safe-area-inset-bottom)));margin:0;min-height:0}
+body.play-screen #play-area .traveller-body{min-height:0;flex:1 1 auto;overflow:auto;touch-action:pan-y;overscroll-behavior:contain}
+body.play-screen #play-area .skill-window-top{position:sticky;top:0;z-index:5}
+body.play-screen #play-area .skill-window{max-width:1120px;max-height:calc(100vh - max(6px,env(safe-area-inset-top)) - max(6px,env(safe-area-inset-bottom)));max-height:calc(100dvh - max(6px,env(safe-area-inset-top)) - max(6px,env(safe-area-inset-bottom)));margin:0;overflow:auto;touch-action:pan-y;overscroll-behavior:contain}
+body.play-screen #play-area .dialog{z-index:35;bottom:10px;max-height:calc(100% - 20px);overflow:auto;touch-action:pan-y}.play-screen #play-area .dialog button{min-height:44px;font-size:12px}
+body.play-screen #play-area .cover{z-index:40;align-items:center;overflow:auto;padding:20px;touch-action:pan-y}
+body.play-screen #play-area .cover h2{font-size:clamp(28px,6vw,45px)}
+body.play-screen #play-area .landscape-hint{display:none}
+body.play-screen #play-area:not(.is-playing) .traveller-kit,body.play-screen #play-area:not(.is-playing) .combat-hotbar,body.play-screen #play-area:not(.is-playing) .touch,body.play-screen #play-area:not(.is-playing) #status{visibility:hidden;pointer-events:none}
+body.play-screen #play-area.is-dialogue .traveller-kit,body.play-screen #play-area.is-dialogue .combat-hotbar,body.play-screen #play-area.is-dialogue .touch,body.play-screen #play-area.is-dialogue #status{visibility:hidden;pointer-events:none}
+body.play-screen #play-area.is-ferry .traveller-kit,body.play-screen #play-area.is-ferry .combat-hotbar,body.play-screen #play-area.is-ferry .touch{opacity:.3;pointer-events:none}
+@media(max-width:900px),(any-pointer:coarse){
+ body.play-screen #play-area .touch{display:contents;position:static;width:auto;max-width:none;margin:0;padding:0;touch-action:auto}
+ body.play-screen #play-area .touch-pad{position:absolute;z-index:22;left:calc(env(safe-area-inset-left) + 8px);bottom:calc(env(safe-area-inset-bottom) + 64px);display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,44px);gap:4px;width:140px;height:140px;touch-action:none}
+ body.play-screen #play-area .touch-actions{position:absolute;z-index:22;right:calc(env(safe-area-inset-right) + 8px);bottom:calc(env(safe-area-inset-bottom) + 64px);display:grid;grid-template-columns:repeat(2,46px);grid-template-rows:repeat(3,44px);gap:4px;width:96px;height:140px;touch-action:none}
+ body.play-screen #play-area .touch button{min-width:44px;min-height:44px;height:44px;padding:3px;font-size:10px;background:#263b2bdd;border-width:2px;opacity:.92}
+ body.play-screen #play-area .touch-pad button{font-size:21px}
+ body.play-screen #play-area #touchMap,body.play-screen #play-area #touchJournal{display:none}
+ body.play-screen #play-area .combat-hotbar{width:236px;height:48px;padding:0;border:0;background:none;box-shadow:none}
+ body.play-screen #play-area .skill-loadout{gap:4px}
+ body.play-screen #play-area .skill-slot{width:44px;min-width:44px;height:48px;min-height:48px;padding:3px 2px;gap:0}
+ body.play-screen #play-area .slot-icon{width:27px;height:27px}.play-screen #play-area .slot-icon svg{width:25px;height:25px}
+ body.play-screen #play-area .slot-copy{display:none}
+ body.play-screen #play-area #status{bottom:calc(env(safe-area-inset-bottom) + 60px);max-width:calc(100% - 320px);font-size:9px;line-height:1.2;padding:2px 5px;max-height:28px;overflow:hidden}
+ body.play-screen #play-area .combat-vitals{width:120px}
+ body.play-screen #play-area .combat-vitals .hearts{font-size:12px!important}
+ body.play-screen #play-area .skill-window-top,body.play-screen #play-area .traveller-heading{padding:11px 15px}
+ body.play-screen #play-area .skill-window h2,body.play-screen #play-area .traveller-heading h2{font-size:24px}
+ body.play-screen #play-area .skill-window-top p{display:none}
+ body.play-screen #play-area .traveller-tabs{padding-top:6px}
+ body.play-screen #play-area .traveller-tabs button{min-height:44px}
+ body.play-screen #play-area .traveller-footer{padding:7px 13px}
+}
+@media(orientation:portrait) and (max-width:900px){
+ body.play-screen #play-area .traveller-kit{top:calc(env(safe-area-inset-top) + 62px);right:calc(env(safe-area-inset-right) + 8px)}
+ body.play-screen #play-area .landscape-hint{display:block;position:absolute;z-index:12;left:12px;right:112px;top:calc(env(safe-area-inset-top) + 12px);font:11px Georgia;line-height:1.4;color:#d9ceaa;pointer-events:none}
+ body.play-screen #play-area #status{max-width:calc(100% - 24px);bottom:calc(env(safe-area-inset-bottom) + 60px)}
+ body.play-screen #play-area .combat-vitals{top:6px!important;left:6px!important;width:116px}
+ body.play-screen #play-area .place{top:66px;left:6px;font-size:9px;max-width:128px}
+ body.play-screen #play-area .dayclock{display:none}
+ body.play-screen #play-area .enemy-target{top:96px;width:110px;font-size:8px}
+ body.play-screen #play-area .cast-display{top:67px;width:110px}
+ body.play-screen #play-area .hint{top:6px;left:auto;right:6px;transform:none;max-width:48%;font-size:9px}
+ body.play-screen #play-area .dialog{bottom:4px;left:2%;right:2%;padding:9px;max-height:95%}
+ body.play-screen #play-area .dialog p{font-size:12px;line-height:1.4;margin:7px 0}
+}
+@media(max-height:350px) and (orientation:landscape){
+ body.play-screen #play-area .traveller-heading,body.play-screen #play-area .skill-window-top{padding:7px 12px}
+ body.play-screen #play-area .traveller-heading h2,body.play-screen #play-area .skill-window h2{font-size:21px;margin:2px 0}
+ body.play-screen #play-area .traveller-eyebrow,body.play-screen #play-area .skill-eyebrow{font-size:7px}
+ body.play-screen #play-area .traveller-footer{padding:5px 12px}
+ body.play-screen #play-area .traveller-footer p{font-size:10px;line-height:1.25}
+ body.play-screen #play-area .traveller-tabs{padding:4px 10px 0;gap:3px}
+ body.play-screen #play-area .traveller-tabs button{padding:5px 9px;font-size:11px}
+ body.play-screen #play-area .skill-summary{padding:6px 12px}
+ body.play-screen #play-area .spell-browser-tools{padding:6px 12px}
+ body.play-screen #play-area .skill-window-top p{display:none}
+}
+@media(prefers-reduced-motion:reduce){body.play-screen #play-area .kit-object img{transition:none;transform:none}}

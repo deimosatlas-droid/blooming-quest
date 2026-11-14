@@ -1,6 +1,6 @@
 # Blooming Quest: what is playable now
 
-This guide describes the v0.15 browser game. It is a single-player adventure in development: exploration, combat, spells, gathering and daily town life are playable; the story currently contains its opening lead.
+This guide describes the v0.16 browser game. It is a single-player adventure in development: exploration, combat, spells, gathering and daily town life are playable; the story currently contains its opening lead.
 
 Play at https://deimosatlas-droid.github.io/blooming-quest/.
 
@@ -12,7 +12,7 @@ The interface uses physical map, bag and spellbook icons, with leather, wood, br
 - **Bag:** quantities of gathered fruit, noodles and poisonous crafting mushrooms, category tabs and item descriptions. Apples, pears and berries restore one heart; noodles restore two. Food is consumed only when healing succeeds. Poisonous mushrooms have no eating action.
 - **Spellbook:** learn spells, upgrade ranks, read their effects, search/filter schools and arrange five equipped slots.
 - **Journal:** the current Raeez lead and journey information.
-- **Options:** save, toggle sound and expand the game. Save-file and offline controls remain available.
+- **Options:** save, toggle sound and expand the game. Save-file and offline controls live inside Options, without leaving the game screen. System Options and corrective updates remain reachable on the start/loading screen.
 
 Menus pause gameplay while open. Keyboard and touch controls support the same core actions.
 
@@ -100,7 +100,7 @@ Options can enable synthesized interaction and combat sound effects. There is cu
 | Journal / Options | J / O |
 | Eat noodles / close a menu | H / Escape |
 
-Phones and tablets provide a D-pad, action buttons, five spell slots and travelling-kit icons. Expanded play retains the controls. Modern iOS, Android, Windows, macOS and Linux browsers are the target; actual hardware/browser layout verification is still needed. The release is a browser game, not an App Store or Play Store native installer.
+Phones and tablets provide a D-pad, action buttons, five spell slots and travelling-kit icons. The game fills the browser viewport by default, with all menus and controls inside it. Sideways phones have a dedicated landscape layout. Native fullscreen is requested from a real Start click where supported; Safari can keep the full browser view. Modern iOS, Android, Windows, macOS and Linux browsers are the target; actual hardware/browser layout verification is still needed. The release is a browser game, not an App Store or Play Store native installer.
 
 The game plays independently of ChatGPT, with no paid runtime APIs or gameplay-server account. Progress saves locally in the current browser, automatically and manually. Export/import save files to move between browsers, devices or hosting addresses; there is no automatic cloud save synchronization. Import retains a previous-save backup, and compatible older journeys migrate additively.
 

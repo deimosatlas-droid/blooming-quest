@@ -49,38 +49,82 @@
     // Captured events normally reach the button; window listeners also release
     // a finger if a browser interrupts capture during rotation or app switching.
     for(const type of ['pointerup','pointercancel'])listen(win,type,event=>release(event.pointerId));
-    listen(win,'blur',reset);listen(win,'pagehide',reset);
+    listen(win,'blur',reset);listen(win,'pagehide',reset);listen(win,'orientationchange',reset);listen(win,'resize',reset);
     listen(root,'visibilitychange',()=>{if(root.hidden||root.visibilityState==='hidden')reset();});
     return {reset,snapshot:()=>({pointers:pointers.size,held:[...counts.keys()]}),destroy(){reset();for(const[target,type,handler]of listeners)target?.removeEventListener?.(type,handler);}};
   }
   function bindViewport(options={}){
     const container=options.container,button=options.button,doc=options.doc||document,win=options.win||global;
     if(!container||!button)return null;
-    let expanded=false,oldOverflow='',busy=false;
+    const orientation=win.screen?.orientation||global.screen?.orientation;
+    let expanded=false,oldOverflow='',wanted=false,operation=null,reconcilingTarget=null,wasNative=false,orientationOwned=false,orientationAttempted=false,orientationEpoch=0;
+    const native=()=>doc.fullscreenElement===container;
+    // The game screen is permanent. Native fullscreen only hides browser chrome;
+    // leaving it must never return Amaal to the old page-with-a-game layout.
+    container.classList?.toggle('is-game-screen',true);
+    function paint(){
+      const active=native();button.textContent=active?'Leave fullscreen':'Enter fullscreen';
+      button.setAttribute?.('aria-pressed',String(active));
+      button.setAttribute?.('aria-label',active?'Leave browser fullscreen':'Enter browser fullscreen');
+    }
     function set(value){
-      if(expanded===value)return;
-      expanded=value;container.classList?.toggle('is-expanded',value);
-      if(doc.body?.style){if(value){oldOverflow=doc.body.style.overflow;doc.body.style.overflow='hidden';}else doc.body.style.overflow=oldOverflow;}
-      button.textContent=value?'Exit expanded view':'Expand game';button.setAttribute?.('aria-pressed',String(value));
-      options.onChange?.(value);
+      if(expanded!==value){
+        expanded=value;container.classList?.toggle('is-expanded',value);
+        if(doc.body?.style){if(value){oldOverflow=doc.body.style.overflow;doc.body.style.overflow='hidden';}else doc.body.style.overflow=oldOverflow;}
+        options.onChange?.(value);
+      }
+      paint();
     }
-    async function exit(){
-      if(busy)return;busy=true;
-      try{if(doc.fullscreenElement===container)await doc.exitFullscreen?.();}catch{}
-      finally{set(false);busy=false;button.focus?.({preventScroll:true});}
+    function releaseOrientation(){
+      orientationEpoch++;orientationAttempted=false;
+      if(orientationOwned){orientationOwned=false;try{orientation?.unlock?.();}catch{}}
     }
-    async function toggle(){
-      if(expanded)return exit();if(busy)return;busy=true;set(true);
-      // iPhone Safari has no element fullscreen API. The same layout still
-      // expands inside the browser viewport and keeps every action reachable.
-      try{if(doc.fullscreenEnabled!==false&&container.requestFullscreen)await container.requestFullscreen();}catch{}
-      finally{busy=false;}
+    function suggestLandscape(){
+      if(!native()||orientationAttempted||typeof orientation?.lock!=='function')return;
+      orientationAttempted=true;const epoch=orientationEpoch;
+      // Orientation is advisory. Safari/desktop may reject or omit this API;
+      // neither a rejected lock nor a pending one can delay the game or Exit.
+      try{Promise.resolve(orientation.lock('landscape')).then(()=>{
+        if(native()&&epoch===orientationEpoch)orientationOwned=true;
+        else if(!native())try{orientation.unlock?.();}catch{}
+      }).catch(()=>{});}catch{}
     }
-    button.textContent='Expand game';button.setAttribute?.('aria-pressed','false');button.onclick=toggle;
-    doc.addEventListener?.('fullscreenchange',()=>{if(expanded&&!doc.fullscreenElement)set(false);});
-    doc.addEventListener?.('keydown',event=>{if(event.key==='Escape'&&expanded){event.preventDefault();exit();}});
-    win.addEventListener?.('pagehide',()=>{if(expanded)set(false);});
-    return{toggle,exit,expanded:()=>expanded};
+    function browserChanged(){
+      if(native()){wasNative=true;set(true);return;}
+      if(wasNative){wasNative=false;if(reconcilingTarget!==false)wanted=false;set(false);releaseOrientation();}
+      else paint();
+    }
+    async function reconcile(){
+      // There is always an await, including unsupported browsers, so operation
+      // is assigned before cleanup; concurrent Enter/Exit calls share one job.
+      try{
+        let target;
+        do{
+          target=wanted;reconcilingTarget=target;
+          if(target){
+            set(true);
+            try{if(!native()&&doc.fullscreenEnabled!==false&&typeof container.requestFullscreen==='function')await container.requestFullscreen();else await Promise.resolve();}catch{}
+            if(native()){wasNative=true;if(wanted)suggestLandscape();}
+            paint();
+          }else{
+            try{if(native()&&typeof doc.exitFullscreen==='function')await doc.exitFullscreen();else await Promise.resolve();}catch{}
+            set(native());if(!native()){wasNative=false;releaseOrientation();}
+          }
+          await Promise.resolve();
+        }while(target!==wanted);
+        return{expanded,native:native()};
+      }finally{operation=null;reconcilingTarget=null;paint();}
+    }
+    function request(value){wanted=value;if(!operation)operation=reconcile();return operation;}
+    function enter(){return request(true);}
+    function exit(){return request(false).then(value=>{button.focus?.({preventScroll:true});return value;});}
+    function toggle(){return expanded||native()?exit():enter();}
+    button.onclick=()=>native()?exit():enter();paint();
+    doc.addEventListener?.('fullscreenchange',browserChanged);
+    doc.addEventListener?.('keydown',event=>{if(event.defaultPrevented)return;if(event.key==='Escape'&&(expanded||native())){event.preventDefault();exit();}});
+    win.addEventListener?.('pagehide',()=>{request(false);});
+    if(native()){wasNative=true;wanted=true;set(true);}
+    return{toggle,enter,exit,expanded:()=>expanded,native};
   }
   global.BloomMobile={bindHolds,bindViewport};
 })(window);

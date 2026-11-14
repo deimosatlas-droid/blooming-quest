@@ -24,7 +24,7 @@
     moonpath:[[83.84,28.91],[82.46,27.16],[82.18,26.15],[80.52,25.87],[79.35,25.23],[78.38,23.66],[77.97,22.65],[76.24,22.28],[73.48,22.28],[71.55,22.01],[70.1,21.55]],
     petalferry:[[53.04,46.04],[53.66,51.75],[55.32,57.46],[58.15,62.15],[62.29,65.75],[66.85,68.32],[71.55,70.9],[75.69,74.03]]
   };
-  let config={},configured=false,bound=false,opened=false,view='bag',category='all',selectedItem='',selectedTown='rosepetal',signature='',previousFocus=null,seenMap=false;
+  let config={},configured=false,bound=false,opened=false,view='bag',category='all',selectedItem='',selectedTown='rosepetal',signature='',previousFocus=null,seenMap=false,portablePanel=null,returnHome=null,parking=null;
   const own=(value,key)=>Object.prototype.hasOwnProperty.call(value,key);
   const count=value=>Number.isFinite(Number(value))?Math.max(0,Math.floor(Number(value))):0;
   const state=()=>config.getState?.()||{},world=()=>config.getWorld?.()||{},area=()=>String(config.getArea?.()||state().area||'rosepetal');
@@ -105,7 +105,7 @@
     const data=world(),destinations=towns(),current=locationInfo();
     if(!destinations.some(town=>town.id===selectedTown))selectedTown=current.id||destinations[0]?.id;
     const layout=el('div','map-layout'),chart=el('div','map-chart'),art=el('div','map-art'),image=el('img','traveller-map-image');
-    image.src='assets/map-a-world.png?v=15';image.alt='The Blooming Atlas: seven towns, Rosepetal estate, long roads and the ferry passage';image.width=1448;image.height=1086;image.draggable=false;art.appendChild(image);
+    image.src='assets/map-a-world.png?v=16';image.alt='The Blooming Atlas: seven towns, Rosepetal estate, long roads and the ferry passage';image.width=1448;image.height=1086;image.draggable=false;art.appendChild(image);
     if(doc.createElementNS){
       const svg=doc.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 1000 1000');svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('class','traveller-routes');svg.setAttribute('aria-hidden','true');
       for(const route of [...(data.roads||[]),...(data.ferries||[])]){const points=ROUTES[route.id];if(!points)continue;const path=doc.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',points.map((point,index)=>(index?'L':'M')+(point[0]*10)+' '+(point[1]*10)).join(' '));path.setAttribute('class','traveller-route'+(route.id==='petalferry'?' ferry':''));path.dataset.mapRoute=route.id;path.classList?.toggle('is-linked',route.from===selectedTown||route.to===selectedTown);svg.appendChild(path);}art.appendChild(svg);
@@ -120,7 +120,7 @@
     if(selected){summary.appendChild(el('p','map-location-kind',selected.id==='rosepetal'?'Private home estate':selected.port?'Safe harbour':'Safe town'));summary.appendChild(el('h3','',selected.name));summary.appendChild(el('p','',selected.description||selected.subtitle||''));const places=el('ul','map-places');for(const place of selected.places||[])places.appendChild(el('li','',place));summary.appendChild(places);
       const travel=button('Travel to '+selected.name,'map-travel',()=>{if(!opened||view!=='map'||selectedTown!==selected.id||!towns().some(town=>town.id===selected.id))return;close();result(()=>config.onTravel?.(selected.id),'Journey continued.');});travel.dataset.fastTravel=selected.id;travel.disabled=typeof config.onTravel!=='function';summary.appendChild(travel);summary.appendChild(el('p','map-travel-note','Development travel · every town and home unlocked. Your journey is preserved.'));
     }else summary.appendChild(el('p','','The atlas is still opening.'));
-    const fallback=el('a','map-full-page','Open the full atlas ↗');fallback.href='world-map.html?v=15';summary.appendChild(fallback);layout.appendChild(summary);body.appendChild(layout);
+    summary.appendChild(el('p','map-full-page','Select a map pin or use the destination list.'));layout.appendChild(summary);body.appendChild(layout);
   }
   function clearedCampCount(){
     const saved=state(),cleared=saved.clearedCamps,progress=saved.campProgress||{};
@@ -133,46 +133,37 @@
     const fruit=inventory().filter(item=>item.category==='fruit');notes.appendChild(el('p','',fruit.length?'Forage carried: '+fruit.map(item=>item.name+' ×'+item.count).join(' · '):'Gather fruit and berries beside the roads. Plants stay in place and regrow with the game day.'));notes.appendChild(el('p','','Poisonous mushrooms are crafting ingredients. They cannot be eaten.'));page.appendChild(notes);
     const character=el('div','journal-entry'),progression=global.BloomProgression?.snapshot?.(saved);character.appendChild(el('h3','','Amaal'));character.appendChild(el('p','',count(saved.hp)+' / 5 hearts'+(progression?' · Level '+progression.level+' · '+progression.xp+' XP':'')));character.appendChild(el('p','','At home: the rose-covered tower, animal barn, gardens and three practice dummies.'));page.appendChild(character);body.appendChild(page);
   }
-  async function openSaveFiles(){
+  function captureSystemTools(){
+    portablePanel=portablePanel||$('portable-tools')||$('export-save')?.closest?.('details');returnHome=returnHome||$('new');
+    if(!parking&&doc?.createElement&&$('play-area')?.appendChild){parking=el('div','system-tools-parking');parking.id='system-tools-parking';parking.hidden=true;$('play-area').appendChild(parking);}
+  }
+  function parkSystemTools(){captureSystemTools();if(!parking)return;for(const node of [portablePanel,returnHome])if(node&&node.parentElement!==parking)parking.appendChild(node);}
+  function openSaveFiles(){
     if(!opened||view!=='options')return false;
-    close();
-    try{
-      // The normal and native fullscreen layouts intentionally hide these tools.
-      // Finish exiting that layout before opening and focusing its save panel.
-      if((config.getOptions?.()||{}).expanded){
-        if(typeof config.onExpand!=='function')throw Error('Leave expanded view to open your save files.');
-        await config.onExpand();
-        if((config.getOptions?.()||{}).expanded)throw Error('Leave expanded view to open your save files.');
-      }
-      const target=$('export-save'),details=target?.closest?.('details');
-      if(details)details.open=true;
-      target?.focus?.({preventScroll:true});target?.scrollIntoView?.({block:'nearest'});return true;
-    }catch(error){
-      const message=error.message||'The save-file tools could not open.';feedback(message);
-      const status=$('status')||$('portable-status');if(status)status.textContent=message;
-      return false;
-    }
+    captureSystemTools();
+    if(!portablePanel){feedback('Save tools are still loading. Try again in a moment.');return false;}
+    portablePanel.open=true;$('export-save')?.focus?.({preventScroll:true});portablePanel.scrollIntoView?.({block:'nearest'});return true;
   }
   function renderOptions(body){
     const grid=el('div','options-grid'),options=config.getOptions?.()||{};
-    grid.appendChild(button('Save journey','traveller-option',()=>{if(opened)result(()=>config.onSave?.(),'Journey saved.');}));
+    const save=button('Save journey','traveller-option',()=>{if(opened)result(()=>config.onSave?.(),'Journey saved.');});save.disabled=options.playing===false||options.ready===false;grid.appendChild(save);
     grid.appendChild(button(options.sound?'Sound effects · on':'Sound effects · off','traveller-option',()=>{if(opened)result(()=>config.onSound?.(),'Sound setting updated.');}));
-    grid.appendChild(button(options.expanded?'Leave expanded view':'Expand game view','traveller-option',()=>{if(opened)result(()=>config.onExpand?.(),'View updated.');}));
+    grid.appendChild(button((options.native??options.expanded)?'Leave fullscreen':'Enter fullscreen','traveller-option',()=>{if(opened)result(()=>config.onExpand?.(),'View updated.');}));
     grid.appendChild(button('Save files & offline play','traveller-option',openSaveFiles));
-    body.appendChild(grid);body.appendChild(el('p','options-help','Your journey saves in this browser. Export a save file before changing device or browser. Optional offline play downloads the game for this device.'));
+    if(returnHome){returnHome.disabled=options.playing===false;returnHome.classList?.toggle('traveller-option',true);grid.appendChild(returnHome);}body.appendChild(grid);if(portablePanel)body.appendChild(portablePanel);body.appendChild(el('p','options-help','Your journey saves in this browser. Export a save file before changing device or browser. Optional offline play downloads the game for this device.'));
     const keys=el('div','options-help');keys.appendChild(el('h3','','On the road'));keys.appendChild(el('p','','WASD / arrows · move   Shift · run   E · interact   Space · hold to chain attacks   Q · dodge   C · guard / parry   1–5 · spells   B · bag   M · map   K · spellbook   J · journal   O · options'));body.appendChild(keys);
   }
   function renderTabs(){
     const target=$('traveller-tabs');if(!target)return;clear(target);
     for(const[id,label]of [['map','Map'],['bag','Bag'],['spells','Spellbook'],['journal','Journal'],['options','Options']]){
-      const tab=button(label,'traveller-tab',()=>{if(id==='spells'){if(typeof config.onSpells==='function'){close();config.onSpells();}return;}open(id);});tab.dataset.travelTab=id;tab.setAttribute('aria-pressed',String(view===id));tab.disabled=id==='spells'&&typeof config.onSpells!=='function';target.appendChild(tab);
+      const tab=button(label,'traveller-tab',()=>{if(id==='spells'){if(typeof config.onSpells==='function'){close();config.onSpells();}return;}open(id);});tab.dataset.travelTab=id;tab.setAttribute('aria-pressed',String(view===id));tab.disabled=(id==='spells'&&typeof config.onSpells!=='function')||config.getEnabled?.(id)===false;target.appendChild(tab);
     }
   }
   function keydown(event){
     if(!opened)return;const target=event.target||doc.activeElement,editing=Boolean(target?.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(target?.tagName||''));
     if(event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation?.();event.stopPropagation?.();close();return;}
     if(event.key==='Tab'){
-      const focusable=[...($('traveller-overlay')?.querySelectorAll?.('button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), [tabindex="0"]')||[])].filter(node=>!node.closest?.('[hidden]')&&(typeof node.getClientRects!=='function'||node.getClientRects().length));
+      const focusable=[...($('traveller-overlay')?.querySelectorAll?.('button:not(:disabled), summary, a[href], input:not(:disabled), select:not(:disabled), [tabindex="0"]')||[])].filter(node=>!node.closest?.('[hidden]')&&(typeof node.getClientRects!=='function'||node.getClientRects().length));
       if(focusable.length){const first=focusable[0],last=focusable.at(-1),active=doc.activeElement;if(event.shiftKey&&(active===first||!focusable.includes(active))){event.preventDefault();last.focus?.();}else if(!event.shiftKey&&(active===last||!focusable.includes(active))){event.preventDefault();first.focus?.();}}
     }else if(!editing&&!['Enter',' '].includes(event.key)){
       event.preventDefault();const shortcut={b:'bag',m:'map',j:'journal',o:'options'}[event.key?.toLowerCase()];if(shortcut)open(shortcut);if(event.key?.toLowerCase()==='k'&&config.onSpells){close();config.onSpells();}
@@ -185,24 +176,24 @@
     if($('traveller-close'))$('traveller-close').onclick=close;
     $('traveller-overlay')?.addEventListener?.('click',event=>{if(event.target===$('traveller-overlay'))close();});doc.addEventListener?.('keydown',keydown,true);
   }
-  function configure(options={}){config=options;configured=true;bind();update();}
+  function configure(options={}){config=options;configured=true;captureSystemTools();parkSystemTools();bind();update();}
   function open(next='bag'){
-    if(!own(VIEWS,next)||!configured||!$('traveller-overlay'))return false;
-    if(!opened){if(config.getEnabled?.()===false||config.onPause?.()===false)return false;previousFocus=doc.activeElement||$('kit-'+next);opened=true;$('traveller-overlay').hidden=false;$('play-area')?.classList?.toggle('traveller-open',true);}
+    if(!own(VIEWS,next)||!configured||!$('traveller-overlay')||config.getEnabled?.(next)===false)return false;
+    if(!opened){if(config.onPause?.(next)===false)return false;previousFocus=doc.activeElement||$('kit-'+next);opened=true;$('traveller-overlay').hidden=false;$('play-area')?.classList?.toggle('traveller-open',true);}
     view=next;if(next==='map'&&!seenMap){selectedTown=locationInfo().id||'rosepetal';seenMap=true;}signature='';feedback('');renderTabs();update();$('traveller-close')?.focus?.({preventScroll:true});return true;
   }
   function close(){
     if(!opened)return false;opened=false;if($('traveller-overlay'))$('traveller-overlay').hidden=true;$('play-area')?.classList?.toggle('traveller-open',false);config.onResume?.();update();previousFocus?.focus?.({preventScroll:true});previousFocus=null;return true;
   }
   function update(){
-    const enabled=configured&&(config.getEnabled?.()!==false||opened);
-    for(const[id,destination]of [['kit-map','map'],['kit-bag','bag'],['kit-journal','journal'],['kit-options','options']]){const node=$(id);if(node){node.disabled=!enabled;node.setAttribute?.('aria-expanded',String(opened&&view===destination));}}
+
+    for(const[id,destination]of [['kit-map','map'],['kit-bag','bag'],['kit-journal','journal'],['kit-options','options']]){const node=$(id);if(node){node.disabled=!configured||config.getEnabled?.(destination)===false;node.setAttribute?.('aria-expanded',String(opened&&view===destination));}}
     if(!opened)return;const title=$('traveller-title');if(title)title.textContent=VIEWS[view];
     const saved=state(),next=JSON.stringify([view,category,selectedItem,selectedTown,saved.inventory,saved.food,saved.hp,saved.note,saved.progression?.xp,saved.clearedCamps,saved.campProgress,world().version,world().towns?.length,area(),view==='map'?saved.x:null,view==='map'?saved.y:null,view==='options'?config.getOptions?.():null]);
     if(next===signature)return;signature=next;const body=$('traveller-body');if(!body)return;
-    const focus=doc.activeElement?.dataset||{},remembered={item:focus.inventoryItem,category:focus.bagCategory,town:focus.mapTown,pin:focus.mapPin,travel:focus.fastTravel,use:focus.useItem};clear(body);const content=el('div','traveller-'+view+'-view');content.id='traveller-'+view+'-view';content.dataset.travellerView=view;
+    const active=doc.activeElement,systemFocus=active&&(portablePanel?.contains?.(active)||active===returnHome)?active:null;parkSystemTools();const focus=active?.dataset||{},remembered={item:focus.inventoryItem,category:focus.bagCategory,town:focus.mapTown,pin:focus.mapPin,travel:focus.fastTravel,use:focus.useItem};clear(body);const content=el('div','traveller-'+view+'-view');content.id='traveller-'+view+'-view';content.dataset.travellerView=view;
     if(view==='bag')renderBag(content);else if(view==='map')renderMap(content);else if(view==='journal')renderJournal(content);else renderOptions(content);body.appendChild(content);
-    const candidates=[...(body.querySelectorAll?.('button:not(:disabled), a[href]')||[])];const focusTarget=candidates.find(node=>remembered.item&&node.dataset.inventoryItem===remembered.item||remembered.category&&node.dataset.bagCategory===remembered.category||remembered.town&&node.dataset.mapTown===remembered.town&&node.dataset.mapPin===remembered.pin||remembered.travel&&node.dataset.fastTravel===remembered.travel||remembered.use&&node.dataset.useItem===remembered.use);focusTarget?.focus?.({preventScroll:true});
+    const candidates=[...(body.querySelectorAll?.('button:not(:disabled), a[href]')||[])];const focusTarget=candidates.find(node=>remembered.item&&node.dataset.inventoryItem===remembered.item||remembered.category&&node.dataset.bagCategory===remembered.category||remembered.town&&node.dataset.mapTown===remembered.town&&node.dataset.mapPin===remembered.pin||remembered.travel&&node.dataset.fastTravel===remembered.travel||remembered.use&&node.dataset.useItem===remembered.use);(systemFocus||focusTarget)?.focus?.({preventScroll:true});
   }
   global.BloomTraveller={configure,open,close,isOpen:()=>opened,update};
 })(window);

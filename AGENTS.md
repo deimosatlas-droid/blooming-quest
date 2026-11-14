@@ -36,9 +36,15 @@ The Pages workflow uploads only dist/. Keep .openai, Git metadata, credentials a
 
 ## Travelling kit interface
 
-The v0.15 interface uses the approved B-object-icons/A-open-menus direction: physical map, leather bag and rose-bound spellbook icons, with wood/brass/leather/parchment UI. Traveller menus open inside the game/fullscreen wrapper, pause gameplay, clear held input, and keep the existing Map A region/labels and real spell/inventory data. M Map, B Bag, K Spellbook, J Journal, O Options. Maintain modal exclusivity and refresh kit availability when starting or closing menus. Food use is explicit: apples/pears/berries heal one heart, noodles two; full health consumes nothing. Poison mushrooms are crafting only and never edible. Export/import controls must be revealed after exiting expanded play because that layout hides the portable panel.
+The v0.15 interface uses the approved B-object-icons/A-open-menus direction: physical map, leather bag and rose-bound spellbook icons, with wood/brass/leather/parchment UI. Traveller menus open inside the game/fullscreen wrapper, pause gameplay, clear held input, and keep the existing Map A region/labels and real spell/inventory data. M Map, B Bag, K Spellbook, J Journal, O Options. Maintain modal exclusivity and refresh kit availability when starting or closing menus. Food use is explicit: apples/pears/berries heal one heart, noodles two; full health consumes nothing. Poison mushrooms are crafting only and never edible. The v0.16 game always fills the browser viewport; all controls and menus stay inside #play-area, including sideways-phone layouts. Native fullscreen is optional and entered only from a real user gesture; unsupported browsers retain the full browser game view. Keep the protagonist above the bottom spell controls (camera focus capped at180logical pixels).
+
+Keep the actual save/import/offline/update details and Return Home button attached to hidden game parking when inactive and mount those same nodes inside Options. Never clone their listeners or send players outside the game to use save files. Options and corrective updates must remain accessible before Start or asset-load failure; other gameplay menus stay disabled. Keep the on-screen update badge and modal focus/scroll behaviour.
 
 docs/PLAYABLE-NOW.md is the current player guide; do not describe scenery such as shops or the barn as finished commerce/animal-management systems.
+
+## Rosepetal fences
+
+The v0.16 estate uses fences.js with fencePiece metadata for straight joined wooden/stone segments and single corner/gate caps. Configure with the approved world atlas before entry; draw through BloomFences before ordinary objects. Existing group bounds and six gates are preserved; other maps retain their renderer. Do not return to overlapping final stamps or repeat the old T/diagonal vertical fragments.
 
 ## Action RPG systems
 

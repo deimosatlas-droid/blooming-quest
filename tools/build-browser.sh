@@ -18,6 +18,10 @@ node tests/abilities.cjs
 node tests/combat-ui.cjs
 node tests/traveller-ui.cjs
 node tests/traveller-integration.cjs
+node tests/system-access.cjs
+node tests/screen-layout.cjs
+node tests/fullscreen-lifecycle.cjs
+node tests/rosepetal-fences.cjs
 node tests/arpg-integration.cjs
 node tests/fluidity-integration.cjs
 node tests/collision-input.cjs

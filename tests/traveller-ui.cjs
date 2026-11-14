@@ -5,11 +5,13 @@ class Element{
   constructor(tag='div',document){this.tagName=tag.toUpperCase();this.ownerDocument=document;this.parentElement=null;this.children=[];this.dataset={};this.attrs={};this.events={};this.textContent='';this.innerHTML='';this.hidden=false;this.disabled=false;this.style={};const classes=new Set();this.classList={toggle(name,value){if(value)classes.add(name);else classes.delete(name);},contains:name=>classes.has(name)};}
   setAttribute(name,value){this.attrs[name]=String(value);}
   getAttribute(name){return this.attrs[name];}
-  appendChild(node){node.parentElement=this;this.children.push(node);return node;}
+  appendChild(node){if(node.parentElement){const siblings=node.parentElement.children;const index=siblings.indexOf(node);if(index>=0)siblings.splice(index,1);}node.parentElement=this;this.children.push(node);return node;}
+  contains(node){return this===node||this.children.some(child=>child.contains(node));}
   replaceChildren(...nodes){for(const node of this.children)node.parentElement=null;this.children=[];for(const node of nodes)this.appendChild(node);}
   addEventListener(type,handler){(this.events[type]??=[]).push(handler);}
   closest(selector){for(let node=this;node;node=node.parentElement)if(selector==='[hidden]'&&node.hidden||selector==='details'&&node.tagName==='DETAILS')return node;return null;}
   matches(selector){
+    if(selector==='summary')return this.tagName==='SUMMARY';
     if(selector==='button:not(:disabled)')return this.tagName==='BUTTON'&&!this.disabled;
     if(selector==='input:not(:disabled)')return this.tagName==='INPUT'&&!this.disabled;
     if(selector==='select:not(:disabled)')return this.tagName==='SELECT'&&!this.disabled;
@@ -20,7 +22,7 @@ class Element{
   }
   querySelectorAll(selector){const output=[];for(const child of this.children){if(selector.split(',').some(part=>child.matches(part.trim())))output.push(child);output.push(...child.querySelectorAll(selector));}return output;}
   focus(){this.ownerDocument.activeElement=this;}
-  getClientRects(){return this.closest('[hidden]')?[]:[{}];}
+  getClientRects(){if(this.closest('[hidden]'))return[];for(let node=this.parentElement;node;node=node.parentElement)if(node.tagName==='DETAILS'&&!node.open&&node.children[0]!==this&&!node.children[0]?.contains(this))return[];return[{}];}
   scrollIntoView(){this.scrolled=true;}
 }
 const nodes=new Map(),document={events:{},activeElement:null};
@@ -30,12 +32,12 @@ const play=make('play-area'),overlay=make('traveller-overlay'),frame=make('trave
 for(const[id,tag]of [['traveller-title','h2'],['traveller-close','button'],['traveller-tabs','div'],['traveller-body','div'],['traveller-feedback','p']])frame.appendChild(make(id,tag));
 for(const id of ['kit-map','kit-bag','kit-journal','kit-options'])play.appendChild(make(id,'button'));
 play.appendChild(make('status','p'));
-const details=make('portable','details'),exportButton=make('export-save','button');play.appendChild(details);details.appendChild(exportButton);
+const details=make('portable','details'),exportButton=make('export-save','button');play.appendChild(details);const summary=make('portable-summary','summary');summary.textContent='Save files & offline play';details.appendChild(summary);details.appendChild(exportButton);let exportCalls=0;exportButton.onclick=()=>exportCalls++;
 const C={window:{},document,Math,JSON,Promise,Map,Set,console};vm.createContext(C);vm.runInContext(fs.readFileSync(path.join(root,'traveller-ui.js'),'utf8'),C,{filename:'traveller-ui.js'});
 const ui=C.window.BloomTraveller,$=id=>nodes.get(id),world=JSON.parse(fs.readFileSync(path.join(root,'world.json')));
 const state={area:'rosepetal',lastSafeTown:'rosepetal',x:512,y:328,hp:2,food:2,note:false,inventory:{apple:2,berry:3,poison_amanita:1,moss_clump:4},clearedCamps:{'lavenderway:camp-1':true,'unrelated:flag':true},campProgress:{'foxglove:camp-2':{cleared:true}}};
 let enabled=false,allowPause=true,pauses=0,resumes=0,saves=0,spells=0,uses=[],travels=[],options={sound:false,expanded:false},deferExpand=false,finishExpand=null,expandCalls=0,expandError=false;
-ui.configure({getState:()=>state,getWorld:()=>world,getArea:()=>state.area,getEnabled:()=>enabled&&!ui.isOpen(),getOptions:()=>options,
+ui.configure({getState:()=>state,getWorld:()=>world,getArea:()=>state.area,getEnabled:view=>enabled||view==='options'&&options.playing===false,getOptions:()=>options,
  onPause:()=>{pauses++;return allowPause;},onResume:()=>resumes++,onSpells:()=>{assert(!ui.isOpen());spells++;},
  onUseItem:id=>{assert(ui.isOpen(),'use callback runs before the bag closes');uses.push(id);if(id==='noodles'){state.food--;state.hp=Math.min(5,state.hp+2);}else{state.inventory[id]--;state.hp=Math.min(5,state.hp+1);}return{ok:true,message:'Ate '+id+'.'};},
  onTravel:id=>{assert(!ui.isOpen(),'travel closes the modal before entering an area');travels.push(id);state.area=id;return{ok:true};},onSave:()=>{saves++;return{ok:true,message:'Saved at home.'};},onSound:()=>{options.sound=!options.sound;return{ok:true};},onExpand:async()=>{expandCalls++;if(expandError)throw Error('Fullscreen exit failed.');if(deferExpand)await new Promise(resolve=>finishExpand=resolve);options.expanded=!options.expanded;return{ok:true};}});
@@ -59,14 +61,16 @@ const text=node=>[node.textContent,...node.children.map(text)].join(' ');
  buttonBy('fastTravel','seabloom').onclick();await tick();assert.deepEqual(travels,['seabloom']);assert(!ui.isOpen());assert.equal(state.inventory.apple,1);assert.equal(document.activeElement,$('kit-bag'),'closing restores the original kit focus');
  assert(ui.open('journal'));assert.equal($('traveller-title').textContent,'Amaal’s Journal');assert.match(text($('traveller-body')),/Check the bookshelf/);assert.match(text($('traveller-body')),/2 \/ 24 monster camps cleared/,'unrelated old flags do not inflate actual camp clears');state.note=true;ui.update();assert.match(text($('traveller-body')),/Follow Lavenderway Fields east/);assert.match(text($('traveller-body')),/still being written/,'journal does not invent finished quest chains');
  tab('spells').onclick();assert.equal(spells,1);assert(!ui.isOpen());
- assert(ui.open('options'));assert(allButtons().find(node=>node.textContent==='Sound effects · off'));allButtons().find(node=>node.textContent==='Save journey').onclick();await tick();assert.equal(saves,1);assert.match($('traveller-feedback').textContent,/Saved at home/);allButtons().find(node=>node.textContent==='Sound effects · off').onclick();await tick();assert(options.sound);assert(allButtons().find(node=>node.textContent==='Sound effects · on'));allButtons().find(node=>node.textContent==='Expand game view').onclick();await tick();assert(options.expanded);assert(allButtons().find(node=>node.textContent==='Leave expanded view'));
+ assert(ui.open('options'));assert(allButtons().find(node=>node.textContent==='Sound effects · off'));allButtons().find(node=>node.textContent==='Save journey').onclick();await tick();assert.equal(saves,1);assert.match($('traveller-feedback').textContent,/Saved at home/);allButtons().find(node=>node.textContent==='Sound effects · off').onclick();await tick();assert(options.sound);assert(allButtons().find(node=>node.textContent==='Sound effects · on'));allButtons().find(node=>node.textContent==='Enter fullscreen').onclick();await tick();assert(options.expanded);assert(allButtons().find(node=>node.textContent==='Leave fullscreen'));
  const input=document.createElement('input');$('traveller-body').appendChild(input);input.focus();assert(!key('m').defaultPrevented,'native input editing is not hijacked');assert.equal($('traveller-title').textContent,'By the Campfire');const escape=key('Escape');assert(escape.defaultPrevented&&escape.immediate);assert(!ui.isOpen());
- ui.open('options');options.expanded=true;deferExpand=true;details.open=false;
- const opening=allButtons().find(node=>node.textContent==='Save files & offline play').onclick();
- assert(!ui.isOpen(),'save tools close the modal before leaving fullscreen');assert.equal(details.open,false,'save tools stay hidden until fullscreen exit completes');assert.notEqual(document.activeElement,exportButton,'focus waits for the exit callback');finishExpand();await opening;deferExpand=false;
- assert.equal(options.expanded,false);assert(details.open);assert.equal(document.activeElement,exportButton,'after fullscreen exit the real export panel is visible and focused');
- details.open=false;ui.open('options');const callsBeforeNormal=expandCalls;await allButtons().find(node=>node.textContent==='Save files & offline play').onclick();assert.equal(expandCalls,callsBeforeNormal,'normal view does not toggle into fullscreen while opening save files');assert(details.open);assert.equal(document.activeElement,exportButton);
- details.open=false;options.expanded=true;expandError=true;ui.open('options');assert.equal(await allButtons().find(node=>node.textContent==='Save files & offline play').onclick(),false);assert.equal(details.open,false,'failed fullscreen exit never focuses a hidden export panel');assert.match($('status').textContent,/Fullscreen exit failed/);expandError=false;options.expanded=false;
+ ui.open('options');options.expanded=true;details.open=false;
+ const callsBeforeFiles=expandCalls;const original=exportButton;
+ await allButtons().find(node=>node.textContent==='Save files & offline play').onclick();
+ assert(ui.isOpen(),'save files stay inside the paused game menu');assert.equal(options.expanded,true,'save tools do not exit fullscreen');assert.equal(expandCalls,callsBeforeFiles);assert(details.open);assert.equal(document.activeElement,original);assert($('traveller-body').contains(details),'actual save details are mounted inside Options');original.onclick();assert.equal(exportCalls,1,'original export listeners survive mounting');
+ ui.open('bag');const parked=play.children.find(node=>node.id==='system-tools-parking');assert(parked?.contains(details),'switching pages parks original save tools attached to the game');assert(details.closest('[hidden]'),'parking is hidden');
+ ui.open('options');assert($('traveller-body').contains(original));original.onclick();assert.equal(exportCalls,2);assert.equal(original,exportButton,'reopening does not clone the export controls');
+ summary.focus();assert(!key('Tab').defaultPrevented,'the native details summary is a real modal tab stop');
+ ui.close();enabled=false;options.playing=false;options.ready=false;ui.update();assert(ui.open('options'),'system Options remain available before Start');assert.equal(ui.open('bag'),false,'preboot Bag remains unavailable');assert.equal(ui.open('map'),false);assert(!allButtons().find(node=>node.textContent==='Save journey'),'preboot system menu cannot claim a game save');assert(tab('map').disabled&&tab('bag').disabled&&tab('spells').disabled);allButtons().find(node=>node.textContent==='Save files & offline play').onclick();assert($('traveller-body').contains(original),'corrective update/save panel stays reachable without world assets');ui.close();delete options.playing;delete options.ready;
  enabled=false;ui.update();assert($('kit-map').disabled&&$('kit-options').disabled);assert.equal(state.inventory.poison_amanita,1);assert.equal(state.inventory.moss_clump,4);assert(resumes>0);
  console.log('PASS: real bag quantities/categories/food/poison safety, unknown-item preservation, eight Map A destinations/routes/current marker and fast travel, honest journal, options callbacks, title/pause guards, focus trap and save-file access.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

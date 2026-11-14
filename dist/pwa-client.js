@@ -6,7 +6,7 @@
   const base=new URL('./',document.baseURI),secure=global.location.protocol==='https:'||['localhost','127.0.0.1','[::1]'].includes(global.location.hostname);
   let registration=null,applying=false;
   const tell=text=>{if(status)status.textContent=text;};
-  function waiting(){if(update)update.hidden=!registration?.waiting;}
+  function waiting(){const ready=Boolean(registration?.waiting);if(update)update.hidden=!ready;const notice=$('system-notice');if(notice){notice.hidden=!ready;notice.textContent='Update ready · Options';notice.setAttribute?.('aria-label','A game update is ready. Open Options to save and apply it.')}}
   function watch(value){
     registration=value;waiting();if(button)button.hidden=true;
     if(value.active)tell('Offline play enabled for this browser.');
