@@ -8,6 +8,12 @@
 - The original ChatGPT Sites copy is retained for save migration. It is not the primary hosting target. Do not delete it or change its audience unless the user asks.
 - Gameplay must stay independent of ChatGPT and paid AI services. The current engine is static HTML/JavaScript/Canvas with local data and artwork.
 
+## Current hosting and device requirements
+
+The user now requests iOS, Android and desktop browser support, and a private GitHub repository while retaining editing access. Complete touch controls are in progress. Target modern browsers; do not claim real-device verification without performing it.
+
+Free GitHub Pages requires a public source repository. Prepare the free Cloudflare Pages migration described in docs/PRIVATE-HOSTING.md before changing repository visibility, so the playable website and save transfer remain available. Keep the existing GitHub application authorized for the repository after it becomes private. Do not claim the private-source migration is complete until the replacement host and private-repository access have both been verified.
+
 ## Release checks
 
 Run the relevant tests under tests/ against the actual project source. Before packaging or publishing a changed dist/, run:
