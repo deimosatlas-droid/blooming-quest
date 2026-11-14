@@ -36,7 +36,7 @@ Build an uploadable browser ZIP with:
 python3 tools/export-standalone.py --output /tmp/blooming-quest-browser.zip
 ```
 
-See [regression checks](tests/README.md). Native render checks additionally use `@napi-rs/canvas`; the player does not need that development package.
+See [regression checks](tests/README.md). Run `npm ci --ignore-scripts` once to install the pinned development-only Canvas renderer before running all checks; the Pages workflow does this automatically. Players need only the static browser game and never install a package.
 
 ## Planned action RPG expansion
 

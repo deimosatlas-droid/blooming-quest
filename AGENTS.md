@@ -22,6 +22,8 @@ Run the relevant tests under tests/ against the actual project source. Before pa
 python3 tools/export-standalone.py --prepare-only
 python3 tools/export-standalone.py --check
 
+All-tests release checks include native Canvas rendering. Install the pinned development-only renderer with `npm ci --ignore-scripts` when it is missing; the Pages workflow installs it automatically. It is not a player/runtime dependency.
+
 The Pages workflow uploads only dist/. Keep .openai, Git metadata, credentials and local artifacts out of portable/public release packages.
 
 ## User requirements

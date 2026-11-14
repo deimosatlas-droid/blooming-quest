@@ -1,0 +1,12 @@
+{
+  "name": "blooming-quest-checks",
+  "version": "0.17.0",
+  "private": true,
+  "description": "Development-only checks for the static browser game",
+  "scripts": {
+    "test": "sh tools/build-browser.sh"
+  },
+  "devDependencies": {
+    "@napi-rs/canvas": "0.1.100"
+  }
+}

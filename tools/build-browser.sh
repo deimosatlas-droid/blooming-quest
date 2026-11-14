@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-# Static browser release: no paid service, package install or server bundle.
+# Static player build; CI installs only the development Canvas test renderer.
 for source in dist/*.js; do
   node --check "$source"
 done
