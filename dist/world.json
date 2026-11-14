@@ -1,6 +1,6 @@
 {
   "title": "Forrest Hydrangea Meadows",
-  "version": "0.11 · Portable browser release and world consistency",
+  "version": "0.12 · Touch controls and cross-platform browser play",
   "rules": {
     "townsAreSafe": true,
     "homeIsSafe": true,

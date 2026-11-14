@@ -10,9 +10,11 @@
 
 ## Current hosting and device requirements
 
-The user now requests iOS, Android and desktop browser support, and a private GitHub repository while retaining editing access. Complete touch controls are in progress. Target modern browsers; do not claim real-device verification without performing it.
+The user now requests iOS, Android and desktop browser support, and a private GitHub repository while retaining editing access. The v0.12 release provides movement, run, attack, interaction, healing, map and journal touch controls plus expanded play with controls visible. Target modern browsers; do not claim real-device verification without performing it.
 
 Free GitHub Pages requires a public source repository. Prepare the free Cloudflare Pages migration described in docs/PRIVATE-HOSTING.md before changing repository visibility, so the playable website and save transfer remain available. Keep the existing GitHub application authorized for the repository after it becomes private. Do not claim the private-source migration is complete until the replacement host and private-repository access have both been verified.
+
+The user has chosen to keep the repository public for now. Continue publishing to GitHub Pages; leave the private-hosting guide available for a future migration.
 
 ## Release checks
 

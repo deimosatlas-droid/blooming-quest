@@ -13,5 +13,6 @@ node tests/forage.cjs
 node tests/world-map.cjs
 node tests/save-transfer.cjs
 node tests/offline.cjs
+node tests/mobile-controls.cjs
 python3 tools/export-standalone.py --prepare-only
 python3 tools/export-standalone.py --check

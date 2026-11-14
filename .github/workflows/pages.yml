@@ -7,6 +7,7 @@ on:
       - 'dist/**'
       - 'tests/**'
       - 'tools/export-standalone.py'
+      - 'tools/build-browser.sh'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -28,20 +29,7 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Check the browser game
-        run: |
-          for file in dist/*.js; do node --check "$file"; done
-          node tests/adventure.cjs
-          node tests/hero-combat.cjs
-          node tests/collision-input.cjs
-          node tests/scene-interactions.cjs
-          node tests/forage.cjs
-          node tests/world-map.cjs
-          node tests/save-transfer.cjs
-          node tests/offline.cjs
-      - name: Prepare a coherent offline release
-        run: |
-          python3 tools/export-standalone.py --prepare-only
-          python3 tools/export-standalone.py --check
+        run: sh tools/build-browser.sh
       - name: Upload the standalone website
         uses: actions/upload-pages-artifact@v4
         with:

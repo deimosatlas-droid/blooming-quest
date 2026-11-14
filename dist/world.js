@@ -1,7 +1,7 @@
 /* Map A: seven towns and the Rosepetal home estate share eight travel destinations. */
 (function(global){
   'use strict';
-  const ART='assets/map-a-world.png?v=11';
+  const ART='assets/map-a-world.png?v=12';
   const SAVE_KEY='blooming-world-v05',SELECTION_KEY='blooming-map-selected-town';
   const NS='http://www.w3.org/2000/svg';
   // Coordinates are percentages of the artwork, independent of image resolution.
@@ -22,7 +22,7 @@
   function rgb(color){const value=String(color||'#9bbb84').replace('#','');return value.length===6?[0,2,4].map(i=>parseInt(value.slice(i,i+2),16)).join(','):'155,187,132';}
   function create(tag,classes,text){const element=document.createElement(tag);if(classes)element.className=classes;if(text)element.textContent=text;return element;}
   function pathFor(points){return points.map((point,i)=>(i?'L':'M')+(point[0]*10).toFixed(1)+' '+(point[1]*10).toFixed(1)).join(' ');}
-  function travelUrl(id){return 'index.html?area='+encodeURIComponent(id)+'&devtravel=1&v=11';}
+  function travelUrl(id){return 'index.html?area='+encodeURIComponent(id)+'&devtravel=1&v=12';}
   function fastTravel(id=selectedId){if(!town(id))return false;location.href=travelUrl(id);return true;}
   function linkedTo(id,route){return route.from===id||route.to===id;}
   function paintSelection(){
@@ -101,7 +101,7 @@
   global.BloomWorldMap={initialize,choose,preview,clearPreview,fastTravel,travelUrl,previewPosition,layout:MAP_ART,getState:()=>({selectedId,hoveredId,world,saved})};
   if(typeof document!=='undefined'){
     global.addEventListener?.('resize',()=>{if(selectedId)updatePreview(selectedId);});
-    document.addEventListener('keydown',event=>{if(event.key.toLowerCase()==='m'&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&event.target?.tagName!=='INPUT'&&event.target?.tagName!=='TEXTAREA'){event.preventDefault();location.href='index.html?devtravel=1&v=11';}});
-    fetch('world.json?v=11').then(response=>{if(!response.ok)throw Error('Destination data is unavailable.');return response.json();}).then(initialize).catch(error=>{$('detailname').textContent='The atlas could not open';$('detaildesc').textContent='Refresh to try again.';$('map-status').textContent=error.message;$('travel').disabled=true;});
+    document.addEventListener('keydown',event=>{if(event.key.toLowerCase()==='m'&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&event.target?.tagName!=='INPUT'&&event.target?.tagName!=='TEXTAREA'){event.preventDefault();location.href='index.html?devtravel=1&v=12';}});
+    fetch('world.json?v=12').then(response=>{if(!response.ok)throw Error('Destination data is unavailable.');return response.json();}).then(initialize).catch(error=>{$('detailname').textContent='The atlas could not open';$('detaildesc').textContent='Refresh to try again.';$('map-status').textContent=error.message;$('travel').disabled=true;});
   }
 })(window);

@@ -6,13 +6,13 @@ The browser game lives in `dist/`. It runs without ChatGPT, an AI API key or a g
 
 ## Playing and saves
 
-Use WASD/arrows to move, Shift to run, E to interact/harvest, Space for the katana combo, M for the map and J for the journal.
+Use WASD/arrows to move, Shift to run, E to interact/harvest, Space for the katana combo, M for the map and J for the journal. Phones and tablets have a D-pad plus Interact, Attack, Run, Heal, Map and Journal buttons. Expanded play keeps those controls visible. Modern iOS, Android and desktop browsers are the target; real-device verification is still needed.
 
 Progress is stored in the current browser. The **Save files & offline play** panel exports/imports a journey when changing website or device. Optional offline mode downloads a complete release, and an update saves before an explicit reload.
 
 ## Releases
 
-The included GitHub Pages workflow publishes `dist/` after its checks pass. Repository Pages settings must use **GitHub Actions**. See [independent hosting](docs/GITHUB-PAGES.md) and [portable browser builds](docs/STANDALONE.md).
+The included GitHub Pages workflow publishes `dist/` after its checks pass. Repository Pages settings must use **GitHub Actions**. See [independent hosting](docs/GITHUB-PAGES.md), [portable browser builds](docs/STANDALONE.md), and [free private-source hosting](docs/PRIVATE-HOSTING.md).
 
 Prepare the offline release with:
 
