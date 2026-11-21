@@ -31,7 +31,7 @@ The Pages workflow uploads only dist/. Keep .openai, Git metadata, credentials a
 - Laptop browser first; keep the whole game process free of paid runtime APIs.
 - Preserve the save key blooming-world-v05 and migrate new fields additively. Save export/import must carry existing camps, inventory, harvest days, clock and NPC state across origins.
 - Rosepetal is a private tower estate with a barn, animals, gardens and practice targets.
-- Towns, home and boats stay safe. Overworld monsters spawn from camps beside long roads. Briarvault is the deliberate dungeon-combat exception, installed by journey-content.js at load.
+- Towns, home and boats stay safe. Overworld monsters spawn from camps beside long roads. Briarvault and Medusa’s garden are deliberate dungeon-combat areas, installed at load by journey-content.js and guardian-campaign.js.
 - NPC appearances are unique across the whole world and match Amaal's art style.
 - Preview every new monster/boss sprite or variant for the user before adding it.
 - Preserve connected impassable fences, purposeful prop placement, readable paths and dense map-edge cover.
@@ -54,7 +54,7 @@ The v0.14 release implements 20 distinct active spells across Katana/Bloomcraft/
 
 Combat uses stamina, Q dodge, directional C guard/parry, warned enemy attacks and collision-safe projectiles/fields. Movement has brief analytic acceleration, immediate stops, swept collision, clamped camera smoothing and bounded frame substeps. Amaal has faster combos and runtime-articulated dodge, guard, casting and hurt poses using the approved sprites; do not describe these as a newly drawn sprite sheet. Casting releases after its wind-up; cancelling a cast or changing scene must prevent late effects. Touch equivalents must remain available. Camp and actual kill rewards use stable one-time IDs. Camp cleanup grants no invented kills; v0.17 awards one-time mastery XP for unfought wave slots, with legacy reconciliation.
 
-docs/ARPG-SYSTEMS.md retains the expansion design. v0.17 implements one complete opening quest and Briarvault, a replayable three-spell puzzle dungeon with a checkpoint/shortcut and an already-approved minotaur Guardian. The full campaign, further dungeons and general side-quest system remain future work. See docs/PLAYABLE-NOW.md for precise boundaries.
+docs/ARPG-SYSTEMS.md retains the expansion design. v0.18 preserves the complete opening quest and replayable Briarvault, and adds the first guardian region after Raeez’s cache. The remaining five guardian chapters and general side-quest system remain future work. See docs/PLAYABLE-NOW.md for precise boundaries.
 
 ## v0.17 journey interface and content
 
@@ -63,3 +63,13 @@ One satchel opens Bag/Map/Spellbook/Journal/Options. Keep the hub and page overl
 journey-ui.js owns the title, stored input/comfort settings and remapping (BloomJourney); journey-content.js owns additive state.journey chapter/puzzle/home/replay data and runtime Briarvault maps (BloomContent). Gifted puzzle spell base ranks are free and survive respec; upgrades use normal points. Do not conflate the two module namespaces. Atmosphere uses free local WebAudio and existing pixels; no music/artist songs.
 
 Motion cameraBounds supplies touch-safe padded camera bounds; adventure paints extended terrain/edge foliage so it cannot expose unpainted world edges. NPC static navigation/routine caches are bounded and opt-in; occupants and reservations stay dynamic. All top-level tests run in the Pages build. Native Canvas and VM checks are not browser/physical-device verification.
+
+## v0.18 first guardian region
+
+Keep safe Lavendyr Glade (13 residents) distinct from the long unsafe Lavenderway road (four camps, no residents). Preserve the town’s eight established building/interior links and the road’s existing camp IDs. Regional scenery does not imply a general economy or crafting system.
+
+The user previewed and approved Lavender Imp, Violet Brambleback, Amethyst Wisp and Medusa. Their separate lavender-creatures sheet supplies four drawn facings with runtime articulation; do not claim full hand-drawn walk/attack animation. New designs or variants still require preview before integration. Keep existing licensed-pack credits distinct from this project-generated regional sheet.
+
+guardian-campaign.js owns additive state.campaign guardian/quest/power/memory/restoration/reward data (BloomCampaign). Unlock the Medusa continuation after state.journey.stage reaches 7; preserve the original opening chapter and replayable Briarvault. The Briarvault minotaur is not Asterion. Medusa has an explicit three-herb greenhouse recipe route and a separate gaze/lash/crystal arena battle. Both expose the Thornheart and require purification, awarding the same permanent parry-slow power and 180 XP once. Story battle defeat grants no ordinary kill/camp/mastery XP. Never respawn purified Medusa or erase her power on spell respec. Nemean Lion, Hydra, Scylla, Asterion and Chimera remain staged definitions; Hydra and Chimera are mandatory-battle designs, the other three permit quest paths.
+
+Touch regressions cover joystick-edge/outside-pad movement, transfers from other controls, pointer capture and incidental viewport changes. Automatic road/town boundaries preserve held movement through resetInput({preserveMovement:true}); manual travel, dialogue, menus, release/cancel, blur and hidden-page cleanup still release input. Keep gameplay movement separate from action-button release, and preserve multitouch combat.

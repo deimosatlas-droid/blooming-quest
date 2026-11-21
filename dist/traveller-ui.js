@@ -36,7 +36,7 @@
     const saved=state(),result=[];
     for(const[id,value]of Object.entries(saved.inventory||{})){
       const quantity=count(value);if(!quantity)continue;
-      const authored=global.BloomContent?.itemInfo?.(id),known=own(ITEMS,id)&&id!=='noodles'||authored;
+      const authored=global.BloomCampaign?.itemInfo?.(id)||global.BloomContent?.itemInfo?.(id),known=own(ITEMS,id)&&id!=='noodles'||authored;
       result.push({id:known?id:'stored:'+id,key:id,count:quantity,...(authored||(known?ITEMS[id]:{name:String(id).replace(/_/g,' ').replace(/^./,letter=>letter.toUpperCase()),category:'crafting',description:'An item carried in your satchel.'}))});
     }
     if(count(saved.food))result.push({id:'noodles',count:count(saved.food),...ITEMS.noodles});
@@ -105,7 +105,7 @@
     const data=world(),destinations=towns(),current=locationInfo();
     if(!destinations.some(town=>town.id===selectedTown))selectedTown=current.id||destinations[0]?.id;
     const layout=el('div','map-layout'),chart=el('div','map-chart'),art=el('div','map-art'),image=el('img','traveller-map-image');
-    image.src='assets/map-a-world.png?v=17';image.alt='The Blooming Atlas: seven towns, Rosepetal estate, long roads and the ferry passage';image.width=1448;image.height=1086;image.draggable=false;art.appendChild(image);
+    image.src='assets/map-a-world.png?v=18';image.alt='The Blooming Atlas: seven towns, Rosepetal estate, long roads and the ferry passage';image.width=1448;image.height=1086;image.draggable=false;art.appendChild(image);
     if(doc.createElementNS){
       const svg=doc.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 1000 1000');svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('class','traveller-routes');svg.setAttribute('aria-hidden','true');
       for(const route of [...(data.roads||[]),...(data.ferries||[])]){const points=ROUTES[route.id];if(!points)continue;const path=doc.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',points.map((point,index)=>(index?'L':'M')+(point[0]*10)+' '+(point[1]*10)).join(' '));path.setAttribute('class','traveller-route'+(route.id==='petalferry'?' ferry':''));path.dataset.mapRoute=route.id;path.classList?.toggle('is-linked',route.from===selectedTown||route.to===selectedTown);svg.appendChild(path);}art.appendChild(svg);
@@ -127,7 +127,7 @@
     return(world().roads||[]).reduce((total,road)=>total+[1,2,3,4].filter(index=>{const key=road.id+':camp-'+index;return(Array.isArray(cleared)?cleared.includes(key):cleared?.[key]===true)||progress[key]?.cleared===true;}).length,0);
   }
   function renderJournal(body){
-    const authored=global.BloomContent?.journal?.();
+    const authored=global.BloomCampaign?.journal?.()||global.BloomContent?.journal?.();
     if(authored){const page=el('div','journal-page'),entry=el('div','journal-entry');entry.appendChild(el('p','journal-eyebrow','The search for Raeez'));entry.appendChild(el('h3','',authored.title));entry.appendChild(el('p','',authored.objective));for(const text of authored.entries||[])entry.appendChild(el('p','',text));page.appendChild(entry);body.appendChild(page);return;}
     const saved=state(),page=el('div','journal-page'),story=el('div','journal-entry');story.appendChild(el('p','journal-eyebrow','The search for Raeez'));story.appendChild(el('h3','',saved.note?'A note, and a road east':'Before dinner'));
     story.appendChild(el('p','',saved.note?'Raeez’s note says the flowers along the old road have stopped opening. He went to ask the herbalist. Follow Lavenderway Fields east to Lavendyr Glade.':'Raeez has not returned. Check the bookshelf inside our tower at Rosepetal Estate for his note.'));story.appendChild(el('p','journal-draft-note','The opening story is a draft. The later quest trail is still being written.'));page.appendChild(story);

@@ -15,9 +15,10 @@ function fixture(old={},weather={type:'rain'}){
 }
 
 const g=fixture(),{api,saved,maps}=g,maera={id:'lavendyr_maera',name:'Maera',lines:['Original fallback.']};
+assert.match(api.dialogueFor({id:'stormy-companion',name:'Stormy',kind:'animal'})[0][1],/Raeez said/,'Stormy uses the story dialogue rather than generic pet dialogue');
 assert.equal(api.journal().stage,0);assert.match(api.dialogueFor(maera)[0][1],/note/);assert.equal(saved.journey.stage,0,'Maera does not skip the opening clue');
 saved.note=true;api.onNote();assert.equal(api.journal().stage,1);api.dialogueFor({actor:maera});assert.equal(saved.journey.stage,2,'actual resident wrapper reaches Maera');
-g.move('lavendyr',504,320);assert.equal(api.nearby(g.hero).id,'closed-flowers');g.use('closed-flowers');assert.equal(saved.journey.stage,3);assert.match(api.journal().objective,/Meadow Slime/);
+g.move('lavendyr',504,320);assert.equal(api.nearby(g.hero).id,'closed-flowers');g.use('closed-flowers');assert.equal(saved.journey.stage,3);assert.match(api.journal().objective,/Lavender Imp/);
 api.onCampClear({id:'camp-2'},'lavenderway');assert.equal(saved.journey.stage,3,'the named quest camp is specific');saved.clearedCamps['lavenderway:camp-1']=true;api.onCampClear({id:'camp-1'},'lavenderway');assert.equal(saved.journey.stage,4);api.dialogueFor(maera);assert.equal(saved.journey.stage,5);assert.equal(saved.inventory.briar_key,1);const earned=g.rewards.length;api.dialogueFor(maera);assert.equal(g.rewards.length,earned,'repeated dialogue cannot farm quest XP');
 assert(maps.briarvault.camps.every(c=>['goblin','minotaur'].includes(c.monster)),'dungeon uses only existing approved monster art');assert(maps.briarvault.camps.find(c=>c.boss).hidden);assert.equal(maps.briarvault.safe,false);assert.equal(maps.briarvault.kind,'dungeon');
 g.move('lavendyr',352,236);assert(g.use('cellar-entry').entered);assert.equal(g.getArea(),'briarvault');

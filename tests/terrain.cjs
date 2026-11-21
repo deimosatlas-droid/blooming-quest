@@ -34,12 +34,17 @@ const inside=area(['ssssss','siiiis','siiiis','ssssss'],{kind:'interior'});const
 const forest=area(Array(10).fill('gggggggggg'),{objects:[{sprite:'tree0',x:64,y:64},{sprite:'pine',x:96,y:80}]});
 const f1=terrain.paint(forest,testAtlas,testTexture),f2=terrain.paint(forest,testAtlas,testTexture);assert.equal(digest(f1),digest(f2),'ground detail is deterministic');
 assert.notEqual(digest(f1),digest(terrain.paint({...forest,objects:[]},testAtlas,testTexture)),'real trees receive forest-floor detail');
+const regional=createCanvas(16,16),rg=regional.getContext('2d');rg.fillStyle='#c371bf';rg.fillRect(0,0,16,16);
+const regionalAtlas={...testAtlas,regional_grass:{rect:[0,0,16,16],anchor:[8,16],sheet:'regional'},flower_patch:{rect:[0,0,16,16],anchor:[8,16],sheet:'regional'}};
+const regionalFloor=terrain.paint(area(['ggg','ggg','ggg'],{tilePalette:{g:'regional_grass'}}),regionalAtlas,testTexture,{regional});assert.deepEqual(pixel(regionalFloor,0,0),[195,113,191,255],'regional terrain uses its own texture rather than unrelated base-atlas pixels');
+const cachedFlowers=terrain.paint(area(['ggg','gdg','ggg'],{objects:[{sprite:'flower_patch',x:24,y:16,groundDetail:true},{sprite:'flower_patch',x:24,y:32,groundDetail:true}]}),regionalAtlas,testTexture,{regional});assert.deepEqual(pixel(cachedFlowers,24,8),[195,113,191,255],'low flowers are baked into the cached ground');assert.deepEqual(pixel(cachedFlowers,24,24),roadColor,'cached plants cannot cover the readable road');
 (async()=>{
+ const sheets={'lavendyr-v18':await loadImage(ROOT+'assets/lavendyr-v18.png'),'lavender-nature-v18':await loadImage(ROOT+'assets/lavender-nature-v18.png')};
  const maps=JSON.parse(fs.readFileSync(ROOT+'fixed-maps.json')),atlas=JSON.parse(fs.readFileSync(ROOT+'assets/world-v05.json')),texture=await loadImage(ROOT+'assets/world-v05.png');
  const measurements=[];let count=0;
  for(const [id,map]of Object.entries(maps)){
   const data=JSON.stringify(map),shape=terrain.inspect(map);assert.equal(shape.errors.length,0,id+' has closed street contours');
-  const start=performance.now(),canvas=terrain.paint(map,atlas,texture),elapsed=performance.now()-start;
+  const start=performance.now(),canvas=terrain.paint(map,atlas,texture,sheets),elapsed=performance.now()-start;
   assert.equal(canvas.width,map.w*16);assert.equal(canvas.height,map.h*16);assert.equal(JSON.stringify(map),data,id+' remains unchanged');
   measurements.push({id,ms:Math.round(elapsed)});count++;
  }
@@ -47,9 +52,9 @@ assert.notEqual(digest(f1),digest(terrain.paint({...forest,objects:[]},testAtlas
  if(process.argv.includes('--render')){
   const shot=(id,hx,hy)=>{
    const map=maps[id],x=hx??map.spawn[0],y=hy??map.spawn[1],cx=Math.round(Math.max(0,Math.min(map.w*16-384,x-192))),cy=Math.round(Math.max(0,Math.min(map.h*16-256,y-(map.cameraY?170+(map.cameraY-170)*Math.max(0,1-Math.max(0,y-map.spawn[1])/128):170))));
-   const ground=terrain.paint(map,atlas,texture),out=createCanvas(384,256),ctx=out.getContext('2d');ctx.imageSmoothingEnabled=false;ctx.drawImage(ground,cx,cy,384,256,0,0,384,256);
+   const ground=terrain.paint(map,atlas,texture,sheets),out=createCanvas(384,256),ctx=out.getContext('2d');ctx.imageSmoothingEnabled=false;ctx.drawImage(ground,cx,cy,384,256,0,0,384,256);
    for(const o of [...map.objects].sort((a,b)=>a.y-b.y)){
-    const a=atlas[o.sprite],scale=o.scale??1;if(!a)continue;ctx.drawImage(texture,...a.rect,Math.round(o.x-cx-a.anchor[0]*scale),Math.round(o.y-cy-a.anchor[1]*scale),a.rect[2]*scale,a.rect[3]*scale);
+    const a=atlas[o.sprite],scale=o.scale??1;if(!a||o.groundDetail)continue;ctx.drawImage(a.sheet?sheets[a.sheet]:texture,...a.rect,Math.round(o.x-cx-a.anchor[0]*scale),Math.round(o.y-cy-a.anchor[1]*scale),a.rect[2]*scale,a.rect[3]*scale);
    }
    if(map.theme==='moon'||map.theme==='night'){ctx.fillStyle=map.theme==='moon'?'#192f6660':'#132a3c50';ctx.fillRect(0,0,384,256);}
    return out;

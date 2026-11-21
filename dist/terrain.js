@@ -5,6 +5,9 @@
   const DEFAULT={g:'grass',d:'dirt_clean',c:'cobble_grey',b:'dock_planks',w:'water',a:'sand_1',i:'tavern_floor',s:'wall',f:'dirt_clean'};
   const ROAD=new Set(['d','c','b']);
   const BLOCKED=new Set(['w','x','s']);
+  // Generated scenery carries the rich colour; quiet ground keeps actors and
+  // path edges readable at the game's native 384px camera resolution.
+  const SOFT_GROUND={lv18_moss_grass:['#74925c',.13],lv18_pale_cobble:['#d9c79e',.22],lv18_worn_path:['#b8ab81',.2],lv18_lavender_soil:['#796a73',.2]};
   const PALETTES={
     rose:['#628e49','#96b461','#b4a66b'],lavender:['#628c51','#95ad73','#a5a277'],
     gold:['#748d46','#a8b85a','#bea167'],hydrangea:['#527f50','#88a76b','#a5a977'],
@@ -16,7 +19,7 @@
   function key(area,atlas,type){const selected=area.tilePalette?.[type]||DEFAULT[type];return atlas[selected]?selected:DEFAULT[type];}
   function seed(text){let n=2166136261;for(const ch of String(text))n=Math.imul(n^ch.charCodeAt(0),16777619);return n>>>0;}
   function noise(x,y,n){let v=Math.imul(x+374761393,668265263)^Math.imul(y+1274126177,2246822519)^n;v=Math.imul(v^(v>>>13),1274126177);return ((v^(v>>>16))>>>0)/4294967296;}
-  function drawTile(ctx,texture,atlas,name,x,y){const a=atlas[name];if(a)ctx.drawImage(texture,...a.rect,x*SIZE,y*SIZE,SIZE,SIZE);}
+  function drawTile(ctx,texture,atlas,name,x,y,sheets={}){const a=atlas[name],image=a?.sheet?sheets[a.sheet]:texture;if(!a||!image)return;const soft=SOFT_GROUND[name];if(soft){ctx.save();ctx.fillStyle=soft[0];ctx.fillRect(x*SIZE,y*SIZE,SIZE,SIZE);ctx.globalAlpha*=soft[1];ctx.drawImage(image,...a.rect,x*SIZE,y*SIZE,SIZE,SIZE);ctx.restore();if(name==='lv18_pale_cobble'){ctx.save();ctx.strokeStyle='#b8ad913e';ctx.lineWidth=1;for(let row=0;row<3;row++){const yy=y*16+row*5+1,shift=(row+y)%2?4:0;ctx.beginPath();ctx.moveTo(x*16,yy);ctx.lineTo(x*16+16,yy);for(let xx=shift;xx<16;xx+=8){ctx.moveTo(x*16+xx,yy);ctx.lineTo(x*16+xx,yy+5);}ctx.stroke();}ctx.restore();}}else ctx.drawImage(image,...a.rect,x*SIZE,y*SIZE,SIZE,SIZE);}
   function neighbours(area,x,y,types){return [[x,y-1],[x+1,y],[x,y+1],[x-1,y]].map(([xx,yy])=>types.has(tile(area,xx,yy)));}
 
   function contours(area,types=ROAD){
@@ -129,6 +132,16 @@
     }
     ctx.restore();
   }
+  function lavenderStream(ctx,area){
+    if(area.id!=='lavenderway')return;
+    const n=seed('lavenderway-stream');ctx.save();
+    for(let y=0;y<area.h;y++)for(let x=0;x<area.w;x++)if(tile(area,x,y)==='w'){
+      const px=x*16,py=y*16;ctx.fillStyle='#4faeae';ctx.fillRect(px,py,16,16);
+      const shore=[[0,-1],[1,0],[0,1],[-1,0]].filter(([dx,dy])=>!['w','b'].includes(tile(area,x+dx,y+dy)));
+      ctx.fillStyle='#8bcdba';for(const[dx,dy]of shore)ctx.fillRect(px+(dx>0?13:0),py+(dy>0?13:0),dx?3:16,dy?3:16);
+      if(noise(x,y,n)<.55){ctx.fillStyle='#b9e1ce70';const xx=px+3+Math.floor(noise(x+1,y,n)*5),yy=py+5+Math.floor(noise(x,y+1,n)*7);ctx.fillRect(xx,yy,5,1);ctx.fillStyle='#3b8c9670';ctx.fillRect(xx+2,yy+3,4,1);}
+    }ctx.restore();
+  }
   function nearbyRoad(area,x,y){
     const own=tile(area,x,y);if(ROAD.has(own))return own;
     if(own!=='g')return null;
@@ -156,12 +169,12 @@
     }
     ctx.restore();
   }
-  function streetSurface(ctx,area,atlas,texture){
+  function streetSurface(ctx,area,atlas,texture,sheets){
     const outline=contours(area);if(!outline.loops.length)return;
     const loops=outline.loops.map(points=>rounded(area,points));
     ctx.save();trace(ctx,loops);ctx.clip('evenodd');
     for(let y=0;y<area.h;y++)for(let x=0;x<area.w;x++){
-      const type=nearbyRoad(area,x,y);if(type)drawTile(ctx,texture,atlas,key(area,atlas,type),x,y);
+      const type=nearbyRoad(area,x,y);if(type)drawTile(ctx,texture,atlas,key(area,atlas,type),x,y,sheets);
     }
     // An inset, subdued lip breaks the perfectly cut edge of the tile texture.
     trace(ctx,loops);ctx.strokeStyle=area.theme==='coast'?'rgba(78,88,64,0.24)':'rgba(53,68,42,0.25)';ctx.lineWidth=1.5;ctx.stroke();
@@ -175,23 +188,24 @@
     }
     roadLeaves(ctx,area);ctx.restore();
   }
-  function paint(area,atlas,texture){
+  function paint(area,atlas,texture,sheets={}){
     const canvas=document.createElement('canvas');canvas.width=area.w*SIZE;canvas.height=area.h*SIZE;
     const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
     ctx.fillStyle=area.kind==='interior'?'#192b23':'#76c564';ctx.fillRect(0,0,canvas.width,canvas.height);
     if(area.kind==='interior'){
-      for(let y=0;y<area.h;y++)for(let x=0;x<area.w;x++)drawTile(ctx,texture,atlas,key(area,atlas,tile(area,x,y)),x,y);
+      for(let y=0;y<area.h;y++)for(let x=0;x<area.w;x++)drawTile(ctx,texture,atlas,key(area,atlas,tile(area,x,y)),x,y,sheets);
       return canvas;
     }
-    for(let y=0;y<area.h;y++)for(let x=0;x<area.w;x++)if('gdcf'.includes(tile(area,x,y)))drawTile(ctx,texture,atlas,key(area,atlas,'g'),x,y);
+    for(let y=0;y<area.h;y++)for(let x=0;x<area.w;x++)if('gdcf'.includes(tile(area,x,y)))drawTile(ctx,texture,atlas,key(area,atlas,'g'),x,y,sheets);
     quietGrass(ctx,area);
     for(let y=0;y<area.h;y++)for(let x=0;x<area.w;x++){
       const type=tile(area,x,y);
       if(type==='g'||type==='d'||type==='c')continue;
       if(type==='x'){ctx.fillStyle='#192b23';ctx.fillRect(x*SIZE,y*SIZE,SIZE,SIZE);}
-      else drawTile(ctx,texture,atlas,key(area,atlas,type),x,y);
+      else drawTile(ctx,texture,atlas,key(area,atlas,type),x,y,sheets);
     }
-    streetSurface(ctx,area,atlas,texture);banks(ctx,area);
+    lavenderStream(ctx,area);streetSurface(ctx,area,atlas,texture,sheets);banks(ctx,area);
+    const details=(area.objects||[]).filter(o=>o.groundDetail);if(details.length){ctx.save();ctx.beginPath();for(let y=0;y<area.h;y++)for(let x=0;x<area.w;x++)if('gf'.includes(tile(area,x,y)))ctx.rect(x*16,y*16,16,16);ctx.clip();for(const o of details){const a=atlas[o.sprite],image=a?.sheet?sheets[a.sheet]:texture;if(!a||!image)continue;const scale=o.scale||1;ctx.drawImage(image,...a.rect,Math.round(o.x-a.anchor[0]*scale),Math.round(o.y-a.anchor[1]*scale),Math.round(a.rect[2]*scale),Math.round(a.rect[3]*scale));}ctx.restore();}
     return canvas;
   }
   function inspect(area){

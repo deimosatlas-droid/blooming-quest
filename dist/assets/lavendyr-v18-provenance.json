@@ -1,0 +1,28 @@
+{
+  "environment": {
+    "file": "lavendyr-v18.png",
+    "source": "AI-generated from the user-provided Blooming Quest design bible; adapted to top-down game scale",
+    "objects": 9
+  },
+  "creatures": {
+    "file": "lavender-creatures.png",
+    "types": [
+      "lavender_imp",
+      "violet_brambleback",
+      "amethyst_wisp",
+      "medusa"
+    ],
+    "approval": "User approved all four displayed directional designs before integration, 21 Nov 2026",
+    "frames": "Four drawn facings per creature; runtime articulation supplies movement, preparation and recovery. No full hand-drawn attack cycles are claimed."
+  },
+  "references": "Blooming Quest Master Design Bible, 19 Nov 2026, pages 11\u201314",
+  "masters": "Retained outside the player download in assets-source/v18-art",
+  "runtime": "Static local sprites; no AI service used during gameplay",
+  "nature": {
+    "file": "lavender-nature-v18.png",
+    "source": "AI-generated nature and terrain atlas based on the user-provided Lavenderway road reference, adapted to top-down game scale",
+    "objects": 12,
+    "groundTiles": 4,
+    "rendering": "Quiet ground colours and low-contrast stone joints keep native-resolution paths and actors legible."
+  }
+}

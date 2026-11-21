@@ -165,13 +165,14 @@
       group++;
     }
   }
-  function anchorNode(position){
+  function anchorNode(position,actor=null){
+    const usable=index=>{const p=point(index);return clearLine(position,p)&&(!actor||humanSpace(actor,...p)&&peopleLine(actor,position,p));};
     const first=nearestNode(...position);
-    if(first>=0&&clearLine(position,point(first)))return first;
+    if(first>=0&&usable(first))return first;
     const tx=Math.floor(position[0]/16),ty=Math.floor(position[1]/16);let best=-1,distance=Infinity;
     for(let yy=Math.max(0,ty-3);yy<=Math.min(rows-1,ty+3);yy++)for(let xx=Math.max(0,tx-3);xx<=Math.min(columns-1,tx+3);xx++){
       const index=node(xx,yy),p=point(index),d=Math.hypot(p[0]-position[0],p[1]-position[1]);
-      if(navigation[index]&&d<distance&&clearLine(position,p)){best=index;distance=d;}
+      if(navigation[index]&&d<distance&&usable(index)){best=index;distance=d;}
     }
     return best;
   }
@@ -196,7 +197,7 @@
   }
   function pathBetween(from,to,actor=null) {
     if(preferredLine(from,to)&&peopleLine(actor,from,to))return[to];
-    const start=anchorNode(from),end=anchorNode(to);
+    const start=anchorNode(from,actor),end=anchorNode(to,actor);
     if(start<0||end<0||components[start]!==components[end])return[];
     const previous=new Int32Array(columns*rows);previous.fill(-1);
     const cost=new Float64Array(columns*rows);cost.fill(Infinity);cost[start]=0;previous[start]=start;
@@ -253,14 +254,30 @@
     }
     return result;
   }
-  function placeIndoorResident(source,index){
+  function indoorRestSafe(p,actor=null){
+    if(!stand(...p)||!humanSpace(actor,...p,20))return false;
+    // A clear foot position alone can leave a resting neighbour's head inside
+    // the wall or half their body through a bed. Keep their full silhouette on
+    // the floor and in front of, or beside, the furniture.
+    for(const dx of[-10,0,10])for(const dy of[-31,-16,-3])if(['w','x','s'].includes(map.tiles?.[Math.floor((p[1]+dy)/16)]?.[Math.floor((p[0]+dx)/16)]||'x'))return false;
+    if(idleBounds.some(([x,y,w,h])=>p[0]+10>x&&p[0]-10<x+w&&p[1]>y&&p[1]-31<y+h))return false;
+    if(people.some(other=>other!==actor&&other.restPoint&&Math.hypot(other.restPoint[0]-p[0],other.restPoint[1]-p[1])<20))return false;
+    return !(map.portals||[]).some(door=>Math.hypot(door.x-p[0],door.y-p[1])<32);
+  }
+  function indoorDoor(source){
+    const door=(map.portals||[]).find(p=>p.target===source.homeTown)||(map.portals||[]).find(p=>p.kind==='return');
+    return door?safePoint(door.x,door.y):null;
+  }
+  function placeIndoorResident(source,index,arriving=false){
     const furniture=(map.objects||[]).filter(o=>/bed|chair|bench|stool/.test(o.sprite||'')),candidates=[];
-    for(const object of furniture)for(const[dx,dy]of[[0,16],[20,10],[-20,10]]){const p=safePoint(object.x+dx,object.y+dy);if(p)candidates.push(p);}
-    for(let y=72;y<rows*16-32;y+=24)for(let x=40;x<columns*16-32;x+=24)candidates.push([x,y]);
-    const spot=candidates.find(p=>stand(...p)&&humanSpace(null,...p,20)&&!(map.portals||[]).some(door=>Math.hypot(door.x-p[0],door.y-p[1])<30));
+    for(const object of furniture){const art=sprites[object.sprite],half=art?art.rect[2]*(object.scale||1)/2:12;for(const[dx,dy]of[[0,36],[half+16,4],[-half-16,4]]){const p=safePoint(object.x+dx,object.y+dy);if(p)candidates.push(p);}}
+    for(let y=104;y<rows*16-32;y+=24)for(let x=48;x<columns*16-32;x+=24)candidates.push([x,y]);
+    const door=indoorDoor(source),doorNode=door&&anchorNode(door);
+    const spot=candidates.find(p=>indoorRestSafe(p)&&(!door||doorNode>=0&&components[anchorNode(p)]===components[doorNode]));
     if(!spot)return null;
-    const actor=makeActor({...source,x:spot[0],y:spot[1],route:[spot]},index,false);
-    if(actor){actor.state='home';actor.pause=Infinity;actor.sleeping=true;actor.hidden=false;actor.indoors=true;actor.sourcePerson=source;}
+    if(arriving&&(!door||!humanSpace(null,...door,20)))return null;
+    const start=arriving?door:spot,actor=makeActor({...source,x:start[0],y:start[1],route:[spot]},index,false);
+    if(actor){actor.state=arriving?'travel':'home';actor.pause=0;actor.sleeping=!arriving;actor.hidden=false;actor.indoors=true;actor.sourcePerson=source;actor.restPoint=spot;actor.homeDoor=door;actor.homeTransition=arriving?'arriving':null;}
     return actor;
   }
   function syncIndoorResidents(){
@@ -268,7 +285,7 @@
     const minute=Math.floor(absoluteMinute());if(minute===lastIndoorCheck)return;lastIndoorCheck=minute;
     const present=new Set(people.map(person=>person.id));
     for(const[source,index]of indoorResidents(map).map((person,index)=>[person,index]))if(!present.has(source.id)){
-      const actor=placeIndoorResident(source,index);if(actor){people.push(actor);present.add(actor.id);}
+      const actor=placeIndoorResident(source,index,true);if(actor){people.push(actor);present.add(actor.id);}
     }
   }
   function enter(nextMap,options={}) {
@@ -283,7 +300,7 @@
     }).filter(Boolean);
     stand=(x,y)=>physical(x,y)&&!buildings.some(([bx,by,bw,bh])=>x>bx&&x<bx+bw&&y>by&&y<by+bh);
     columns=map.w;rows=map.h;
-    const guests=indoorResidents(map),hasRoutines=(map.residents?.length||0)+(map.animals?.length||0)+guests.length>0;
+    const guests=indoorResidents(map),hasRoutines=(map.residents?.length||0)+(map.animals?.length||0)+guests.length>0||(map.kind==='interior'&&Boolean(getAreas));
     if(hasRoutines){const signature=cacheable?navigationSignature(map,buildings):null;if(!cacheable||!restoreNavigation(signature)){buildNavigation();if(cacheable)cacheNavigation(signature);}}
     else{navigation=[];links=new Uint8Array(0);components=new Int32Array(0);}
     idleBounds=(map.objects||[]).map(o=>{const a=sprites[o.sprite],scale=o.scale??1;if(!a||scale<.2)return null;return[o.x-a.anchor[0]*scale-2,o.y-a.anchor[1]*scale-1,a.rect[2]*scale+4,a.rect[3]*scale+3];}).filter(Boolean);
@@ -465,6 +482,7 @@
         if(current.leaseUntil===null&&!['home','breakfast'].includes(actor.task.phase))current.leaseUntil=absoluteMinute()+18+actor.phase*8;
       }
       const focus=actor.task.node.focus;faceToward(actor,focus[0]-actor.x,focus[1]-actor.y);
+      if(actor.task.node.stationKind==='seat'&&!actor.waitingFor)actor.face='down';
       if(actor.task.action==='watch')actor.face=['left','down','right','down'][Math.floor(absoluteMinute()/4.8+actor.phase*4)%4];
       return;
     }
@@ -473,11 +491,41 @@
     if(!actor.path.length){actor.path=pathBetween([actor.x,actor.y],target,actor);if(!actor.path.length){actor.pause=.7+actor.phase;return;}}
     moveResident(actor,actor.path[0],dt);
   }
+  function updateIndoorResident(actor,dt){
+    const resting=global.BloomRoutines.isResting(actor.sourcePerson,clock(),actor.homeIndex);
+    actor.walking=false;actor.sleeping=false;actor.working=false;
+    if(resting){
+      if(actor.hidden){
+        if(!actor.homeDoor||!humanSpace(actor,...actor.homeDoor,20))return;
+        actor.x=actor.homeDoor[0];actor.y=actor.homeDoor[1];actor.hidden=false;actor.path=[];actor.homeTransition='arriving';
+      }else if(actor.homeTransition==='departing'){actor.path=[];actor.homeTransition='arriving';}
+    }else{
+      if(actor.hidden)return;
+      if(actor.homeTransition!=='departing'){actor.homeTransition='departing';actor.path=[];}
+      // Households share one narrow threshold. Let the nearest departing
+      // neighbour use it first instead of converging on the same blocked point.
+      const first=people.filter(other=>other.homeGuest&&!other.hidden&&other.homeDoor&&!global.BloomRoutines.isResting(other.sourcePerson,clock(),other.homeIndex)).sort((a,b)=>Math.hypot(a.x-a.homeDoor[0],a.y-a.homeDoor[1])-Math.hypot(b.x-b.homeDoor[0],b.y-b.homeDoor[1]))[0];
+      if(first&&first!==actor){actor.state='home';return;}
+    }
+    if(actor.talkPause>0){actor.talkPause-=dt;return;}
+    const target=actor.homeTransition==='departing'?actor.homeDoor:actor.restPoint;
+    if(!target)return;
+    if(Math.hypot(target[0]-actor.x,target[1]-actor.y)<.6){
+      actor.x=target[0];actor.y=target[1];actor.path=[];actor.state='home';
+      if(actor.homeTransition==='departing'){actor.hidden=true;actor.indoors=false;}
+      else{actor.sleeping=true;actor.face='down';}
+      actor.homeTransition=null;return;
+    }
+    actor.state='travel';actor.indoors=true;
+    if(actor.pause>0){actor.pause-=dt;return;}
+    if(!actor.path.length){actor.path=pathBetween([actor.x,actor.y],target,actor);if(!actor.path.length){actor.pause=.5;return;}}
+    moveResident(actor,actor.path[0],dt);
+  }
   function update(dt,hero) {
     if(!map)return;
     time+=dt;advanceClock(dt);rememberTime+=dt;syncIndoorResidents();
     for(const actor of people){
-      if(actor.homeGuest){actor.hidden=!global.BloomRoutines.isResting(actor.sourcePerson,clock(),actor.homeIndex);actor.sleeping=actor.talkPause<=0||!actor.talkPause;actor.walking=false;if(actor.talkPause>0)actor.talkPause-=dt;}
+      if(actor.homeGuest)updateIndoorResident(actor,dt);
       else if(actor.plan)updateRoutine(actor,dt);else updateActor(actor,dt);
     }
     for(const actor of animals)updateActor(actor,dt);
@@ -521,7 +569,13 @@
     const t=absoluteMinute()/.8,offset=actor.phase*Math.PI*2,gait=actor.steps*10.5,walk=Boolean(actor.walking),working=Boolean(actor.working&&!walk),action=actor.task?.action||'rest';
     const breathe=Math.sin(t*.9+offset)>.55?1:0;
     const pose={motion:walk?(actor.brisk?'brisk-walk':'walk'):working?'work-'+action:'idle',baseX:walk?0:Math.round(Math.sin(t*.42+offset)*.6),torsoX:walk?Math.round(Math.sin(gait)*.8):0,torsoY:walk?-Math.round(Math.abs(Math.sin(gait))*(actor.brisk?2:1.4)):0,stretch:walk?0:breathe,headX:0,headY:walk?-Math.round(Math.abs(Math.sin(gait))):(-breathe),headFace:actor.face,leftArmX:0,rightArmX:0,leftArmY:0,rightArmY:0,leftLegX:0,rightLegX:0,leftLegY:0,rightLegY:0,clothSway:0};
-    if(walk){
+    pose.seated=Boolean(!walk&&!actor.waitingFor&&actor.reservationStatus==='occupied'&&actor.task?.node.stationKind==='seat');
+    if(pose.seated){
+      // Use the approved articulated sprite: the body rests against the bench,
+      // with shorter, separated lower legs. A queued neighbour stays standing.
+      pose.motion='seated';pose.torsoY=-10;pose.headY=-10;pose.leftArmY=1;pose.rightArmY=1;pose.leftLegX=-2;pose.rightLegX=2;pose.leftLegY=-9;pose.rightLegY=-9;
+      if(action==='read'){pose.leftArmY=-1;pose.rightArmY=-1;pose.headY=-9;}
+    }else if(walk){
       pose.leftLegX=Math.round(Math.sin(gait));pose.rightLegX=-pose.leftLegX;
       pose.leftLegY=-Math.round(Math.max(0,Math.sin(gait))*(actor.brisk?3:2));pose.rightLegY=-Math.round(Math.max(0,-Math.sin(gait))*(actor.brisk?3:2));
       pose.leftArmY=-Math.round(Math.max(0,-Math.sin(gait))*2);pose.rightArmY=-Math.round(Math.max(0,Math.sin(gait))*2);
@@ -547,13 +601,13 @@
     if(actor.homeGuest&&actor.sleeping){pose.headY=1;pose.headX=Math.round(Math.sin(t*.25+offset));pose.leftArmY=1;pose.rightArmY=1;}
     return pose;
   }
-  function drawResident(actor,ctx,x,y){
-    const col=DIRECTIONS[actor.face]??0,row=Number.isInteger(actor.spriteRow)?actor.spriteRow:(ROLE_ROWS[actor.type]??7),parts=spriteParts(row,col),pose=animationPose(actor),baseX=x-20+pose.baseX,baseY=y-40;
+  function drawResident(actor,ctx,x,y,pose=animationPose(actor)){
+    const col=DIRECTIONS[actor.face]??0,row=Number.isInteger(actor.spriteRow)?actor.spriteRow:(ROLE_ROWS[actor.type]??7),parts=spriteParts(row,col),baseX=x-20+pose.baseX,baseY=y-40;
     const piece=(sourceCol,sx,sy,w,h,dx=0,dy=0,stretch=0)=>{if(w>0&&h>0)ctx.drawImage(residentsImage,sourceCol*40+sx,row*48+sy,w,h,Math.round(baseX+sx+dx),Math.round(baseY+sy+dy),w,h+stretch);};
     // Overlapping attachment bands cover every source pixel. Limbs move beneath
     // the torso/head, so bends never expose a cut seam or a detached sprite part.
-    piece(col,0,parts.legStart,22,48-parts.legStart,pose.leftLegX,pose.leftLegY);
-    piece(col,18,parts.legStart,22,48-parts.legStart,pose.rightLegX,pose.rightLegY);
+    piece(col,0,parts.legStart,22,48-parts.legStart,pose.leftLegX,pose.leftLegY,pose.seated?-4:0);
+    piece(col,18,parts.legStart,22,48-parts.legStart,pose.rightLegX,pose.rightLegY,pose.seated?-4:0);
     const height=parts.bodyEnd-parts.bodyStart+1,bodyY=pose.torsoY-pose.stretch;
     piece(col,0,parts.bodyStart,parts.leftArm,height,pose.torsoX+pose.leftArmX+pose.clothSway,bodyY+pose.leftArmY,pose.stretch);
     piece(col,parts.rightArm,parts.bodyStart,40-parts.rightArm,height,pose.torsoX+pose.rightArmX+pose.clothSway,bodyY+pose.rightArmY,pose.stretch);
@@ -565,9 +619,10 @@
   function draw(entry,ctx,camera) {
     const actor=entry.actor,x=Math.round(actor.x-camera.x),y=Math.round(actor.y-camera.y);
     const walkingBob=actor.walking?Math.round(Math.sin(actor.steps*12)*.8):actor.working&&['hammer','craft','sweep'].includes(actor.task?.action)?Math.round(Math.sin(time*5+actor.phase)*.6):0;
-    ctx.fillStyle='#193c2944';ctx.beginPath();ctx.ellipse(x,y+1,actor.kind==='resident'?5:4,1.7,0,0,Math.PI*2);ctx.fill();
+    const residentPose=actor.kind==='resident'?animationPose(actor):null;
+    ctx.fillStyle='#193c2944';ctx.beginPath();ctx.ellipse(x,y+1-(residentPose?.seated?12:0),actor.kind==='resident'?5:4,1.7,0,0,Math.PI*2);ctx.fill();
     if(actor.kind==='resident'&&residentsImage) {
-      const pose=drawResident(actor,ctx,x,y);
+      const pose=drawResident(actor,ctx,x,y,residentPose);
       if(actor.plan)workEffect(actor,ctx,x+pose.baseX,y,pose);
       if(actor.homeGuest&&actor.sleeping){ctx.save?.();ctx.font='6px monospace';ctx.fillStyle='#e4d6a6';ctx.fillText?.('z',x+7,y-32-Math.round(Math.sin(time*.8+actor.phase)));ctx.restore?.();}
       return;
@@ -619,13 +674,13 @@
       if(actor.hidden)continue;
       const d=Math.hypot(hero.x-actor.x,hero.y-actor.y);
       const priority=d+(actor.kind==='animal'?5:0);
-      if(d<27&&(!closest||priority<closest.d))closest={type:'resident',id:actor.id,name:actor.name||'Neighbour',label:(actor.kind==='animal'?'Greet ':'Talk to ')+(actor.name||'neighbour'),d:priority,actor};
+      if(d<27&&(!closest||priority<closest.d))closest={type:'resident',id:actor.id,name:actor.name||'Neighbour',x:actor.x,y:actor.y,label:(actor.kind==='animal'?'Greet ':'Talk to ')+(actor.name||'neighbour'),d:priority,actor};
     }
     return closest;
   }
   function talk(id,hero) {
     const actor=[...people,...animals,...(companion?[companion]:[])].find(p=>p.id===id);
-    if(!actor)return [];
+    if(!actor||actor.hidden)return [];
     actor.path=[];actor.pause=3.5;actor.talkPause=3.5;actor.walking=false;actor.working=false;faceToward(actor,hero.x-actor.x,hero.y-actor.y);
     const lines=actor.lines?.length?actor.lines:actor.id==='stormy-companion'?['He said before dinner. I think he owes us two.', 'I am following you. For the adventure. And the possibility of snacks.', 'Home will still be there, Amaal. Let’s bring him back to it.']:actor.kind==='animal'?['A curious nose turns toward you, then goes back to its very busy day.']:['Beautiful day for a walk. The roads between towns are long; rest here as long as you need.'];
     let line=lines[actor.talkCount++%lines.length];
@@ -657,7 +712,7 @@
     }
   }
   function snapshot() {
-    return [...people,...animals,...(companion?[companion]:[])].map(actor=>({id:actor.id,x:actor.x,y:actor.y,face:actor.face,type:actor.type,walking:actor.walking,pause:actor.pause,state:actor.state||'routine',activity:actor.task?.action||null,task:actor.task?.label||null,destination:actor.task?.node.label||null,target:actor.task?.node.point?.slice()||null,personality:actor.plan?.personality||null,job:actor.plan?.job||null,stationKey:actor.stationKey||null,reservationStatus:actor.reservationStatus||null,waitingFor:actor.waitingFor||null,breakUntil:actor.cooldownUntil||null,brisk:Boolean(actor.brisk),indoors:Boolean(actor.indoors),hidden:Boolean(actor.hidden),homeGuest:Boolean(actor.homeGuest)}));
+    return [...people,...animals,...(companion?[companion]:[])].map(actor=>({id:actor.id,x:actor.x,y:actor.y,face:actor.face,type:actor.type,walking:actor.walking,pause:actor.pause,state:actor.state||'routine',activity:actor.task?.action||null,task:actor.task?.label||null,destination:actor.task?.node.label||null,target:actor.task?.node.point?.slice()||null,personality:actor.plan?.personality||null,job:actor.plan?.job||null,stationKey:actor.stationKey||null,reservationStatus:actor.reservationStatus||null,waitingFor:actor.waitingFor||null,breakUntil:actor.cooldownUntil||null,brisk:Boolean(actor.brisk),indoors:Boolean(actor.indoors),hidden:Boolean(actor.hidden),homeGuest:Boolean(actor.homeGuest),homeTransition:actor.homeTransition||null,sleeping:Boolean(actor.sleeping)}));
   }
   function inspectRoutines(){return people.filter(p=>p.plan).map(p=>({id:p.id,job:p.plan.job,personality:p.plan.personality,home:p.plan.home,work:p.plan.work,lunch:p.plan.lunch,shops:p.plan.shops,evening:p.plan.evening,times:p.plan.times}));}
   function animation(id){const actor=people.find(p=>p.id===id);if(!actor)return null;const col=DIRECTIONS[actor.face]??0,row=Number.isInteger(actor.spriteRow)?actor.spriteRow:(ROLE_ROWS[actor.type]??7);return{...animationPose(actor),parts:{...spriteParts(row,col)},spriteRow:row,face:actor.face};}

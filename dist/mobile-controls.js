@@ -34,13 +34,14 @@
         if(!pointer.keys.has(key)){pointer.keys.add(key);change(key,1);}
       }
       for(const button of buttons)paint(button);
+      return pointers.get(id)===pointer;
     }
-    const press=(id,button)=>setKeys(id,[button.dataset.key],{button,pad:null,directional:DIRECTIONS.has(button.dataset.key)});
-    function reset(){for(const id of [...pointers.keys()])release(id);}
-    function padDirections(pad,event){
+    const press=(id,button)=>setKeys(id,[button.dataset.key],{button,pad:null,captureTarget:pointers.get(id)?.captureTarget||button,directional:DIRECTIONS.has(button.dataset.key)});
+    function reset(settings={}){for(const [id,pointer]of [...pointers]){if(settings.preserveMovement&&[...pointer.keys].every(key=>DIRECTIONS.has(key)||key==='shift'))continue;release(id);}}
+    function padDirections(pad,event,insideOnly=false){
       const rect=pad.getBoundingClientRect?.(),x=Number(event.clientX),y=Number(event.clientY);
       if(!rect||!Number.isFinite(x)||!Number.isFinite(y)||!(rect.width>0)||!(rect.height>0))return null;
-      if(x<rect.left||x>rect.left+rect.width||y<rect.top||y>rect.top+rect.height)return[];
+      if(insideOnly&&(x<rect.left||x>rect.left+rect.width||y<rect.top||y>rect.top+rect.height))return null;
       const dx=(x-rect.left-rect.width/2)/(rect.width/2),dy=(y-rect.top-rect.height/2)/(rect.height/2);
       if(Math.hypot(dx,dy)<.22)return[];
       const keys=[],ratio=Math.tan(Math.PI/8);
@@ -49,24 +50,35 @@
       return keys;
     }
     function padEnabled(pad){return buttons.some(button=>padFor(button)===pad&&!button.disabled);}
+    function capture(id,target,event){
+      const pointer=pointers.get(id);if(!pointer)return;
+      const implicit=event.target||target;pointer.captureTarget=implicit;
+      try{if(typeof target.setPointerCapture==='function'){pointer.captureTarget=target;target.setPointerCapture(id);}}
+      catch{pointer.captureTarget=implicit;}
+    }
     function beginPad(pad,event,button=null){
       if(pointers.has(event.pointerId)||!padEnabled(pad)||event.pointerType==='mouse'&&event.button!==0)return;
-      const keys=padDirections(pad,event);if(keys===null)return;
-      event.preventDefault();setKeys(event.pointerId,keys,{button,pad,directional:true});
-      try{pad.setPointerCapture?.(event.pointerId);}catch{}
+      const keys=padDirections(pad,event,true);if(keys===null)return;
+      event.preventDefault();if(!setKeys(event.pointerId,keys,{button,pad,captureTarget:pad,directional:true}))return;
+      capture(event.pointerId,pad,event);
     }
     function movePad(event){
       const pointer=pointers.get(event.pointerId);if(!pointer?.pad)return;
       event.preventDefault?.();const keys=padEnabled(pointer.pad)?padDirections(pointer.pad,event):[];
       if(keys!==null)setKeys(event.pointerId,keys);
     }
+    function captureLost(event){
+      // Capture-transfer notifications bubble from the previous descendant.
+      // Only loss from this hold's capture owner ends the current gesture.
+      if(pointers.get(event.pointerId)?.captureTarget===event.target)release(event.pointerId);
+    }
     for(const button of buttons){
       button.setAttribute?.('aria-pressed','false');
       listen(button,'pointerdown',event=>{
         if(button.disabled||event.pointerType==='mouse'&&event.button!==0)return;
         const pad=padFor(button);if(pads.has(pad)&&padDirections(pad,event)!==null){beginPad(pad,event,button);return;}
-        event.preventDefault();press(event.pointerId,button);
-        try{button.setPointerCapture?.(event.pointerId);}catch{}
+        event.preventDefault();if(!press(event.pointerId,button))return;
+        capture(event.pointerId,button,event);
       });
       listen(button,'pointermove',event=>{
         const pointer=pointers.get(event.pointerId);if(!pointer?.directional)return;
@@ -76,7 +88,8 @@
         const under=root.elementFromPoint?.(event.clientX,event.clientY)?.closest?.('[data-key]');
         if(allowed.has(under)&&!under.disabled&&DIRECTIONS.has(under.dataset.key))press(event.pointerId,under);
       });
-      for(const type of ['pointerup','pointercancel','lostpointercapture'])listen(button,type,event=>release(event.pointerId));
+      for(const type of ['pointerup','pointercancel'])listen(button,type,event=>release(event.pointerId));
+      listen(button,'lostpointercapture',captureLost);
       listen(button,'keydown',event=>{
         if(button.disabled||event.key!==' '&&event.key!=='Enter')return;
         event.preventDefault();if(!event.repeat)press('key:'+event.key,button);
@@ -87,15 +100,19 @@
     for(const pad of pads){
       // Empty corner cells belong to the same control: a thumb can begin on a
       // diagonal, slide through all eight sectors, or rest in the centre.
-      listen(pad,'pointerdown',event=>beginPad(pad,event));listen(pad,'pointermove',movePad);
-      listen(pad,'pointerleave',event=>{if(pointers.get(event.pointerId)?.pad===pad)setKeys(event.pointerId,[]);});
-      for(const type of ['pointerup','pointercancel','lostpointercapture'])listen(pad,type,event=>release(event.pointerId));
+      listen(pad,'pointerdown',event=>{if(!allowed.has(event.target?.closest?.('[data-key]')))beginPad(pad,event);});listen(pad,'pointermove',movePad);
+      // A captured thumb may drift beyond this small pad. Keep steering until
+      // the centre deadzone, release or cancellation, including after relayout.
+      for(const type of ['pointerup','pointercancel'])listen(pad,type,event=>release(event.pointerId));
+      listen(pad,'lostpointercapture',captureLost);
     }
     // Captured events normally reach the button; window listeners also release
     // a finger if a browser interrupts capture during rotation or app switching.
     for(const type of ['pointerup','pointercancel'])listen(win,type,event=>release(event.pointerId));
     listen(win,'pointermove',movePad);
-    listen(win,'blur',reset);listen(win,'pagehide',reset);listen(win,'orientationchange',reset);listen(win,'resize',reset);
+    // Browser address/tool bars resize the viewport during an ordinary hold.
+    // Actual rotation and lifecycle interruptions still cancel every input.
+    listen(win,'blur',reset);listen(win,'pagehide',reset);listen(win,'orientationchange',reset);listen(win.screen?.orientation,'change',reset);
     listen(root,'visibilitychange',()=>{if(root.hidden||root.visibilityState==='hidden')reset();});
     return {reset,snapshot:()=>({pointers:pointers.size,held:[...counts.keys()]}),destroy(){reset();for(const[target,type,handler]of listeners)target?.removeEventListener?.(type,handler);}};
   }

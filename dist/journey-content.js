@@ -52,7 +52,7 @@
     if(q.stage<1)return lines('Maera','You look as though you left a question at home. Check Raeez’s note in the tower; I’ll keep the kettle warm.');
     if(q.stage===1){q.stage=2;reward('maera-listens',20);changed();return lines('Maera','Raeez brought me a flower that would not open, even in sunlight. He was worried about the roots.','Look at the closed bluebells in my garden, just north of the south gate. Tell me what you find.');}
     if(q.stage===2)return lines('Maera','The closed bluebell patch is inside my garden. The south gate is open. Look closely at the roots.');
-    if(q.stage===3&&!roadResolved())return lines('Maera','Those dark threads lead toward the Meadow Slime den on Lavenderway. Break that first roadside camp; then come back to me.');
+    if(q.stage===3&&!roadResolved())return lines('Maera','Those dark threads lead toward the Lavender Imp Den on Lavenderway. Break that first roadside camp; then come back to me.');
     if(q.stage===3&&roadResolved())q.stage=4;
     if(q.stage===4){q.stage=5;item('briar_key');q.decorations.pressed_lavender=true;reward('maera-cellar-key',60);changed();return lines('Maera','The bluebells have opened. You untangled something old beneath that den.','Raeez left this root-cellar key with me. Briarvault is in the clearing northwest of the village. He tied his green cord to its arch.','Its old inscriptions lend three simple spells. Listen to the wind, still the water, and ask the roots to let you pass.');}
     if(q.stage===5)return lines('Maera','Briarvault’s entrance is northwest of the village. Use its three inscribed stones to learn the spells you need.','If the Guardian is too much, the waystone opens a shortcut and a safe place to recover.');
@@ -62,11 +62,11 @@
   function dialogueFor(actor){
     if(!actor)return null;actor=actor.actor||actor;const q=state(),id=String(actor.id||''),name=actor.name||'Neighbour';
     if(id==='lavendyr_maera'||name==='Maera')return maera();
+    if(id==='stormy-companion')return lines(name,q.stage<3?'Raeez said before dinner. I am keeping a very careful count of dinners.':q.stage<7?'Follow the clues, Amaal. I’ll watch the path behind us.':'A ribbon is a promise, not a goodbye. Let’s bring him home.');
     if(actor.kind==='animal'||(maps.rosepetal?.animals||[]).some(a=>a.id===id)){
       if(q.metDays[id]!==day()){q.metDays[id]=day();q.friends[id]=Math.min(5,(Number(q.friends[id])||0)+1);if(q.friends[id]>=3){q.decorations.bramble_bell=true;reward('first-animal-friend',25);}changed();}
       return lines(name,(actor.lines||[])[0]||name+' leans into your hand.',q.friends[id]>=3?'A familiar friend. A little brass bell now hangs by the tower door.':'A quiet greeting remembered. Visit again on another day.');
     }
-    if(id==='stormy-companion')return lines(name,q.stage<3?'Raeez said before dinner. I am keeping a very careful count of dinners.':q.stage<7?'Follow the clues, Amaal. I’ll watch the path behind us.':'A ribbon is a promise, not a goodbye. Let’s bring him home.');
     if(!id)return null;
     if(q.metDays[id]!==day()){q.metDays[id]=day();q.friends[id]=Math.min(5,(Number(q.friends[id])||0)+1);changed();}
     const minute=Number(saved().worldClock?.minutes)||480,weather=config.getWeather?.()||{},weatherKind=typeof weather==='string'?weather:weather.kind||weather.type||weather.weather,period=minute<660?'morning':minute<1020?'afternoon':'evening';
@@ -93,8 +93,8 @@
       case'maera-ledger':result=maera();break;
       case'closed-flowers':
         if(q.stage<2)result=lines('Amaal','Bluebells folded tight in daylight. Maera will know what to look for.');
-        else if(q.stage===2){q.stage=roadResolved()?4:3;reward('bluebell-roots',30);result=lines('Amaal','Black root threads, pulling west toward Lavenderway. There’s a scrap of Raeez’s green cord caught here.',q.stage===4?'That den is already broken. I should tell Maera what I found.':'I should break the Meadow Slime den on Lavenderway, then report to Maera.');}
-        else result=lines('Amaal',q.stage>=4?'Open bluebells. The change is small, but it matters.':'The dark threads still point toward the Meadow Slime den.');break;
+        else if(q.stage===2){q.stage=roadResolved()?4:3;reward('bluebell-roots',30);result=lines('Amaal','Black root threads, pulling west toward Lavenderway. There’s a scrap of Raeez’s green cord caught here.',q.stage===4?'That den is already broken. I should tell Maera what I found.':'I should break the Lavender Imp Den on Lavenderway, then report to Maera.');}
+        else result=lines('Amaal',q.stage>=4?'Open bluebells. The change is small, but it matters.':'The dark threads still point toward the Lavender Imp Den.');break;
       case'cellar-entry':
         if(q.stage<5){result=lines('Briarvault','The root-cellar lock is closed. Maera may know where its key has gone.');break;}
         if(q.stage>=7&&q.runComplete){q.run++;q.runComplete=false;q.checkpoint=false;q.shortcut=false;q.puzzles={};bridgeUntil=0;maps[DUNGEON]=dungeon(q.run);}
@@ -166,7 +166,7 @@
     }g.restore();
   }
   function journal(){
-    const q=state(),objectives=['Read Raeez’s note in Rosepetal Tower.','Find Maera in Lavendyr, or read her signed ledger inside the herbalist cottage.','Investigate the closed bluebells in Maera’s garden.','Break the Meadow Slime den on Lavenderway, then return to Maera.','Tell Maera that the bluebell roots have relaxed.','Enter Briarvault northwest of Lavendyr. Wake wind, still water, and part the roots.','Search Raeez’s field cache behind the Guardian.','Chapter one complete. Take Raeez’s ribbon home; optional Briarvault trials remain available.'];
+    const q=state(),objectives=['Read Raeez’s note in Rosepetal Tower.','Find Maera in Lavendyr, or read her signed ledger inside the herbalist cottage.','Investigate the closed bluebells in Maera’s garden.','Break the Lavender Imp Den on Lavenderway, then return to Maera.','Tell Maera that the bluebell roots have relaxed.','Enter Briarvault northwest of Lavendyr. Wake wind, still water, and part the roots.','Search Raeez’s field cache behind the Guardian.','Chapter one complete. Take Raeez’s ribbon home; optional Briarvault trials remain available.'];
     return{title:q.stage>=7?'Keep a light in the tower':'The flowers that forgot the sun',stage:q.stage,objective:objectives[q.stage],entries:[q.stage>=4?'Lavendyr’s bluebells are opening again.':'Dark threads close the bluebells along the old road.',q.checkpoint?'Briarvault waystone active. Southern shortcut open.':'Briarvault contains a waystone checkpoint.',q.stage>=7?'Raeez followed the sickness east beneath the lantern roads. The next chapter is still ahead.':'Raeez left a green cord to mark his trail.',q.run>1?'Optional Briarvault trial '+q.run+'. Cleared road camps stay peaceful.':'The root-cellar trial can be repeated after the first chapter.', 'Home garden: '+['seedlings','leaves','flowers','ripe berries'][gardenStage()]+'. Tower keepsakes: '+Object.values(q.decorations).filter(Boolean).length+'.']};
   }
   function itemInfo(id){return({briar_key:{name:'Briarvault Key',category:'quest',description:'Maera’s key opens the old root cellar northwest of Lavendyr. It stays safely in the satchel.'},raeez_ribbon:{name:'Raeez’s Green Ribbon',category:'quest',description:'Left in the field cache with Raeez’s promise to return. A keepsake for Rosepetal Tower.'},wayfarer_seed:{name:'Wayfarer’s Seed',category:'quest',description:'An exploration aid earned in Briarvault. Interact with its three inscriptions to wake wind, freeze water or part roots.'}})[id]||null;}

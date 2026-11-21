@@ -72,7 +72,7 @@
       64
     ],
     "anchor": [
-      24.0,
+      24,
       64
     ],
     "source": "serene"
@@ -85,7 +85,7 @@
       64
     ],
     "anchor": [
-      24.0,
+      24,
       64
     ],
     "source": "serene"
@@ -98,7 +98,7 @@
       64
     ],
     "anchor": [
-      32.0,
+      32,
       64
     ],
     "source": "serene"
@@ -111,7 +111,7 @@
       64
     ],
     "anchor": [
-      40.0,
+      40,
       64
     ],
     "source": "serene-corrected-v07"
@@ -124,7 +124,7 @@
       64
     ],
     "anchor": [
-      40.0,
+      40,
       64
     ],
     "source": "serene"
@@ -137,7 +137,7 @@
       64
     ],
     "anchor": [
-      40.0,
+      40,
       64
     ],
     "source": "serene-corrected-v07"
@@ -150,7 +150,7 @@
       64
     ],
     "anchor": [
-      24.0,
+      24,
       64
     ],
     "source": "serene-corrected-v07"
@@ -163,7 +163,7 @@
       64
     ],
     "anchor": [
-      24.0,
+      24,
       64
     ],
     "source": "serene-corrected-v07"
@@ -176,7 +176,7 @@
       64
     ],
     "anchor": [
-      24.0,
+      24,
       64
     ],
     "source": "serene"
@@ -189,7 +189,7 @@
       64
     ],
     "anchor": [
-      24.0,
+      24,
       64
     ],
     "source": "serene"
@@ -202,7 +202,7 @@
       64
     ],
     "anchor": [
-      32.0,
+      32,
       64
     ],
     "source": "serene"
@@ -215,7 +215,7 @@
       64
     ],
     "anchor": [
-      40.0,
+      40,
       64
     ],
     "source": "serene-corrected-v07"
@@ -228,7 +228,7 @@
       64
     ],
     "anchor": [
-      40.0,
+      40,
       64
     ],
     "source": "serene"
@@ -241,7 +241,7 @@
       64
     ],
     "anchor": [
-      40.0,
+      40,
       64
     ],
     "source": "serene-corrected-v07"
@@ -254,7 +254,7 @@
       64
     ],
     "anchor": [
-      24.0,
+      24,
       64
     ],
     "source": "serene-corrected-v07"
@@ -267,7 +267,7 @@
       64
     ],
     "anchor": [
-      24.0,
+      24,
       64
     ],
     "source": "serene-corrected-v07"
@@ -280,7 +280,7 @@
       64
     ],
     "anchor": [
-      24.0,
+      24,
       64
     ],
     "source": "serene"
@@ -293,7 +293,7 @@
       64
     ],
     "anchor": [
-      24.0,
+      24,
       64
     ],
     "source": "serene"
@@ -306,7 +306,7 @@
       64
     ],
     "anchor": [
-      32.0,
+      32,
       64
     ],
     "source": "serene"
@@ -319,7 +319,7 @@
       64
     ],
     "anchor": [
-      40.0,
+      40,
       64
     ],
     "source": "serene-corrected-v07"
@@ -332,7 +332,7 @@
       64
     ],
     "anchor": [
-      40.0,
+      40,
       64
     ],
     "source": "serene"
@@ -345,7 +345,7 @@
       64
     ],
     "anchor": [
-      40.0,
+      40,
       64
     ],
     "source": "serene-corrected-v07"
@@ -358,7 +358,7 @@
       64
     ],
     "anchor": [
-      24.0,
+      24,
       64
     ],
     "source": "serene-corrected-v07"
@@ -371,7 +371,7 @@
       64
     ],
     "anchor": [
-      24.0,
+      24,
       64
     ],
     "source": "serene-corrected-v07"
@@ -384,7 +384,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene"
@@ -397,7 +397,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene"
@@ -410,7 +410,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene"
@@ -423,7 +423,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene"
@@ -436,7 +436,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene"
@@ -449,7 +449,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene"
@@ -462,7 +462,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene"
@@ -475,7 +475,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene"
@@ -488,7 +488,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene"
@@ -501,7 +501,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene-corrected-v07"
@@ -514,7 +514,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene-corrected-v07"
@@ -527,7 +527,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene-corrected-v07"
@@ -540,7 +540,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "serene-corrected-v07"
@@ -553,7 +553,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "serene-corrected-v07"
@@ -566,7 +566,7 @@
       32
     ],
     "anchor": [
-      16.0,
+      16,
       32
     ],
     "source": "serene"
@@ -579,7 +579,7 @@
       24
     ],
     "anchor": [
-      16.0,
+      16,
       24
     ],
     "source": "serene-corrected-v07"
@@ -592,7 +592,7 @@
       32
     ],
     "anchor": [
-      16.0,
+      16,
       32
     ],
     "source": "serene"
@@ -605,7 +605,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "serene"
@@ -618,7 +618,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "serene"
@@ -631,7 +631,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "serene"
@@ -644,7 +644,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "serene"
@@ -657,7 +657,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "serene"
@@ -670,7 +670,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "serene-corrected-v07"
@@ -683,7 +683,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port-corrected-v07"
@@ -696,7 +696,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port-corrected-v07"
@@ -709,7 +709,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port-corrected-v07"
@@ -722,7 +722,7 @@
       16
     ],
     "anchor": [
-      16.0,
+      16,
       16
     ],
     "source": "serene"
@@ -735,7 +735,7 @@
       32
     ],
     "anchor": [
-      8.0,
+      8,
       32
     ],
     "source": "serene"
@@ -748,7 +748,7 @@
       16
     ],
     "anchor": [
-      16.0,
+      16,
       16
     ],
     "source": "serene-corrected-v07"
@@ -761,7 +761,7 @@
       16
     ],
     "anchor": [
-      16.0,
+      16,
       16
     ],
     "source": "serene-corrected-v07"
@@ -774,7 +774,7 @@
       32
     ],
     "anchor": [
-      8.0,
+      8,
       32
     ],
     "source": "pipoya-corrected-v07"
@@ -787,7 +787,7 @@
       32
     ],
     "anchor": [
-      16.0,
+      16,
       32
     ],
     "source": "pipoya"
@@ -800,7 +800,7 @@
       32
     ],
     "anchor": [
-      16.0,
+      16,
       32
     ],
     "source": "pipoya"
@@ -813,7 +813,7 @@
       40
     ],
     "anchor": [
-      14.0,
+      14,
       40
     ],
     "source": "pipoya-corrected-v07"
@@ -826,7 +826,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "pipoya-corrected-v07"
@@ -1008,7 +1008,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1021,7 +1021,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1034,7 +1034,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1047,7 +1047,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1060,7 +1060,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1073,7 +1073,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1086,7 +1086,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1099,7 +1099,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1112,7 +1112,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1125,7 +1125,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1138,7 +1138,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1151,7 +1151,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1164,7 +1164,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1177,7 +1177,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1190,7 +1190,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1203,7 +1203,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1216,7 +1216,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1229,7 +1229,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1242,7 +1242,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1255,7 +1255,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "port"
@@ -1307,7 +1307,7 @@
       9
     ],
     "anchor": [
-      14.0,
+      14,
       9
     ],
     "source": "flowers"
@@ -1320,7 +1320,7 @@
       9
     ],
     "anchor": [
-      14.0,
+      14,
       9
     ],
     "source": "flowers"
@@ -1333,7 +1333,7 @@
       9
     ],
     "anchor": [
-      14.0,
+      14,
       9
     ],
     "source": "flowers"
@@ -1385,7 +1385,7 @@
       32
     ],
     "anchor": [
-      16.0,
+      16,
       32
     ],
     "source": "nature-corrected-v07"
@@ -1398,7 +1398,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "nature"
@@ -1411,7 +1411,7 @@
       16
     ],
     "anchor": [
-      8.0,
+      8,
       16
     ],
     "source": "nature"
@@ -1424,7 +1424,7 @@
       80
     ],
     "anchor": [
-      40.0,
+      40,
       80
     ],
     "source": "boats"
@@ -1437,7 +1437,7 @@
       64
     ],
     "anchor": [
-      32.0,
+      32,
       64
     ],
     "source": "boats"
@@ -1450,7 +1450,7 @@
       224
     ],
     "anchor": [
-      70.0,
+      70,
       224
     ],
     "source": "generated-rose-estate"
@@ -1463,7 +1463,7 @@
       112
     ],
     "anchor": [
-      20.0,
+      20,
       112
     ],
     "source": "generated-v07-architecture"
@@ -1476,7 +1476,7 @@
       107
     ],
     "anchor": [
-      56.0,
+      56,
       107
     ],
     "source": "generated-rose-estate"
@@ -1489,7 +1489,7 @@
       111
     ],
     "anchor": [
-      48.0,
+      48,
       111
     ],
     "source": "generated-rose-estate"
@@ -1502,7 +1502,7 @@
       66
     ],
     "anchor": [
-      40.0,
+      40,
       66
     ],
     "source": "generated-rose-estate"
@@ -1515,7 +1515,7 @@
       44
     ],
     "anchor": [
-      32.0,
+      32,
       44
     ],
     "source": "generated-rose-estate"
@@ -1528,7 +1528,7 @@
       45
     ],
     "anchor": [
-      24.0,
+      24,
       45
     ],
     "source": "generated-rose-estate"
@@ -1541,7 +1541,7 @@
       23
     ],
     "anchor": [
-      16.0,
+      16,
       23
     ],
     "source": "generated-rose-estate"
@@ -1554,7 +1554,7 @@
       10
     ],
     "anchor": [
-      16.0,
+      16,
       10
     ],
     "source": "generated-v07-architecture"
@@ -1567,7 +1567,7 @@
       30
     ],
     "anchor": [
-      8.0,
+      8,
       30
     ],
     "source": "generated-v07-architecture"
@@ -1580,7 +1580,7 @@
       41
     ],
     "anchor": [
-      20.0,
+      20,
       41
     ],
     "source": "generated-town-life"
@@ -1593,7 +1593,7 @@
       43
     ],
     "anchor": [
-      20.0,
+      20,
       43
     ],
     "source": "generated-town-life"
@@ -1606,7 +1606,7 @@
       43
     ],
     "anchor": [
-      20.0,
+      20,
       43
     ],
     "source": "generated-town-life"
@@ -1619,7 +1619,7 @@
       38
     ],
     "anchor": [
-      16.0,
+      16,
       38
     ],
     "source": "generated-town-life"
@@ -1632,7 +1632,7 @@
       42
     ],
     "anchor": [
-      20.0,
+      20,
       42
     ],
     "source": "generated-town-life"
@@ -1645,7 +1645,7 @@
       37
     ],
     "anchor": [
-      20.0,
+      20,
       37
     ],
     "source": "generated-town-life"
@@ -1658,7 +1658,7 @@
       74
     ],
     "anchor": [
-      32.0,
+      32,
       74
     ],
     "doorOffset": 0,
@@ -1672,7 +1672,7 @@
       61
     ],
     "anchor": [
-      40.0,
+      40,
       61
     ],
     "doorOffset": 9,
@@ -1686,7 +1686,7 @@
       84
     ],
     "anchor": [
-      36.0,
+      36,
       84
     ],
     "doorOffset": -1,
@@ -1700,7 +1700,7 @@
       56
     ],
     "anchor": [
-      32.0,
+      32,
       56
     ],
     "doorOffset": 2,
@@ -1714,7 +1714,7 @@
       91
     ],
     "anchor": [
-      40.0,
+      40,
       91
     ],
     "doorOffset": -3,
@@ -1728,7 +1728,7 @@
       61
     ],
     "anchor": [
-      36.0,
+      36,
       61
     ],
     "doorOffset": 1,
@@ -1742,7 +1742,7 @@
       60
     ],
     "anchor": [
-      32.0,
+      32,
       60
     ],
     "doorOffset": 10,
@@ -1756,7 +1756,7 @@
       65
     ],
     "anchor": [
-      40.0,
+      40,
       65
     ],
     "doorOffset": 1,
@@ -1770,7 +1770,7 @@
       67
     ],
     "anchor": [
-      36.0,
+      36,
       67
     ],
     "doorOffset": -15,
@@ -1784,7 +1784,7 @@
       67
     ],
     "anchor": [
-      32.0,
+      32,
       67
     ],
     "doorOffset": 1,
@@ -1798,7 +1798,7 @@
       67
     ],
     "anchor": [
-      40.0,
+      40,
       67
     ],
     "doorOffset": 1,
@@ -1812,7 +1812,7 @@
       80
     ],
     "anchor": [
-      36.0,
+      36,
       80
     ],
     "doorOffset": 0,
@@ -1826,7 +1826,7 @@
       78
     ],
     "anchor": [
-      32.0,
+      32,
       78
     ],
     "doorOffset": -1,
@@ -1840,7 +1840,7 @@
       70
     ],
     "anchor": [
-      40.0,
+      40,
       70
     ],
     "doorOffset": -2,
@@ -1854,7 +1854,7 @@
       78
     ],
     "anchor": [
-      36.0,
+      36,
       78
     ],
     "doorOffset": -8,
@@ -1868,7 +1868,7 @@
       66
     ],
     "anchor": [
-      32.0,
+      32,
       66
     ],
     "doorOffset": 7,
@@ -1882,7 +1882,7 @@
       60
     ],
     "anchor": [
-      40.0,
+      40,
       60
     ],
     "doorOffset": -17,
@@ -1896,7 +1896,7 @@
       72
     ],
     "anchor": [
-      36.0,
+      36,
       72
     ],
     "doorOffset": 0,
@@ -1910,7 +1910,7 @@
       68
     ],
     "anchor": [
-      32.0,
+      32,
       68
     ],
     "doorOffset": 2,
@@ -1924,7 +1924,7 @@
       71
     ],
     "anchor": [
-      40.0,
+      40,
       71
     ],
     "doorOffset": 2,
@@ -1938,7 +1938,7 @@
       75
     ],
     "anchor": [
-      36.0,
+      36,
       75
     ],
     "doorOffset": -1,
@@ -1952,7 +1952,7 @@
       60
     ],
     "anchor": [
-      32.0,
+      32,
       60
     ],
     "doorOffset": 14,
@@ -1966,7 +1966,7 @@
       74
     ],
     "anchor": [
-      40.0,
+      40,
       74
     ],
     "doorOffset": -9,
@@ -1980,7 +1980,7 @@
       69
     ],
     "anchor": [
-      36.0,
+      36,
       69
     ],
     "doorOffset": -1,
@@ -2408,7 +2408,7 @@
       49
     ],
     "anchor": [
-      32.0,
+      32,
       49
     ],
     "source": "generated-camps-v07"
@@ -2421,7 +2421,7 @@
       44
     ],
     "anchor": [
-      32.0,
+      32,
       44
     ],
     "source": "generated-camps-v07"
@@ -2434,7 +2434,7 @@
       50
     ],
     "anchor": [
-      32.0,
+      32,
       50
     ],
     "source": "generated-camps-v07"
@@ -2447,7 +2447,7 @@
       29
     ],
     "anchor": [
-      32.0,
+      32,
       29
     ],
     "source": "generated-camps-v07"
@@ -2460,7 +2460,7 @@
       28
     ],
     "anchor": [
-      8.0,
+      8,
       28
     ],
     "source": "generated-v07-architecture"
@@ -2473,7 +2473,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "generated-fruit-v09"
@@ -2486,7 +2486,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "generated-fruit-v09"
@@ -2499,7 +2499,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "generated-fruit-v09"
@@ -2512,7 +2512,7 @@
       48
     ],
     "anchor": [
-      16.0,
+      16,
       48
     ],
     "source": "generated-fruit-v09"
@@ -2525,7 +2525,7 @@
       24
     ],
     "anchor": [
-      12.0,
+      12,
       24
     ],
     "source": "generated-fruit-v09"
@@ -2538,7 +2538,7 @@
       24
     ],
     "anchor": [
-      12.0,
+      12,
       24
     ],
     "source": "generated-fruit-v09"
@@ -2659,5 +2659,372 @@
       44
     ],
     "source": "generated-estate-v10"
+  },
+  "lv18_conservatory": {
+    "rect": [
+      16,
+      41,
+      128,
+      111
+    ],
+    "anchor": [
+      64,
+      103
+    ],
+    "sheet": "lavendyr-v18"
+  },
+  "lv18_herbal_cottage": {
+    "rect": [
+      200,
+      71,
+      80,
+      81
+    ],
+    "anchor": [
+      40,
+      73
+    ],
+    "sheet": "lavendyr-v18"
+  },
+  "lv18_weaver_cottage": {
+    "rect": [
+      360,
+      79,
+      80,
+      73
+    ],
+    "anchor": [
+      40,
+      65
+    ],
+    "sheet": "lavendyr-v18"
+  },
+  "lv18_drying_house": {
+    "rect": [
+      45,
+      228,
+      69,
+      84
+    ],
+    "anchor": [
+      35,
+      76
+    ],
+    "sheet": "lavendyr-v18"
+  },
+  "lv18_birch": {
+    "rect": [
+      222,
+      261,
+      36,
+      51
+    ],
+    "anchor": [
+      18,
+      43
+    ],
+    "sheet": "lavendyr-v18"
+  },
+  "lv18_well": {
+    "rect": [
+      380,
+      264,
+      39,
+      48
+    ],
+    "anchor": [
+      20,
+      40
+    ],
+    "sheet": "lavendyr-v18"
+  },
+  "lv18_herb_stall": {
+    "rect": [
+      56,
+      425,
+      48,
+      47
+    ],
+    "anchor": [
+      24,
+      39
+    ],
+    "sheet": "lavendyr-v18"
+  },
+  "lv18_wagon": {
+    "rect": [
+      211,
+      420,
+      58,
+      52
+    ],
+    "anchor": [
+      29,
+      44
+    ],
+    "sheet": "lavendyr-v18"
+  },
+  "lv18_ruined_greenhouse": {
+    "rect": [
+      352,
+      382,
+      96,
+      90
+    ],
+    "anchor": [
+      48,
+      82
+    ],
+    "sheet": "lavendyr-v18"
+  },
+  "town_house_lavendyr_v18_herbal": {
+    "rect": [
+      200,
+      71,
+      80,
+      81
+    ],
+    "anchor": [
+      40,
+      73
+    ],
+    "sheet": "lavendyr-v18",
+    "doorOffset": 11
+  },
+  "town_house_lavendyr_v18_weaver": {
+    "rect": [
+      360,
+      79,
+      80,
+      73
+    ],
+    "anchor": [
+      40,
+      65
+    ],
+    "sheet": "lavendyr-v18",
+    "doorOffset": -20
+  },
+  "town_house_lavendyr_v18_drying": {
+    "rect": [
+      45,
+      228,
+      69,
+      84
+    ],
+    "anchor": [
+      35,
+      76
+    ],
+    "sheet": "lavendyr-v18",
+    "doorOffset": -1
+  },
+  "lv18_birch_cluster": {
+    "rect": [
+      36,
+      62,
+      56,
+      58
+    ],
+    "anchor": [
+      28,
+      53
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_flowering_tree": {
+    "rect": [
+      160,
+      57,
+      64,
+      63
+    ],
+    "anchor": [
+      32,
+      58
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_bloom_bush": {
+    "rect": [
+      298,
+      84,
+      43,
+      36
+    ],
+    "anchor": [
+      22,
+      31
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_flower_rock": {
+    "rect": [
+      432,
+      95,
+      32,
+      25
+    ],
+    "anchor": [
+      16,
+      20
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_lavender_patch": {
+    "rect": [
+      39,
+      208,
+      49,
+      40
+    ],
+    "anchor": [
+      25,
+      35
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_bluebell_meadow": {
+    "rect": [
+      172,
+      216,
+      40,
+      32
+    ],
+    "anchor": [
+      20,
+      27
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_lavender_bed": {
+    "rect": [
+      295,
+      208,
+      50,
+      40
+    ],
+    "anchor": [
+      25,
+      35
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_fern_bed": {
+    "rect": [
+      428,
+      216,
+      40,
+      32
+    ],
+    "anchor": [
+      20,
+      27
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_ruin_wall": {
+    "rect": [
+      35,
+      336,
+      57,
+      40
+    ],
+    "anchor": [
+      29,
+      35
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_ruin_column": {
+    "rect": [
+      176,
+      343,
+      32,
+      33
+    ],
+    "anchor": [
+      16,
+      28
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_cliff_ledge": {
+    "rect": [
+      292,
+      336,
+      56,
+      40
+    ],
+    "anchor": [
+      28,
+      35
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_waterfall": {
+    "rect": [
+      424,
+      331,
+      48,
+      45
+    ],
+    "anchor": [
+      24,
+      40
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_moss_grass": {
+    "rect": [
+      56,
+      488,
+      16,
+      16
+    ],
+    "anchor": [
+      8,
+      16
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_pale_cobble": {
+    "rect": [
+      184,
+      488,
+      16,
+      16
+    ],
+    "anchor": [
+      8,
+      16
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_worn_path": {
+    "rect": [
+      312,
+      488,
+      16,
+      16
+    ],
+    "anchor": [
+      8,
+      16
+    ],
+    "sheet": "lavender-nature-v18"
+  },
+  "lv18_lavender_soil": {
+    "rect": [
+      440,
+      488,
+      16,
+      16
+    ],
+    "anchor": [
+      8,
+      16
+    ],
+    "sheet": "lavender-nature-v18"
   }
 }

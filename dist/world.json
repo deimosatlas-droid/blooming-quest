@@ -1,19 +1,19 @@
 {
   "title": "Forrest Hydrangea Meadows",
-  "version": "0.17 · A living journey: chapter one, Briarvault and the travelling satchel",
+  "version": "0.18 · Lavendyr, Lavenderway and Medusa’s garden",
   "rules": {
     "townsAreSafe": true,
     "homeIsSafe": true,
     "monsterSpawns": "roads-only",
     "encountersEnabled": true,
-    "roster": "16 free monster species active across24 roadside camps.",
+    "roster": "16 retained road monster species plus three approved Lavenderway species; Medusa is a separate story Guardian.",
     "artStatus": "104 globally distinct Amaal-style NPC models, 416 directional resident views, 64 new Amaal idle and sword-action poses, and Map A regional artwork.",
     "ferriesAreSafe": true,
     "lifeStatus": "104 globally distinct residents perform free built-in daily tasks across seven towns, with animated work actions and reserved workstations. Rosepetal has no village NPCs.",
     "campRules": "Camps appear only beside long roads. Breaking a camp permanently stops its spawns. Towns, home and boat crossings remain safe.",
     "uniqueNpcAppearanceWithinTown": true,
     "placement": "Loose wild plants moved off paving; sensible property fences and harbours; dense land-edge canopy and named exit openings.",
-    "ground": "Rounded road ends/junctions, grass and leaf detail, shoreline reeds, woodland canopy belts and groves.",
+    "ground": "Separate town and road maps; Lavenderway has dense lavender fields, pale winding stone paths, birch and pink flowering woodland, mossy ruins and turquoise stream banks.",
     "uniqueNpcAppearanceWorldwide": true,
     "npcModelReuse": 0,
     "ferryTravel": "Walk onto the visible ship for automatic quick travel; arrive safely off the boarding trigger.",
@@ -21,7 +21,8 @@
     "homeEstate": "Rosepetal is Amaal and Raeez’s private home estate: one grand tower, an animal barn, farmyard and growing garden. It has no village NPCs.",
     "foraging": "Wild fruit trees and berry bushes grow beside the long roads. Poison mushrooms grow in marked woodland patches at Rosepetal.",
     "practice": "Practice dummies at Rosepetal provide a place to train at home.",
-    "storyStatus": "The opening story draft includes Raeez’s note at home. The full trail through the seven towns is still being written."
+    "storyStatus": "The opening story draft includes Raeez’s note at home. The full trail through the seven towns is still being written.",
+    "campaignStatus": "The opening and Briarvault continue into Medusa’s garden with battle and remedy routes. Five further bible guardian chapters remain planned."
   },
   "towns": [
     {
